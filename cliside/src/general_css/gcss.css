@@ -1,0 +1,85 @@
+.logbackground{ 
+    background-image: url(./Photon-10s-3000px.svg);
+    width: 100vw;
+    height:100vh ;
+    background-position: center;
+	background-size:cover;
+
+}
+
+
+.maincontainer{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+
+.Form_schem{
+    background: rgba( 255, 255, 255, 0.35 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 2.0px );
+    -webkit-backdrop-filter: blur( 2.0px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    width: 25vw;
+    min-height:50vh ;
+    height: fit-content;
+    border-radius: 30px;
+    border: none;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-right: 12.5%;
+}
+
+.Form_schem>span>input[type=text],input[type=email],input[type=password],button{
+    height: 2.5rem;
+    width: 75%;
+    border: 4px solid #39386f;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: none;
+    color:black;
+    
+}
+
+.Form_schem>span>button{
+    margin: 1%;
+    width: 65% !important;
+    transition: 0.2s ease;
+}
+
+
+.Form_schem>span>input:focus-visible{
+    outline: none;
+}
+.Form_schem>span{
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 14%;
+    align-items: center;
+    padding: 1%;
+}
+.Form_schem>span>button:hover{
+    cursor: pointer;
+    background:#39386f;
+    color: #e6e6eb;
+    transition: 0.2s ease;
+}
+
+
+.Form_schem>span>label{
+    font-size: 1.35rem;
+    font-weight: 500 ;
+    padding: 2px;
+    color: rgb(0, 0, 0);
+}

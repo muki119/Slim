@@ -1,0 +1,14 @@
+#tctxt{
+    text-align: center;
+    font-size: 1rem !important;
+}
+
+#tctxt>p1>a{
+    font-weight: 500;
+    color: #73457e;
+}
+
+#emailmess{
+    padding: 0.5%;
+    color: rgb(90, 15, 15);
+}
