@@ -85,7 +85,9 @@ class Register extends React.Component{
                         <span id = 'tctxt'>
                             <p1>By clicking Register you are agreeing to the <a href= '#'>Terms and Conditions</a></p1>
                         </span>
-                
+                        <span class = 'logbtn'>
+                            <span>Already have an account?<a href='/login'>Login</a></span>
+                        </span>
                     </div>
                 </div>
             </div>

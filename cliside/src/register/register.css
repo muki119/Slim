@@ -3,12 +3,14 @@
     font-size: 1rem !important;
 }
 
-#tctxt>p1>a{
+#tctxt>p1>a,.logbtn>span>a{
     font-weight: 500;
-    color: #73457e;
+    color: #513158;
 }
 
 #emailmess{
     padding: 0.5%;
     color: rgb(90, 15, 15);
 }
+
+
