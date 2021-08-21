@@ -1,0 +1,6 @@
+<span>
+    <span class = 'rme'>
+        <label for='remeber_me'>Remember me ? </label>
+        <input value = {logindetails.remember_me}name = 'remember_me'id='remember_me'type='checkbox' onChange={handleChange}/>
+    </span>
+</span>

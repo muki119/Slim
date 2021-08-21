@@ -2,14 +2,12 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 import axios from 'axios';
 import './App.css';
 import Login from './Login/login.js'; // goes to the login page 
 import Register from "./register/register.js" 
 import Dashboard from "./Dashboard/dashboard.js";
-import Footer from "./general_css/footer";
 import UdContext from './usercontext/usercontext.js'
 import { useContext, useState } from "react";
 
@@ -48,6 +46,7 @@ function App() {
 
 
 function Home (){
+  document.title = 'Slim'
   return (
     <h1>welcome</h1>
   );
