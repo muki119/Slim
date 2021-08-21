@@ -10,27 +10,98 @@ regi.post('/register',(req,res)=>{
     const sr  = process.env.SALT_ROUNDS
     bcrypt.hash(req.body.password,10,(err,hash)=>{ // .env the salt rounds
 
-        console.log(hash)
+        if (err){
+            console.log('bcrypt hash error')
+            res.status(500).send({ 
+                error:{
+                    type:500,
+                    message:'server error'  // res.error.message
+                }
+            })
+        }else{
 
-        var regifill = new regimodel({
-            firstname:req.body.fnm,
-            surname:req.body.surn,
-            email:req.body.email,
-            username:req.body.usrnm,
-            password:hash, // hased password 
-        });
+            var regifill = new regimodel({
+                firstname:req.body.fnm,
+                surname:req.body.surn,
+                email:req.body.email,
+                username:req.body.usrnm,
+                password:hash, // hased password 
+                phonenumber:req.body.pnum
+            });
 
-        regifill.save((err)=>{
-            if (err){console.log("theres a error in the process of saving a register")}
-        });
-        res.send(regifill);
+            regifill.save((err)=>{
+                if (err){
+                    console.log("theres a error in the process of saving a register")
+                    console.log(err)
+                }else{
+
+                    res.status(200).send({
+                        msg:'account created successfully'
+                    }
+                    );
+
+                }
+            });
+
+            
+
+
+
+        }
+
+            
     })
 
 })
 
 
 //check for taken username 
+regi.post('/takencred' , (req,res)=>{
+    console.log('attempt to post at /takencred')
+    console.log(req.body)
+    if (req.body.username){
+        regimodel.exists({username:req.body.username},(err,data)=>{
+            if (err){console.log(err)}
+            if (data===true){
+                console.log('username match')
+                res.status(200).send({
+                    taken:true,
+                    works:'yah'
+                })
+            }else if (data===false){
+                res.send({
+                    taken:false,
+                    works:'yah'
+                })
+            }else{
+                res.status(404).send()
+            }
+        })
+    }else if (req.body.email){
+        regimodel.exists({email:req.body.email},(err,data)=>{
+            if (err){console.log(err)}
+            if (data===true){ // if there is a match 
+                console.log('datamatch')
+                res.status(200).send({
+                    taken:true,
+                    works:'yah'
+
+                })
+            }else if (data===false){
+                res.status(200).send({ // if there isnt a match
+                    taken:false,
+                    works:'yah'
+                })
+            }
+        })
+
+    }else{
+        res.status(500)
+    }
+
+    
+   
+});
 
 
-
-module.exports=regi
+module.exports = regi

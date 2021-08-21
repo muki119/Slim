@@ -1,0 +1,4 @@
+#when recieve message to add to database :
+told where to add it to -
+once added to is given a channel to broadcast the command to refresh and get message - using socket or pusher 
+send command to client n then clientside will refresh revealing new message

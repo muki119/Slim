@@ -16,11 +16,13 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
 
     console.log(req.body)
     //console.log('^^incomeing body ')
-
+    if (req.body == null){
+        console.log(null)
+    }
     regimodel.findOne({username:un},' firstname surname email username password friends date_created verified phonenumber',(error,data)=>{ // data is the found user 
         //console.log(data)
         if (data == null) { // if theres no user matching the description then say that user cannot be found 
-            console.log('There is no data in this request')
+            console.log('user is not found')
             res.status(401).send({login_error:'invalid username/password'});
         }else{ //otherwise there is a matchin user 
 
@@ -45,7 +47,16 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
                         if (jwtout){res.cookie('userauth',jwtout,{httpOnly:true,maxAge:604800000}) }// sends the jwt to the client as a cookie // fixes problem of cookie switching from jwt to undefined where undefined is caused by no remember me in jwt so the jwtout is nothing and as a result the output is nothing - adding a if stamemnt makes sure that if there is somethin in the jwt out then it will send it as a cookie - not just sending it out even with no remember_me == true 
                         
                         res.send({ // sends the data 
-                            user:data,
+                            user:{
+                                firstname:data.firstname,
+                                surname:data.surname,
+                                email:data.email,
+                                username:data.username,
+                                phonenumber:data.phonenumber,
+                                verified:data.verified,
+                                date_created:data.date_created,
+                                friends:data.friends
+                            },
                             redirect:true,
                             jwtout:jwtout, // then send the token  or not 
                                 });
