@@ -64,3 +64,60 @@ function updstate(event){
 
     
     };
+
+
+
+
+
+
+
+regi.post('/takencred' , (req,res)=>{
+    console.log('attempt to post at /takencred')
+    console.log(req.body)
+    if (req.body.username){
+        regimodel.findOne({username:req.body.username}, 'username ',(err,data)=>{
+            if (data){
+                console.log('username match')
+                res.status(200).send({
+                    taken:true,
+                    works:'yah'
+                })
+            }else if (!data){
+                res.send({
+                    taken:false,
+                    works:'yah'
+                })
+            }else{
+                res.status(404).send()
+            }
+        })
+    }else if (req.body.email){
+        regimodel.findOne({email:req.body.email}, 'email',(err,data)=>{
+            if (err){console.log(err)}
+            if (data){ // if there is a match 
+                console.log('datamatch')
+                res.status(200).send({
+                    taken:true,
+                    works:'yah'
+
+                })
+            }else if (!data){
+                res.status(200).send({ // if there isnt a match
+                    taken:false,
+                    works:'yah'
+                })
+            }else{
+                res.status(200).send({ // if there isnt a match
+                    taken:false,
+                    works:'yah'
+                })
+            }
+        })
+
+    }else{
+        res.status(500)
+    }
+
+    
+   
+});
