@@ -23,4 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 sltinstantmessager/.env
 cliside/node_modules/.cache/.eslintcache
-sltinstantmessager/regiops/register.js
+
+cliside/src/register/temp_code.txt
