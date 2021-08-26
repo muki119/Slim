@@ -3,14 +3,56 @@
     font-size: 1rem !important;
 }
 
-#tctxt>p1>a,.logbtn>span>a{
+#tctxt>p>a,.logbtn>span>a{
     font-weight: 500;
     color: #513158;
 }
 
-#emailmess{
+#emailmess,#usernamemess{
     padding: 0.5%;
     color: rgb(90, 15, 15);
 }
 
+
+
+
+.usernameprt{
+    width:100%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.usernameprt>span>input{
+    height: 2.5rem;
+    width: 100%;
+    border:solid #39386f;
+    font-size: 1rem;
+    background: none;
+    color:black;
+    border-width: 4px 4px 4px 0px;
+    border-radius: 0px 5px 5px 0px;
+}
+
+.pfx{
+    background: #39386f;
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    border: solid #39386f;
+    border-width: 4px 0px 4px 4px;
+    border-radius: 5px 0px 0px 5px;
+    color: #f5f5f5;
+    font-weight: 600;
+    font-size: 1.15rem;
+}
+
+#pfxcontainer{
+    width: 75%;
+    display: flex;
+}
 

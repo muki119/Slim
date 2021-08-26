@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import ReactDOM, { render } from 'react-dom';
 import {
     BrowserRouter as Router,
     Redirect

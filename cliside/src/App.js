@@ -3,13 +3,13 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import axios from 'axios';
 import './App.css';
 import Login from './Login/login.js'; // goes to the login page 
 import Register from "./register/register.js" 
 import Dashboard from "./Dashboard/dashboard.js";
 import UdContext from './usercontext/usercontext.js'
-import { useContext, useState } from "react";
+import  React,{ useContext, useState } from "react";
+
 
 
 
@@ -46,7 +46,7 @@ function App() {
 
 
 function Home (){
-  document.title = 'Slim'
+  document.title = 'Home'
   return (
     <h1>welcome</h1>
   );

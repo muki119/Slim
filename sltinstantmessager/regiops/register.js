@@ -59,9 +59,10 @@ regi.post('/register',(req,res)=>{
 regi.post('/takencred' , (req,res)=>{
     console.log('attempt to post at /takencred')
     console.log(req.body)
+
     if (req.body.username){
         regimodel.exists({username:req.body.username},(err,data)=>{
-            if (err){console.log(err)}
+            if (err){console.log(err);console.log('an error has occurred tying to find if a username exists')}
             if (data===true){
                 console.log('username match')
                 res.status(200).send({

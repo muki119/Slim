@@ -86,7 +86,7 @@ function jwtauth(req,res,next){  // jwt checker
         try{
             const dcjwt = jwt.verify(userauth,process.env.JWTSK);//decodes jwt
             req.body.un = dcjwt.username;// sets username as the decrypted jwt username 
-            req.body.pass =dcjwt.password;// sets password ass the decrypted jwt password 
+            req.body.pass = dcjwt.password;// sets password ass the decrypted jwt password 
 
             if(req.body.remember_me){delete req.body.remember_me} // if theres a remember me - just delete it because theres already a jwt token
             //console.log(dcjwt) //solving problems 
@@ -94,6 +94,7 @@ function jwtauth(req,res,next){  // jwt checker
             next() // passes on to main function 
         }catch{
             console.log('Jwt verify error')
+            next()
         }
 
     }else{next()} // if token is = null or is just not present then just conitinue with whole process
@@ -101,7 +102,7 @@ function jwtauth(req,res,next){  // jwt checker
 }
 function token_create(dtu){ // make a jwt token  with username and password
     var jwtsk = process.env.JWTSK; // secret key 
-    const tokenout = jwt.sign(dtu, jwtsk, { expiresIn:'7d' }); // encrypts data- dies in 7 days 
+    const tokenout = jwt.sign(dtu, jwtsk, { expiresIn:'7d' }); // encrypts data - dies in 7 days 
     return tokenout // return the token
   
 };

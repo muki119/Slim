@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useEffect, useState } from 'react';
 import Axios from 'axios'
 import './login.css'
 import '../general_css/gcss.css'
@@ -15,6 +14,7 @@ function Login (){
     const [redirect ,setredirect ] = useState({redirect:false}) // redirect state // allow redirect to dashboard?
     const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
     document.title = 'login'
+    
     function handleChange (event){
         setdetails({...logindetails ,[event.target.name]: event.target.value}) // changes 
         console.log(logindetails)
@@ -44,14 +44,15 @@ function Login (){
             throw 'Error in attempt to send oll';
         }
         
-        
-
     }
     
+    useEffect(()=>{
+        onloadlogin()
+    },[])
+
     if (redirect.redirect === true) {
         return(<Redirect push to = '/dashboard' />)
     }else{
-        onloadlogin()
         return(
             <div class = 'logbackground'>
                 <div class = 'maincontainer'>
