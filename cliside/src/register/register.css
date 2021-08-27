@@ -24,6 +24,13 @@
     flex-direction: column;
 }
 
+.usernameprt>label{
+    font-size: 1.35rem;
+    font-weight: 500 ;
+    padding: 2px;
+    color: rgb(0, 0, 0);
+}
+
 .usernameprt>span>input{
     height: 2.5rem;
     width: 100%;
@@ -33,6 +40,7 @@
     color:black;
     border-width: 4px 4px 4px 0px;
     border-radius: 0px 5px 5px 0px;
+    padding:0;
 }
 
 .pfx{
@@ -44,7 +52,6 @@
     justify-content: center;
     align-items: center;
     border: solid #39386f;
-    border-width: 4px 0px 4px 4px;
     border-radius: 5px 0px 0px 5px;
     color: #f5f5f5;
     font-weight: 600;

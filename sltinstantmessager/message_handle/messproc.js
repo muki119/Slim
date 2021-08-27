@@ -34,28 +34,35 @@ function emitrefresh(room){ // emmit refresh using socket or whatever
 
 }
 
-
-// when creating a new conversation - use this schema 
 const newconv = Schema({
     usrsinv:{
         type:Array,
+        unique:true,
         required:true,
     },
     date_created:{
         type:Date,
         default:Date.now()
     },
-    lastmessaged:{
+    lastmessaged:{ // sort by last messaged
         type:Date,
         default:Date.now()
     },
-    messages:{
+    messages:{//array containing objects with{sender:string,message:string,timesent:date,}
         type:Array,
         default:null, // initial one should be 
     }
 });
 
-const ncmodel  = mesdb.model('mess_col',newconv)
+const ncmodel = mesdb.model('mess_col',newconv,'mess_col')
+
+
+
+// when creating a new conversation - use this schema 
 
 module.exports = router
+
+
+
+
 

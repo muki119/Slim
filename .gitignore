@@ -25,3 +25,5 @@ sltinstantmessager/.env
 cliside/node_modules/.cache/.eslintcache
 
 cliside/src/register/temp_code.txt
+cliside/node_modules/
+sltinstantmessager/node_modules/

@@ -29,8 +29,8 @@ const mainschem =  Schema({ // schema to register
         unique:true,
     },
 
-    phonenumber:{type:String, //forgot password option 
-        unique:true,
+    phonenumber:{
+        type:String, //forgot password option 
         default:null
     },
 
@@ -49,6 +49,6 @@ const mainschem =  Schema({ // schema to register
 
 })
 
-const regimodel = mong.model('users',mainschem)
+const regimodel = mong.model('users',mainschem,'users')
 
 module.exports = regimodel; // exports model for later use 

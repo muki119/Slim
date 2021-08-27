@@ -45,15 +45,17 @@ function Register (){
     
         }else if (path === 'username'){ // for username side 
 
-            const tforexp = /([^A-Za-z0-9])/ // test if @ is in the username
-            var utest = tforexp.test(data)
+            const tforexp = /([^A-Za-z0-9_.])/ // requirements of a username - no special characters apart from "_" and "."
+            var utest = tforexp.test(data) // tests validity to requirements
 
             if (data === ''){return{out:false}}
             if (utest === false ){ // if there are no matches for unathorised characters
+
                 var atstring = '@'
                 var dtbs = atstring.concat(data)
+
                 try {
-                    const axdata = await Axios.post('/takencred' , {username:dtbs}) // cancel source token for performance optimisaztion
+                    const axdata = await Axios.post('/takencred' , {username:dtbs}) // asks if username has been taken 
                     //console.log(axdata)
                     if (axdata.data.taken === false ){ // if username aint taken 
                         //this.usernamevall = true // is username valid -true === yes
@@ -80,7 +82,7 @@ function Register (){
     }
 
     function validateEmail(email) { // email validation process
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
 
@@ -92,7 +94,7 @@ function Register (){
 
             if (emailtaken.out === false ){ // if the email is not taken 
 
-                const validemail = validateEmail(event.target.value)
+                const validemail = validateEmail(event.target.value) // validity checker 
                 //console.log(this.emailmess) // valid email checker 
                 //this.emailmess=null; // remvoe email message
                 setmessvall({...messval,emailmess:''})
@@ -161,7 +163,7 @@ function Register (){
     const debcall =useCallback(debounce((event)=>{guimessnval(event)},700),[messval])// debounce calls to guimessnvall - array are dependencies
 
     async function handleChange (event){ //hood for debouncee
-        setrd({...regidetails,[event.target.name]:event.target.value})
+        setrd({...regidetails,[event.target.name]:event.target.value.trim()})
         // change the variable name of whoever called this event event.target gets everything of the thing that calls the event 
         //console.log(regidetails)   
         debcall(event) // debounce function call 
@@ -173,7 +175,9 @@ function Register (){
     async function regiproc(){ // register process
         //console.log('calling regipro')
         if (messval.emailval === true && messval.usernamevall === true){
-            const streg = await Axios.post('/register' ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:regidetails.username,password:regidetails.password,pnum:regidetails.phonenumber})
+            var atc = "@"
+            var new_con = atc.concat(regidetails.username.trim())
+            const streg = await Axios.post('/register' ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:new_con,password:regidetails.password,pnum:regidetails.phonenumber})
             console.log(streg.data)
 
         }

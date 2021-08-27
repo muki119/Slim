@@ -20,9 +20,6 @@ app.listen(25565,()=>{console.log('listening on 25565')})
 //----
 //----- login --------
 
-app.get('/',(req,res,next)=>{
-    res.send('mad')
-})
 
 app.use(registerops);//calls register middleware 
 app.use(loginops);
