@@ -1,0 +1,5 @@
+!cliside/node_modules
+!sltinstantmessager/node_modules
+/cliside/node_modules
+/sltinstantmessager/node_modules
+**/node_modules
