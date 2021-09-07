@@ -3,3 +3,4 @@
 /cliside/node_modules
 /sltinstantmessager/node_modules
 **/node_modules
+sltinstantmessager/.env
