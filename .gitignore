@@ -4,3 +4,4 @@
 /sltinstantmessager/node_modules
 **/node_modules
 sltinstantmessager/.env
+.DS_Store
