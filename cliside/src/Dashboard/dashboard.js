@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import {
-    BrowserRouter as Router,
     Redirect
 } from "react-router-dom";
 import UdContext from '../usercontext/usercontext';
@@ -15,7 +14,7 @@ function Dashboard (props){
             <Redirect push to = '/login' />
         )
 
-    }else if (urdata.redirect=== true){ // if there is a redirect allowance 
+    }else if (urdata.redirect === true){ // if there is a redirect allowance 
         return(
             <div>
                 <a href = '/register'>register</a>

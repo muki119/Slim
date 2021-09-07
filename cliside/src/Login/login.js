@@ -3,7 +3,6 @@ import Axios from 'axios'
 import './login.css'
 import '../general_css/gcss.css'
 import {
-    BrowserRouter as Router,
     Redirect
   } from "react-router-dom";
 import UdContext from '../usercontext/usercontext';
@@ -13,6 +12,7 @@ function Login (){
     const [logindetails,setdetails] = useState({un:'',pass:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
     const [redirect ,setredirect ] = useState({redirect:false}) // redirect state // allow redirect to dashboard?
     const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
+    
     document.title = 'login'
     
     function handleChange (event){
@@ -48,7 +48,7 @@ function Login (){
     
     useEffect(()=>{
         onloadlogin()
-    },[])
+    })
 
     if (redirect.redirect === true) {
         return(<Redirect push to = '/dashboard' />)

@@ -54,9 +54,8 @@ regi.post('/register',(req,res)=>{
 
 })
 
-
 //check for taken username 
-regi.post('/takencred' , (req,res)=>{
+regi.post('/takencredentials' , (req,res)=>{
     console.log('attempt to post at /takencred')
     console.log(req.body)
 

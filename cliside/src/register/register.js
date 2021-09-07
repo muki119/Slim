@@ -4,6 +4,7 @@ import './register.css'
 import Axios from 'axios'
 import {debounce}  from 'lodash';
 
+
 function Register (){
     const [regidetails,setrd] = useState({
         firstname:'',
@@ -31,7 +32,7 @@ function Register (){
             if (data === ''){return{out:false}};
             try{
                 console.log(data[0])
-                const axd = await Axios.post('/takencred' , {email:data})
+                const axd = await Axios.post('/takencredentials' , {email:data})
                 if (axd.data.taken === false ){ // if theres no match in the database i.e username is not taken 
                     return {out:false}
                 }else if (axd.data.taken === true ){ 
@@ -45,7 +46,7 @@ function Register (){
     
         }else if (path === 'username'){ // for username side 
 
-            const tforexp = /([^A-Za-z0-9_.])/ // requirements of a username - no special characters apart from "_" and "."
+            const tforexp = new RegExp(/([^A-Za-z0-9_.])/)// requirements of a username - no special characters apart from "_" and "."
             var utest = tforexp.test(data) // tests validity to requirements
 
             if (data === ''){return{out:false}}
@@ -55,7 +56,7 @@ function Register (){
                 var dtbs = atstring.concat(data)
 
                 try {
-                    const axdata = await Axios.post('/takencred' , {username:dtbs}) // asks if username has been taken 
+                    const axdata = await Axios.post('/takencredentials' , {username:dtbs}) // asks if username has been taken 
                     //console.log(axdata)
                     if (axdata.data.taken === false ){ // if username aint taken 
                         //this.usernamevall = true // is username valid -true === yes
@@ -82,7 +83,7 @@ function Register (){
     }
 
     function validateEmail(email) { // email validation process
-        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const re = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
         return re.test(email);
     }
 
@@ -225,7 +226,7 @@ function Register (){
                         <button type='submit' onClick={regiproc}>Register</button>    
                     </span>
                     <span id = 'tctxt'>
-                        <p>By clicking Register you are agreeing to the <a href= '#'>Terms and Conditions</a></p>
+                        <p>By clicking Register you are agreeing to the <a href= 'https://www.google.com'>Terms and Conditions</a></p>
                     </span>
                     <span class = 'logbtn'>
                         <span>Already have an account?<a href='/login'>Login</a></span>
