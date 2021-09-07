@@ -8,15 +8,9 @@ import Login from './Login/login.js'; // goes to the login page
 import Register from "./register/register.js" 
 import Dashboard from "./Dashboard/dashboard.js";
 import UdContext from './usercontext/usercontext.js'
-import  React,{ useContext, useState } from "react";
-
-
-
-
-
+import  React,{ useContext, useEffect, useState } from "react";
 function App() {
   const [urdata,setUser] = useState({user:null , redirect:false}) // default user info // urdata and setuser from use state are the parametersthat u can use in these routes
-
   return (
     <div className="App">
       <Router>  

@@ -9,7 +9,6 @@ var x = 1
 logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the pre-process to this so before doing this process - do jauth 
 
     console.log(x+':post request to login ')
-    console.log(req.headers)
     x = x+ 1 
     const un =req.body.un; // username from request 
     const pass = req.body.pass;//password from request 

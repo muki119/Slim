@@ -8,11 +8,11 @@ import {
 import UdContext from '../usercontext/usercontext';
 import { createContext, useContext } from "react";
 
+
 function Login (){
     const [logindetails,setdetails] = useState({un:'',pass:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
-    const [redirect ,setredirect ] = useState({redirect:false}) // redirect state // allow redirect to dashboard?
+    const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
     const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
-    
     document.title = 'login'
     
     function handleChange (event){
@@ -25,7 +25,7 @@ function Login (){
         try {
             const userdata = await Axios.post('/login',logindetails)
             if (userdata.data.redirect === true){
-                setredirect({redirect:userdata.data.redirect});
+                setredirect(userdata.data.redirect);
                 setUser({user:userdata.data.user,redirect:userdata.data.redirect}) // sets context to userdata from the redirect
             }  
         } catch (error) {
@@ -37,7 +37,7 @@ function Login (){
         try {
             const prelog = await Axios.post('/login',null)
             if (prelog.data.redirect === true){
-                setredirect({redirect:prelog.data.redirect});
+                setredirect(prelog.data.redirect);
                 setUser({user:prelog.data.user,redirect:prelog.data.redirect}) // sets context to userdata from the redirect
             }
         } catch (error) {
@@ -45,12 +45,12 @@ function Login (){
         }
         
     }
-    
+
     useEffect(()=>{
         onloadlogin()
-    })
+    },[])
 
-    if (redirect.redirect === true) {
+    if (redirect === true) {
         return(<Redirect push to = '/dashboard' />)
     }else{
         return(
