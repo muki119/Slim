@@ -15,7 +15,7 @@ regi.post('/register',(req,res)=>{
             res.status(500).send({ 
                 error:{
                     type:500,
-                    message:'server error'  // res.error.message
+                    message:'Internal server error'  // res.error.message
                 }
             })
         }else{
@@ -25,7 +25,7 @@ regi.post('/register',(req,res)=>{
                 surname:req.body.surn,
                 email:req.body.email,
                 username:req.body.usrnm,
-                password:hash, // hased password 
+                password:hash, // hashed password 
                 phonenumber:req.body.pnum
             });
 
@@ -33,23 +33,23 @@ regi.post('/register',(req,res)=>{
                 if (err){
                     console.log("theres a error in the process of saving a register")
                     console.log(err)
+                    res.status(500).send({
+                        successful:false,
+                        msg:'There was a problem creating your account, please try again later.'
+                    })
+
                 }else{
 
                     res.status(200).send({
-                        msg:'account created successfully'
-                    }
-                    );
+                        succesful:true,
+                        msg:'Account has been created successfully.'
+                    });
 
                 }
             });
 
-            
-
-
-
         }
-
-            
+  
     })
 
 })

@@ -4,12 +4,12 @@ const { Schema } = mong
 const mainschem =  Schema({ // schema to register 
     firstname:{
         type:String,
-        required: true
+        required: true,
     },
 
     surname:{
         type:String,
-        required: true
+        required: true,
     },
 
     username:{

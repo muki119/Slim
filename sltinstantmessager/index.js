@@ -1,14 +1,20 @@
 //main manager 
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+
+const helmet = require('helmet');
+const cors = require("cors")
 var cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
+
 const mong = require('mongoose');//database connection (use environments)
+const dot =require('dotenv').config();
+const { Schema } = mong;
+
 const registerops = require('./regiops/register.js');//register middleware 
 const loginops = require('./loginops/login.js');//login middleware 
 const messops = require('./message_handle/messproc.js') // message handling middleware
-const dot =require('dotenv').config();
-const { Schema } = mong;
+
 
 app.use(cookieParser())
 app.use(bodyParser.json());
@@ -17,6 +23,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //starts server---
 app.listen(25565,()=>{console.log('listening on 25565')})
+app.use(cors({origin:'http://localhost:8080',credentials:true}))
+app.use(helmet())
 //----
 //----- login --------
 

@@ -33,7 +33,7 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
                     if (result == true) { // if the passwords are the same 
                         //jwt creation process -----------
                         
-                        if (remember_me == true){ // if they choose to be remembered in the client 
+                        if (remember_me == true){ // if they choose to be remembered in the client  - as of 15/9/21 this is not the sueres decision - this only operates if the person dosent have a jwt already and has to sign in  
                             var jwtout = token_create(obj = {
                                 username: data.username,
                                 password: pass // sets password to the login form password to avoid hashing problems in bcrypt because us cant compare between two hashed passwords
