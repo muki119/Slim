@@ -5,3 +5,7 @@
 **/node_modules
 sltinstantmessager/.env
 .DS_Store
+cliside/.env.development
+build
+.vscode
+build/*

@@ -8,6 +8,10 @@ database{
 
 
 
+colors - 70385f
+
+
+
 if(this.redirect == true){
             return(<Redirect push to = '/dashboard' />)
         }else
