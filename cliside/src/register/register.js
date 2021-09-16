@@ -4,6 +4,7 @@ import './register.css'
 import Axios from 'axios'
 import {debounce}  from 'lodash';
 
+Axios.defaults.withCredentials = true
 
 function Register (){
     const [regidetails,setrd] = useState({
@@ -22,9 +23,9 @@ function Register (){
         usernamevall :null// is username valid true = yes 
     });
 
-    document.title = 'Register';
+    document.title = 'Register'; 
 
-    
+
     async function credtaken(path , data){ // check if user credentials are already taken 
         //console.log(data)
         
@@ -32,7 +33,7 @@ function Register (){
             if (data === ''){return{out:false}};
             try{
                 console.log(data[0])
-                const axd = await Axios.post('/takencredentials' , {email:data})
+                const axd = await Axios.post('http://localhost:25565/takencredentials' , {email:data})
                 if (axd.data.taken === false ){ // if theres no match in the database i.e username is not taken 
                     return {out:false}
                 }else if (axd.data.taken === true ){ 
@@ -56,7 +57,7 @@ function Register (){
                 var dtbs = atstring.concat(data)
 
                 try {
-                    const axdata = await Axios.post('/takencredentials' , {username:dtbs}) // asks if username has been taken 
+                    const axdata = await Axios.post('http://localhost:25565/takencredentials' , {username:dtbs}) // asks if username has been taken 
                     //console.log(axdata)
                     if (axdata.data.taken === false ){ // if username aint taken 
                         //this.usernamevall = true // is username valid -true === yes
@@ -165,6 +166,7 @@ function Register (){
 
     async function handleChange (event){ //hood for debouncee
         setrd({...regidetails,[event.target.name]:event.target.value.trim()})
+        //console.log(regidetails.phonenumber)
         // change the variable name of whoever called this event event.target gets everything of the thing that calls the event 
         //console.log(regidetails)   
         debcall(event) // debounce function call 
@@ -178,12 +180,12 @@ function Register (){
         if (messval.emailval === true && messval.usernamevall === true){
             var atc = "@"
             var new_con = atc.concat(regidetails.username.trim())
-            const streg = await Axios.post('/register' ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:new_con,password:regidetails.password,pnum:regidetails.phonenumber})
+            const streg = await Axios.post('http://localhost:25565/register' ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:new_con,password:regidetails.password,pnum:regidetails.phonenumber})
             console.log(streg.data)
 
         }
     };
-
+    const debrp = useCallback(debounce(()=>{regiproc()},700),[messval])
     return(
         <div class='logbackground'>
             <div class='maincontainer'> 
@@ -223,7 +225,7 @@ function Register (){
                     </span>
         
                     <span>
-                        <button type='submit' onClick={regiproc}>Register</button>    
+                        <button type='submit' onClick={debrp}>Register</button>    
                     </span>
                     <span id = 'tctxt'>
                         <p>By clicking Register you are agreeing to the <a href= 'https://www.google.com'>Terms and Conditions</a></p>

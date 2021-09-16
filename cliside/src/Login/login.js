@@ -13,7 +13,8 @@ function Login (){
     const [logindetails,setdetails] = useState({un:'',pass:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
     const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
     const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
-    document.title = 'login'
+    document.title = 'Login'
+    Axios.defaults.withCredentials = true
     
     function handleChange (event){
         setdetails({...logindetails ,[event.target.name]: event.target.value}) // changes 
@@ -23,7 +24,7 @@ function Login (){
 
     async function loginproce(){
         try {
-            const userdata = await Axios.post('/login',logindetails)
+            const userdata = await Axios.post('http://localhost:25565/login',logindetails,{headers: {'Content-Type': 'application/json'}})
             if (userdata.data.redirect === true){
                 setredirect(userdata.data.redirect);
                 setUser({user:userdata.data.user,redirect:userdata.data.redirect}) // sets context to userdata from the redirect
@@ -35,7 +36,7 @@ function Login (){
     }
     async function onloadlogin (){
         try {
-            const prelog = await Axios.post('/login',null)
+            const prelog = await Axios.post('http://localhost:25565/login',null,{headers: {'Content-Type': 'application/json'}})
             if (prelog.data.redirect === true){
                 setredirect(prelog.data.redirect);
                 setUser({user:prelog.data.user,redirect:prelog.data.redirect}) // sets context to userdata from the redirect
