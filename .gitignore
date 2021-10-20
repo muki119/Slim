@@ -9,3 +9,4 @@ cliside/.env.development
 build
 .vscode
 build/*
+.env
