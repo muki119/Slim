@@ -1,6 +1,6 @@
 #Client side
 
-
+## add `DANGEROUSLY_DISABLE_HOST_CHECK=true` if needed and cant run server on other things
 
 # Getting Started with Create React App
 
