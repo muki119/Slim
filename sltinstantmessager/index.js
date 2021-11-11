@@ -22,16 +22,20 @@ app.use(bodyParser.json());
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
 //starts server---
-app.listen(25565,()=>{console.log('listening on 25565')})
-app.use(cors({origin:'http://localhost:8080',credentials:true}))
-app.use(helmet())
+app.listen(process.env.PORT,(err)=>{if(!err){console.log('listening on port :'+process.env.PORT)}}) // starts server 
+app.use(cors({origin:'http://localhost:8080',credentials:true})) // server protections -- only accepts requests from localhost 8080
+app.use(helmet()) // response headers removal
+app.use((req,res,next)=>{
+  res.set('Server','H26') // H26 server moniker
+  next()
+})
 //----
 //----- login --------
 
 
 app.use(registerops);//calls register middleware 
-app.use(loginops);
-app.use(messops);
+app.use(loginops); // login operations
+app.use(messops); // message handling
 
 
 //------------------------

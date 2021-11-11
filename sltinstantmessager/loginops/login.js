@@ -23,7 +23,7 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
         //console.log(data)
         if (data == null) { // if theres no user matching the description then say that user cannot be found 
             console.log('user is not found')
-            res.status(401).send({login_error:'invalid username/password'});
+            res.status(200).send({login_error:'Invalid username/password'});
         }else{ //otherwise there is a matchin user 
 
             bcrypt.compare(pass,data.password,async (err, result) =>{ // comapares passwords 
