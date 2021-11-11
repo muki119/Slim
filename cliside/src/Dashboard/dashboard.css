@@ -1,0 +1,29 @@
+
+.dinbox{
+    width: 100vw;
+    height: 100vh;
+    max-height: fit-content;
+    max-width: fit-content;
+    backdrop-filter: blur(2px);
+}
+.topbar{
+    position: static;
+    top:0;
+    height: 5%;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+}
+
+#barwelcome{
+    color: white;
+    font-size: x-large;
+    font-weight: 500;
+}
+
+.chatbar{
+    width: 15vw;
+    height: 95%;
+    background: green;
+}

@@ -13,13 +13,14 @@ function Login (){
     const [logindetails,setdetails] = useState({un:'',pass:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
     const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
     const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
+    const [erm,seterm] = useState(null)
     document.title = 'Login'
     Axios.defaults.withCredentials = true
     
     function handleChange (event){
         setdetails({...logindetails ,[event.target.name]: event.target.value}) // changes 
-        console.log(logindetails)
-        console.log('somewhat works')
+        //console.log(logindetails)
+        //console.log('somewhat works')
     }
 
     async function loginproce(){
@@ -28,7 +29,10 @@ function Login (){
             if (userdata.data.redirect === true){
                 setredirect(userdata.data.redirect);
                 setUser({user:userdata.data.user,redirect:userdata.data.redirect}) // sets context to userdata from the redirect
-            }  
+            } else if (userdata.data.login_error!== null){
+                seterm(userdata.data.login_error)
+                console.log(userdata.data.login_error)
+            }
         } catch (error) {
             throw 'Error in Attempt to send';
         }
@@ -51,6 +55,12 @@ function Login (){
         onloadlogin()
     },[])
 
+    function enterlp (e){
+        if (e.key == 'Enter'){
+            loginproce()
+        }
+    }
+
     if (redirect === true) {
         return(<Redirect push to = '/dashboard' />)
     }else{
@@ -59,12 +69,15 @@ function Login (){
                 <div class = 'maincontainer'>
                     <div class ='Form_schem'>
                         <span>
+                            {erm !== null && <h2>{erm}</h2>}
+                        </span>
+                        <span>
                             <label for='Username'>Username</label>
                             <input value = {logindetails.un} type='text' name = 'un' id = 'Username'placeholder = 'Username'  onChange={handleChange}/>
                         </span>
                         <span>
                             <label for= 'Password'>Password</label>
-                            <input value = {logindetails.pass} name = 'pass' id = 'Password'placeholder = 'Password' type = 'password' onChange={handleChange}/>
+                            <input value = {logindetails.pass} name = 'pass' id = 'Password'placeholder = 'Password' type = 'password' onChange={handleChange} onKeyPress={enterlp} />
                         </span>
                         <span>
                             <button id = 'login_button'onClick = {loginproce}>Login</button>
