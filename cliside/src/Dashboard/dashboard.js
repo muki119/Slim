@@ -9,26 +9,28 @@ import '../general_css/gcss.css';
 function Dashboard (props){
     const {urdata,setUser} = useContext(UdContext) // use this to set user data and pull userdata
     document.title = 'Dashboard'
-    if (urdata.redirect === false){ // if not authorized 
+    const dashdata = JSON.parse(localStorage.getItem('UD'))
+    
+    if (dashdata.redirect === false){ // if not authorized 
 
         return(
             <Redirect push to = '/login' />
         )
 
-    }else if (urdata.redirect === true ){ // if there is a redirect allowance 
+    }else if (dashdata.redirect === true ){ // if there is a redirect allowance 
         return(
             <div class = 'logbackground dbackground' >
                 <div class='dinbox'>
                     <div class ='topbar'>
-                        <span id='barwelcome'>{urdata.user.firstname} {urdata.user.surname}</span>
+                        <span id='barwelcome'>{dashdata.user.firstname} {dashdata.user.surname}</span>
                     </div>
                     <div class = 'chatbar'>
-                        <span>{urdata.user.firstname}</span>
-                        <span>{urdata.user.surname}</span>
+                        <span>{dashdata.user.firstname}</span>
+                        <span>{dashdata.user.surname}</span>
                     </div>
 
                     <a href = '/register'>register</a>
-                    <p>{JSON.stringify(urdata.user)}</p>
+                    <p>{JSON.stringify(dashdata.user)}</p>
 
                 </div>
             </div>

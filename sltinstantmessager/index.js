@@ -24,7 +24,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //starts server---
 app.listen(25565,()=>{console.log('listening on 25565')})
 app.use(cors({origin:'http://localhost:8080',credentials:true}))
-app.use(helmet())
+app.use(helmet()) // response headers removal
+app.use((req,res,next)=>{
+  res.set('Server','H26') // H26 server moniker
+  next()
+})
 //----
 //----- login --------
 
