@@ -38,7 +38,7 @@
     margin-right: 12.5%;
 }
 
-.Form_schem>span>input[type=text],input[type=email],input[type=password],button{
+.Form_schem>span>input[type=text],input[type=email],input[type=password],.Form_schem button{
     height: 2.5rem;
     width: 75%;
     border: 4px solid #39386f;
