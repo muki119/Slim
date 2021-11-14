@@ -25,29 +25,55 @@ function Login (){
 
     async function loginproce(){
         try {
-            const userdata = await Axios.post('http://localhost:25565/login',logindetails,{headers: {'Content-Type': 'application/json'}})
+            const userdata = await Axios.post('http://localhost:25565/login',logindetails)
+            //console.log(userdata)
             if (userdata.data.redirect === true){
+                
+                var ud = JSON.stringify({user:userdata.data.user,redirect:userdata.data.redirect})
+                localStorage.setItem('UD',ud)// user data
+                localStorage.setItem('Uat',userdata.data.uat) // jwt 
                 setredirect(userdata.data.redirect);
-                setUser({user:userdata.data.user,redirect:userdata.data.redirect}) // sets context to userdata from the redirect
+ 
             } else if (userdata.data.login_error!== null){
+
                 seterm(userdata.data.login_error)
                 console.log(userdata.data.login_error)
+                
             }
         } catch (error) {
+            console.log(error)
             throw 'Error in Attempt to send';
+            
         }
         
     }
     async function onloadlogin (){
-        try {
-            const prelog = await Axios.post('http://localhost:25565/login',null,{headers: {'Content-Type': 'application/json'}})
-            if (prelog.data.redirect === true){
-                setredirect(prelog.data.redirect);
-                setUser({user:prelog.data.user,redirect:prelog.data.redirect}) // sets context to userdata from the redirect
+        var uat = localStorage.getItem('Uat') // user authentication token
+        if (uat){
+            var sentuat = {userauth:uat}
+            try {
+                const usdata = await Axios.post('http://localhost:25565/login',sentuat)
+                if (usdata.data.redirect === true){
+
+                    localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect}))
+                    localStorage.setItem('Uat',usdata.data.uat)
+                    setredirect(usdata.data.redirect);
+                    
+                } else if (usdata.data.login_error!== null){ // if there is a error message found 
+    
+                    seterm(usdata.data.login_error)
+                    console.log(usdata.data.login_error)
+                    
+                }
+            } catch (error) {
+                console.log(error)
+                throw 'Error in Attempt to send'; 
             }
-        } catch (error) {
-            throw 'Error in attempt to send oll';
         }
+        
+        // check if jwt in local storrage
+        // send to server 
+        // if ok then redirect and change user data local storage (UD)
         
     }
 

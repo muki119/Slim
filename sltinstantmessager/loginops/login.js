@@ -33,18 +33,20 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
                     if (result == true) { // if the passwords are the same 
                         //jwt creation process -----------
                         
-                        if (remember_me == true){ // if they choose to be remembered in the client  - as of 15/9/21 this is not the sueres decision - this only operates if the person dosent have a jwt already and has to sign in  
-                            var jwtout = token_create(obj = {
-                                username: data.username,
-                                password: pass // sets password to the login form password to avoid hashing problems in bcrypt because us cant compare between two hashed passwords
-                            }) 
-                            console.log('true')
-                        };
+                            // if they choose to be remembered in the client  - as of 15/9/21 this is not the sueres decision - this only operates if the person dosent have a jwt already and has to sign in  
+                            // no choice now as of 11/11/21 jwt is now in localstorage
+
+                        var jwtout = token_create(obj = {
+                            username: data.username,
+                            password: pass // sets password to the login form password to avoid hashing problems in bcrypt because us cant compare between two hashed passwords
+                        }) 
+                        console.log('true')
+                       
                         // end +++++++++++++
 
                         //send data process start ----------
 
-                        if (jwtout){res.cookie('userauth',jwtout,{httpOnly:true,maxAge:604800000}) }// sends the jwt to the client as a cookie // fixes problem of cookie switching from jwt to undefined where undefined is caused by no remember me in jwt so the jwtout is nothing and as a result the output is nothing - adding a if stamemnt makes sure that if there is somethin in the jwt out then it will send it as a cookie - not just sending it out even with no remember_me == true 
+                        //if (jwtout){res.cookie('userauth',jwtout,{httpOnly:true,maxAge:604800000}) }// sends the jwt to the client as a cookie // fixes problem of cookie switching from jwt to undefined where undefined is caused by no remember me in jwt so the jwtout is nothing and as a result the output is nothing - adding a if stamemnt makes sure that if there is somethin in the jwt out then it will send it as a cookie - not just sending it out even with no remember_me == true 
                         
                         res.send({ // sends the data 
                             user:{
@@ -52,13 +54,13 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
                                 surname:data.surname,
                                 email:data.email,
                                 username:data.username,
-                                phonenumber:data.phonenumber,
-                                verified:data.verified,
+                                //phonenumber:data.phonenumber, when taken seriously
+                                //verified:data.verified, // this will come when i actually take this seriously 
                                 date_created:data.date_created,
-                                friends:data.friends
+                                //friends:data.friends // no need for friends now 
                             },
                             redirect:true,
-                            jwtout:jwtout, // then send the token  or not 
+                            uat:jwtout, // then send the user authentication token (userauth in jwt)
                                 });
                         //end+++++++++++++++++++++++
 
@@ -78,10 +80,10 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
 
 
 function jwtauth(req,res,next){  // jwt checker 
-    if ((req.cookies.userauth) || (req.cookies.userauth != null )||(req.cookies.userautuh != undefined)){// if theres a jwt present it sets that as the username and password then passes it to the main login function 
+    if ((req.body.userauth) || (req.body.userauth != null )||(req.body.userautuh != undefined)){// if theres a jwt present it sets that as the username and password then passes it to the main login function 
         //console.log(req.body);// -- thebody that comes in --really for soving problems 
         //console.log ('^^befor body') ;
-        var userauth =req.cookies.userauth; // gets userauth cookies from the request 
+        var userauth =req.body.userauth; // gets userauth cookies from the request 
 
         try{
             const dcjwt = jwt.verify(userauth,process.env.JWTSK);//decodes jwt
