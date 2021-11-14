@@ -26,8 +26,9 @@ function Login (){
     async function loginproce(){
         try {
             const userdata = await Axios.post('http://localhost:25565/login',logindetails)
-            console.log(userdata)
+            //console.log(userdata)
             if (userdata.data.redirect === true){
+                
                 var ud = JSON.stringify({user:userdata.data.user,redirect:userdata.data.redirect})
                 localStorage.setItem('UD',ud)// user data
                 localStorage.setItem('Uat',userdata.data.uat) // jwt 
@@ -47,20 +48,18 @@ function Login (){
         
     }
     async function onloadlogin (){
-        var uat = localStorage.getItem('Uat')
+        var uat = localStorage.getItem('Uat') // user authentication token
         if (uat){
-            console.log('there is a uat')
             var sentuat = {userauth:uat}
             try {
                 const usdata = await Axios.post('http://localhost:25565/login',sentuat)
-                console.log('response' ,usdata)
                 if (usdata.data.redirect === true){
 
                     localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect}))
                     localStorage.setItem('Uat',usdata.data.uat)
                     setredirect(usdata.data.redirect);
                     
-                } else if (usdata.data.login_error!== null){
+                } else if (usdata.data.login_error!== null){ // if there is a error message found 
     
                     seterm(usdata.data.login_error)
                     console.log(usdata.data.login_error)
