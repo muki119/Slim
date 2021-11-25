@@ -1,10 +1,17 @@
 const mesdb = require('./mess_db') // message database connection
 const mong = require('mongoose')
+const { v4: uuidv4 } = require('uuid'); // unique chat identifier -different from document _id 
 const { Schema } = mong
 
 
 //new conversation schema
 const newconv = Schema({
+    chat_id:{
+        type:String,
+        required:true,
+        unique:true,
+        default:uuidv4()
+    },
     users_involved:{
         type:Array,
         required:true,

@@ -65,7 +65,7 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
                         //end+++++++++++++++++++++++
 
                     }else if (result == false ){ // if the passwords are different 
-                        res.send({login_error:'incorrect username/password'}) //send uncuccesfull and a incorrect messge in json 
+                        res.send({login_error:'Incorrect username/password'}) //send uncuccesfull and a incorrect messge in json 
                     };
                         
                 }
