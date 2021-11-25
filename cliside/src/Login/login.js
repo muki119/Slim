@@ -13,7 +13,7 @@ function Login (){
     const [logindetails,setdetails] = useState({un:'',pass:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
     const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
     const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
-    const [erm,seterm] = useState(null)
+    const [erm,seterm] = useState(null) // error message if incorrect login
     document.title = 'Login'
     Axios.defaults.withCredentials = true
     
@@ -37,7 +37,7 @@ function Login (){
             } else if (userdata.data.login_error!== null){
 
                 seterm(userdata.data.login_error)
-                console.log(userdata.data.login_error)
+               // console.log(userdata.data.login_error)
                 
             }
         } catch (error) {
@@ -62,7 +62,7 @@ function Login (){
                 } else if (usdata.data.login_error!== null){ // if there is a error message found 
     
                     seterm(usdata.data.login_error)
-                    console.log(usdata.data.login_error)
+                   // console.log(usdata.data.login_error)
                     
                 }
             } catch (error) {
