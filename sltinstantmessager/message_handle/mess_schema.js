@@ -25,7 +25,7 @@ const newconv = Schema({
         default:Date.now()
     },
     messages:{//array containing objects with{sender:string,message:string,timesent:date,}
-        type:[String] // initial one should be 
+        type:[] // initial one should be 
     }
 });
 
