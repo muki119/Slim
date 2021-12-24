@@ -98,11 +98,11 @@ function Login (){
                             {erm !== null && <h2>{erm}</h2>}
                         </span>
                         <span>
-                            <label for='Username'>Username</label>
+                            <label htmlFor='Username'>Username</label>
                             <input value = {logindetails.un} type='text' name = 'un' id = 'Username'placeholder = 'Username'  onChange={handleChange}/>
                         </span>
                         <span>
-                            <label for= 'Password'>Password</label>
+                            <label htmlFor= 'Password'>Password</label>
                             <input value = {logindetails.pass} name = 'pass' id = 'Password'placeholder = 'Password' type = 'password' onChange={handleChange} onKeyPress={enterlp} />
                         </span>
                         <span>
