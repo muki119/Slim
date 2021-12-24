@@ -1,0 +1,2 @@
+                        <span class = 'incoming_message_container'><span class = 'incoming_message' >Hey bro1 </span><span class ='sentby'>'mugagga'</span></span>
+                        <span class = 'users_message_container'><span class = 'users_message'>message 2 sending</span></span>

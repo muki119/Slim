@@ -1,4 +1,6 @@
-
+.body{
+    transition: all 1s ease-in;
+}
 .dinbox{
     width: 100vw;
     height: 100vh;
@@ -47,6 +49,7 @@
     display: flex;
     flex-direction:row;
     align-items: center;
+    word-break: break-word;
 }
 .chatname{
     height: 40%;
