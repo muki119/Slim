@@ -7,6 +7,7 @@ import './App.css';
 import Login from './Login/login.js'; // goes to the login page 
 import Register from "./register/register.js" 
 import Dashboard from "./Dashboard/dashboard.js";
+import Landing from "./Landing/Landing.js"
 import UdContext from './usercontext/usercontext.js'
 import  React,{ useContext, useEffect, useState } from "react";
 function App() {
@@ -19,7 +20,7 @@ function App() {
           <UdContext.Provider value = {{urdata,setUser}}>     
 
             <Route exact path="/">
-              <Home />
+              <Landing />
             </Route>
             <Route exact path="/login">
               <Login />

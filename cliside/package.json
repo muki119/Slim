@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "animejs": "^3.2.1",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
@@ -40,6 +41,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:25565"
+  }
 }

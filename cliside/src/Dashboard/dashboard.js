@@ -127,13 +127,13 @@ function Dashboard (props){
         }
         else if(logout === true) {
             return(
-                <Redirect push to = '/login' />
+                <Redirect push to = '/' />
             )
 
         }  
     }else{
         return(
-            <Redirect push to = '/login' />
+            <Redirect push to = '/' />
         )
     }
     
