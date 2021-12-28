@@ -7,8 +7,8 @@ const dot =require('dotenv').config();
 
 regi.post('/register',(req,res)=>{
     console.log(req.body)
-    const sr  = process.env.SALT_ROUNDS
-    bcrypt.hash(req.body.password,10,(err,hash)=>{ // .env the salt rounds
+    const sr  = parseInt(process.env.SALT_ROUNDS)
+    bcrypt.hash(req.body.password,sr,(err,hash)=>{ // .env the salt rounds
 
         if (err){
             console.log('bcrypt hash error')
