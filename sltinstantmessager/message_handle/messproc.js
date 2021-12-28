@@ -8,7 +8,8 @@ const { Server } = require("socket.io"); // server
 const io = new Server(8210 || 80,{
     cors:{
         origin: ["http://localhost:8080"]
-    }
+    },
+    transports:["websocket","polling"]
 })
 
 io.on("connection", (socket) => {
