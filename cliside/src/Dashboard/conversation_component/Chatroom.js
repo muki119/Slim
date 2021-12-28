@@ -86,21 +86,23 @@ function Chatroom(){
             const currentcmsgs = currentchat.messages // current chat messages 
             const mappedmsgs = currentcmsgs.map((e,index)=>{
                 if (e.sender !== dashdata.user.username){
-                    return <span class = 'incoming_message_container'><span class = 'incoming_message' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span>
+                    return <span class = 'incoming_message_container' key={index}><span class = 'incoming_message' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span>
                 }else if (e.sender === dashdata.user.username){
                     return <span class = 'users_message_container' key={index} ><span class = 'users_message'>{e.message}</span></span>
                 }
             })
+            const mappedresp =  [currentchat.users_involved.slice(0,currentchat.users_involved.indexOf(dashdata.user.username)).toString(),currentchat.users_involved.slice(currentchat.users_involved.indexOf(dashdata.user.username)+1).toString()]
+           
             return (
                 <div class = 'chatroom_container'>
-                    <div class = 'Recipients'>{JSON.stringify(p)}</div>
+                    <div class = 'Recipients'>{mappedresp}</div>
                     <div class ='message_section '>
-                        <ScrollableFeed>
+                        <ScrollableFeed >
                             {mappedmsgs}
                         </ScrollableFeed>
                     </div>
                     <div class = 'message_input_box' >
-                        <TextareaAutosize id = 'test' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={1}style={{fontsize:'2rem'}}></TextareaAutosize>
+                        <TextareaAutosize id = 'test' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={2}style={{fontsize:'2rem'}}></TextareaAutosize>
                         
                         <button id='sendbtn'onClick={sendmsg}>Send</button>
                     </div>

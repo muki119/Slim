@@ -23,17 +23,21 @@
     width: 100%;
     background-color: #f5f5f5;
     display: flex;
-    align-content:center;
+    min-height: 5%;
+    align-content: center;
+    align-items: center;
     justify-content: center;
-
+    border-top: #39386f solid 2px;
 }
 .users_message,.incoming_message{
+    text-align: left;
     font-weight: 500;
     max-width: 50%;
     word-break: break-word;
     color: white;
     padding: 10px;
     margin: 10px;
+    white-space: pre-wrap;
 }
 .users_message_container {
     display: flex;
@@ -44,20 +48,17 @@
 }
 
 .users_message{
-    text-align: right;
     background-color: #39386f;
     border-radius: 12px 12px 0px 12px;
 }
 
 .incoming_message_container{
-    text-align: right;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
 }
 .incoming_message{
-    text-align: left;
     background-color: #385E70;
     border-radius: 12px 12px 12px 0px;
 }
@@ -69,24 +70,20 @@
     height: none !important;
 }
 
-.message_input_box{
-    min-height: 5%;
-    display: flex;
-    align-content: center;
-    align-items: center;
 
-}
 #test{
     resize: none;
     font-size: large;
     font-weight: 500;
     font-family: Montserrat;
-    max-height: 80vh;
+    max-height: 50vh;
     width: 80%;
     padding: 10px;
     background-color: #eeeeee;margin: 5px;
     border-radius: 10px 0px 0px 10px;
     border: #39386f 1px solid;
+    margin: 5px 0px 5px 5px;
+    transition: 0.3s height ease;
 }
 
 #test:focus{
