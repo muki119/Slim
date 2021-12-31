@@ -40,7 +40,8 @@ function Dashboard (props){
         //console.log('dome') 
         async function get_chats(){ // get the user's chats 
             try {
-                var chat= await Axios.post('http://localhost:25565/api/m/getmsgs',{username:dashdata.user.username})  // URL WILL BE FROM .ENV+ROUTE
+                var uat = localStorage.getItem("Uat")
+                var chat= await Axios.post('http://localhost:25565/api/m/getmsgs',{username:dashdata.user.username,Uat:uat})  // URL WILL BE FROM .ENV+ROUTE
                 //bubble sort the chats by time and get each 
                 setchats(chat)
             } catch (error) {
