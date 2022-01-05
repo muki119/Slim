@@ -8,7 +8,7 @@
 
 
 .message_section{
-    overflow:scroll;
+    overflow: hidden;
     height: 80%;
     width: 100%;
     display: flex;
@@ -36,7 +36,7 @@
     word-break: break-word;
     color: white;
     padding: 10px;
-    margin: 10px;
+    
     white-space: pre-wrap;
 }
 .users_message_container {
@@ -50,6 +50,7 @@
 .users_message{
     background-color: #39386f;
     border-radius: 12px 12px 0px 12px;
+    margin: 10px;
 }
 
 .incoming_message_container{
@@ -61,6 +62,7 @@
 .incoming_message{
     background-color: #385E70;
     border-radius: 12px 12px 12px 0px;
+    margin: 10px 10px 5px 10px !important;
 }
 .sentby{
     font-size: small;
@@ -93,7 +95,8 @@
 
 #sendbtn{
     height: 90%;
-    width:5%;
+    max-width: 15%;
+    min-width:5%;
     border-radius: 0px 10px 10px 0px;
     border: #39386f 1px solid;
     background-color: #385E70;
