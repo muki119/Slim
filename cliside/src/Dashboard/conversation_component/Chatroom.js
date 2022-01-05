@@ -22,7 +22,7 @@ function Chatroom(){
     
 
     function sendmsg(){
-        if (message.length > 0){
+        if (message.length > 0 || message.trim().length !== 0){
             try {
                 const messageobj = { // message object to be sent 
                     sender :dashdata.user.username,
@@ -35,7 +35,7 @@ function Chatroom(){
                 cht.data[indx].messages.push(messageobj)
                 cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
                 //console.log(cht.data[indx].last_messaged )
-                setmessage(' ')
+                setmessage('')
                 forceUpdate()
             } catch (error) {
                 console.log('error in attempt to send ')
@@ -84,15 +84,29 @@ function Chatroom(){
 
         if (currentchat != undefined){
             const currentcmsgs = currentchat.messages // current chat messages 
-            const mappedmsgs = currentcmsgs.map((e,index)=>{
-                if (e.sender !== dashdata.user.username){
-                    return <span class = 'incoming_message_container' key={index}><span class = 'incoming_message' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span>
+            const mappedmsgs = currentcmsgs.map((e,index,arr)=>{
+                var prevarr = arr[index-1]
+                var nextarr = arr[index+1]
+                if (e.sender !== dashdata.user.username){ // if the sender 
+                    if (index>0 && index!==(arr.length-1)){
+                        if (e.sender === nextarr.sender && e.sender !== prevarr.sender){ /// if its the top of the sandwhich
+                            return <span class = 'incoming_message_container' key={index}><span class = 'incoming_message_top' key={index} >{e.message}</span></span>
+                        }else if (e.sender === nextarr.sender && e.sender === prevarr.sender){ // if middle of sandwhich 
+                            return <span class = 'incoming_message_sandwich_container' key={index}><span class = 'incoming_message_middle' key={index} >{e.message}</span></span>
+                        }else if (e.sender !== nextarr.sender && e.sender === prevarr.sender){ // if bottom of sandwhich 
+                            return <span class = 'incoming_message_sandwich_container' key={index}><span class = 'incoming_message_bottom' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span> 
+                        }else{
+                            return <span class = 'incoming_message_container' key={index}><span class = 'incoming_message' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span> 
+                        }
+                    }else{
+                        return <span class = 'incoming_message_container' key={index}><span class = 'incoming_message' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span> 
+                    }  
                 }else if (e.sender === dashdata.user.username){
                     return <span class = 'users_message_container' key={index} ><span class = 'users_message'>{e.message}</span></span>
                 }
             })
+
             const mappedresp =  [currentchat.users_involved.slice(0,currentchat.users_involved.indexOf(dashdata.user.username)).toString(),currentchat.users_involved.slice(currentchat.users_involved.indexOf(dashdata.user.username)+1).toString()]
-           
             return (
                 <div class = 'chatroom_container'>
                     <div class = 'Recipients'>{mappedresp}</div>
