@@ -7,7 +7,7 @@ const regimodel = require('../regiops/registerschem')// register schema
 const userauth = require("./userauth.js")
 const { Server } = require("socket.io"); // server
 
-const io = new Server(8210 || 80,{
+const io = new Server(8210 || 4080,{
     cors:{
         origin: ["http://localhost:8080"]
     },
@@ -24,7 +24,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on('send_message',(room,message)=>{ // room should be chat_id
-        //console.log(room,message)
+        console.log(room,message)
         // update database find by chat id 
         ccvmodel.findOneAndUpdate({chat_id:room},{$push:{messages:message},$currentDate:{last_messaged:true}},(err)=>{ // adds message to database 
             if (err){
