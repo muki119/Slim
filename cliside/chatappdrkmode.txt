@@ -1,0 +1,7 @@
+chat app background = #222222
+chatname tiles = #282828
+chat name tiles text colour = #d2cbff 
+
+
+chat sender name = white i think 
+this is the darkmode 

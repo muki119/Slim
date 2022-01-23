@@ -12,7 +12,7 @@ export default function Landing(){
             targets:targets,
             translateY:['-200%','0%'],
             opacity:[0,1],
-            duration:1700,
+            duration:1000,
             delay:anime.stagger(50),
             direction:'normal',
             easing:'easeInOutCubic',
