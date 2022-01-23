@@ -19,7 +19,7 @@ function Dashboard (props){
     const [currentchatid,changechat] = useState('booom bow') // the id of the 
     const [socket,setsocket]=useState(null)
     const [roomidarr,sridarr]  = useState([])
-    document.title = 'Dashboard'
+    
     const dashdata = JSON.parse(localStorage.getItem('UD')) // login persistence data
     const [,forceUpdate] = useReducer(x => x + 1, 0); // force update 
     
@@ -30,10 +30,11 @@ function Dashboard (props){
     }
 
     function chatchanger(e){ // changes the chat 
-        changechat(e.target.id)
+        changechat(e.currentTarget.id)
     }
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
+        document.title = 'Dashboard'
         const newsocket = io('ws://localhost:8210'); // URL WILL BE FROM .ENV
         setsocket(newsocket)
 
@@ -55,7 +56,7 @@ function Dashboard (props){
     useEffect(()=>{ // if theres chats found that the user is a part of - the chat ids will be gathered and used as seperate socket rooms 
         if (chats.data !== [] ){
             chats.data.forEach((e)=>{
-                console.log(e)
+                //console.log(e)
                 sridarr(roomidarr=>[...roomidarr,e.chat_id]) 
             })
         }  
@@ -92,7 +93,7 @@ function Dashboard (props){
             
             var convomp = chats.data.map((eh,index)=>{
                 var usersinvolved = [(eh.users_involved.slice(0,eh.users_involved.indexOf(dashdata.user.username))).toString(),(eh.users_involved.slice(eh.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-                return <span key = {index} id={eh.chat_id} onClick={chatchanger}><span class= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</span></span> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+                return <div key = {index}id={eh.chat_id} onClick={chatchanger}><span onClick={(e)=>{e.preventDefault() }}class= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
             })
 
             return(
@@ -109,7 +110,7 @@ function Dashboard (props){
                         <div class = 'chatandbar'>
 
                             <div class = 'chatbar'>
-                                <span><span class= 'chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></span>
+                                <div><span class= 'chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></div>
                                 {convomp}
                             </div>
 
