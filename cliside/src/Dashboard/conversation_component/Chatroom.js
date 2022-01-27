@@ -29,7 +29,9 @@ function Chatroom(){
                     message:message,
                     timesent:new Date(Date.now()).toISOString() // gets the time the message was sent 
                 }
-                socket.emit('send_message',currentchatid,messageobj) // change to get username
+                socket.emit('send_message',currentchatid,messageobj,(response)=>{
+                    console.log(response.sent)
+                }) // change to get username
                 const indx = chats.data.findIndex((e)=>{return e.chat_id == currentchatid}) 
                 const cht = chats
                 cht.data[indx].messages.push(messageobj)

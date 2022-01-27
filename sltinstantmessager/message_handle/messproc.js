@@ -27,15 +27,22 @@ io.on("connection", (socket) => {
         socket.join(rooms)
     })
 
-    socket.on('send_message',(room,message)=>{ // room should be chat_id
+    socket.on('send_message',(room,message,callback)=>{ // room should be chat_id
         console.log(room,message)
         // update database find by chat id 
         ccvmodel.findOneAndUpdate({chat_id:room},{$push:{messages:message},$currentDate:{last_messaged:true}},(err)=>{ // adds message to database 
             if (err){
                 console.log(err)
+                callback({
+                    sent:false
+                })
             }else if (!err){
                 console.log('success')
                 socket.to(room).emit('incomming_message', room,message)//message should be {sender,message,timesent}
+                callback({
+                    sent:true
+                });
+        
             }
         })
 
