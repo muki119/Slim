@@ -8,7 +8,8 @@ var cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 
 const mong = require('mongoose');//database connection (use environments)
-const dot =require('dotenv').config();
+const dot =require('dotenv')
+dot.config();
 const { Schema } = mong;
 
 const registerops = require('./regiops/register.js');//register middleware 
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //starts server---
 app.listen(process.env.PORT || 8080,(err)=>{if(!err){console.log('listening on port :'+process.env.PORT)}else{console.log(err)}})
-app.use(cors({origin:'http://localhost:8080',credentials:true})) // needs to be env 
+app.use(cors({origin:process.env.CORS_ORIGIN,credentials:true})) // needs to be env 
 app.use(helmet()) // response headers removal
 app.use((req,res,next)=>{
   res.set('Server','H26') // H26 server moniker
@@ -41,7 +42,7 @@ app.use(messops); // message handling
 //------------------------
 //connects to database 
 var url = process.env.DATABASE_CONURL
-const usrdb = mong.connect("mongodb+srv://muki11:kimera11@cluster0.tew2a.mongodb.net/cluster0?retryWrites=true&w=majority",{useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true},(err)=>{
+const usrdb = mong.connect(url,{useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true},(err)=>{
     if (err){
         console.log('maindb connection error')
         console.log(err)

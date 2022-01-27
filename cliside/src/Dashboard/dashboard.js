@@ -35,14 +35,14 @@ function Dashboard (props){
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
         document.title = 'Dashboard'
-        const newsocket = io('ws://localhost:8210'); // URL WILL BE FROM .ENV
+        const newsocket = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
         setsocket(newsocket)
 
         //console.log('dome') 
         async function get_chats(){ // get the user's chats 
             try {
                 var uat = localStorage.getItem("Uat")
-                var chat= await Axios.post('http://localhost:25565/api/m/getmsgs',{username:dashdata.user.username,Uat:uat})  // URL WILL BE FROM .ENV+ROUTE
+                var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username,Uat:uat})  // URL WILL BE FROM .ENV+ROUTE
                 //bubble sort the chats by time and get each 
                 setchats(chat)
             } catch (error) {
@@ -65,8 +65,8 @@ function Dashboard (props){
 
     useEffect(()=>{ // joins rooms once everything is established - if the user also has no rooms then the function will not run 
         if (roomidarr !== [] && socket !== null){
-            socket.emit('join_rooms',roomidarr,'kachow')
-            console.log(roomidarr)
+            socket.emit('join_rooms',roomidarr)
+            //console.log(roomidarr)
         }
     },[roomidarr])
 
@@ -91,9 +91,9 @@ function Dashboard (props){
             sk.sort(sortalgor) // sorts the chats by last messaged 
             sk.reverse()
             
-            var convomp = chats.data.map((eh,index)=>{
+            var convomp = chats.data.map((eh,index)=>{ // maps the lists into tiles clickable tiles
                 var usersinvolved = [(eh.users_involved.slice(0,eh.users_involved.indexOf(dashdata.user.username))).toString(),(eh.users_involved.slice(eh.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-                return <div key = {index}id={eh.chat_id} onClick={chatchanger}><span onClick={(e)=>{e.preventDefault() }}class= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+                return <div key = {index}id={eh.chat_id} onClick={chatchanger} tabIndex={0}><p onClick={(e)=>{e.preventDefault() }}class= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
             })
 
             return(
@@ -103,7 +103,7 @@ function Dashboard (props){
                         <div class ='topbar'>
 
                             <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
-                            <button id='lout'onClick={logoutproc}>Logout</button>
+                            <button tabIndex={1} id='lout'onClick={logoutproc}>Logout</button>
                             
                         </div>
 

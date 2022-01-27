@@ -25,7 +25,7 @@ function Login (){
 
     async function loginproce(){
         try {
-            const userdata = await Axios.post('http://localhost:25565/login',logindetails)
+            const userdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,logindetails)
             //console.log(userdata)
             if (userdata.data.redirect === true){
                 
@@ -52,7 +52,7 @@ function Login (){
         if (uat){
             var sentuat = {userauth:uat}
             try {
-                const usdata = await Axios.post('http://localhost:25565/login',sentuat)
+                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,sentuat)
                 if (usdata.data.redirect === true){
 
                     localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect}))

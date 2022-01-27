@@ -6,21 +6,25 @@ const ccvmodel = require('./mess_schema')// schema to create new conversation
 const regimodel = require('../regiops/registerschem')// register schema 
 const userauth = require("./userauth.js")
 const { Server } = require("socket.io"); // server
-
+const { instrument } = require("@socket.io/admin-ui");
+const dot = require("dotenv").config()
 const io = new Server(8210 || 4080,{
     cors:{
-        origin: ["http://localhost:8080"]
+        origin: [process.env.CORS_ORIGIN,"https://admin.socket.io"]
     },
     transports:["websocket","polling"]
 })
+instrument(io, {
+    auth: false,
+    namespaceName:"/"
+});
 
 io.on("connection", (socket) => {
     console.log(socket.id)
 
-    socket.on('join_rooms',(rooms,message)=>{ // function for joining rooms(rooms should be an array of roooms of the user (rooms should be chat_id ))
+    socket.on('join_rooms',(rooms)=>{ // function for joining rooms(rooms should be an array of roooms of the user (rooms should be chat_id ))
         console.log(rooms)// testing
         socket.join(rooms)
-        console.log(message)
     })
 
     socket.on('send_message',(room,message)=>{ // room should be chat_id

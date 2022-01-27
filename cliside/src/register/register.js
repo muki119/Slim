@@ -33,7 +33,7 @@ function Register (){
             if (data === ''){return{out:false}};
             try{
                 console.log(data[0])
-                const axd = await Axios.post('http://localhost:25565/takencredentials' , {email:data})
+                const axd = await Axios.post(`${process.env.REACT_APP_API_URL}/takencredentials` , {email:data})
                 if (axd.data.taken === false ){ // if theres no match in the database i.e username is not taken 
                     return {out:false}
                 }else if (axd.data.taken === true ){ 
@@ -57,7 +57,7 @@ function Register (){
                 var dtbs = atstring.concat(data)
 
                 try {
-                    const axdata = await Axios.post('http://localhost:25565/takencredentials' , {username:dtbs}) // asks if username has been taken 
+                    const axdata = await Axios.post(`${process.env.REACT_APP_API_URL}/takencredentials` , {username:dtbs}) // asks if username has been taken 
                     //console.log(axdata)
                     if (axdata.data.taken === false ){ // if username aint taken 
                         //this.usernamevall = true // is username valid -true === yes
@@ -180,7 +180,7 @@ function Register (){
         if (messval.emailval === true && messval.usernamevall === true){
             var atc = "@"
             var new_con = atc.concat(regidetails.username.trim())
-            const streg = await Axios.post('http://localhost:25565/register' ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:new_con,password:regidetails.password,pnum:regidetails.phonenumber})
+            const streg = await Axios.post(`${process.env.REACT_APP_API_URL}/register` ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:new_con,password:regidetails.password,pnum:regidetails.phonenumber})
             console.log(streg.data)
 
         }
