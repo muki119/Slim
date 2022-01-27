@@ -13,7 +13,7 @@ import { io } from "socket.io-client" ;
 import _ from 'lodash';
 import ScrollableFeed from 'react-scrollable-feed'
 import TextareaAutosize from 'react-textarea-autosize';
-
+import $ from "jquery";
 
 function Chatroom(){
     const {chats,setchats,currentchatid,socket,setsocket,forceUpdate} = useContext(Messagecontext) //chats are all the available chats from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
@@ -37,6 +37,7 @@ function Chatroom(){
                 //console.log(cht.data[indx].last_messaged )
                 setmessage('')
                 forceUpdate()
+                $(".styles_scrollable-div__prSCv div ")[0].scrollIntoView({block:'end'});
             } catch (error) {
                 console.log('error in attempt to send ')
             }
@@ -84,6 +85,7 @@ function Chatroom(){
 
         if (currentchat != undefined){
             const currentcmsgs = currentchat.messages // current chat messages 
+
             const mappedmsgs = currentcmsgs.map((e,index,arr)=>{
                 var prevarr = arr[index-1]
                 var nextarr = arr[index+1]
@@ -106,7 +108,7 @@ function Chatroom(){
                 }
             })
 
-            const mappedresp =  [currentchat.users_involved.slice(0,currentchat.users_involved.indexOf(dashdata.user.username)).toString(),currentchat.users_involved.slice(currentchat.users_involved.indexOf(dashdata.user.username)+1).toString()]
+            const mappedresp =  [currentchat.users_involved.slice(0,currentchat.users_involved.indexOf(dashdata.user.username)).toString(),currentchat.users_involved.slice(currentchat.users_involved.indexOf(dashdata.user.username)+1).toString()] // recipients  
             return (
                 <div class = 'chatroom_container'>
                     <div class = 'Recipients'>{mappedresp}</div>
