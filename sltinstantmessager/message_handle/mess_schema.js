@@ -10,7 +10,7 @@ const newconv = Schema({
         type:String,
         required:true,
         unique:true,
-        default:uuidv4()
+        default:uuidv4
     },
     users_involved:{
         type:Array,
