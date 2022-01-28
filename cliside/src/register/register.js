@@ -2,7 +2,8 @@ import React, { useState,useCallback} from 'react';
 import '../general_css/gcss.css'
 import './register.css'
 import Axios from 'axios'
-import {debounce}  from 'lodash';
+import debounce  from 'lodash.debounce';
+
 
 Axios.defaults.withCredentials = true
 

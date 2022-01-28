@@ -4,13 +4,14 @@ import {
 } from "react-router-dom";
 import UdContext from '../usercontext/usercontext';
 import Messagecontext from './messagecontext';
+import CreateChatContext from './create-chat-component/c2context'
 import Axios from 'axios'
 import './dashboard.css';
 import '../general_css/gcss.css';
 import { io } from "socket.io-client" ; 
 import _ from 'lodash';
 import Chatroom from './conversation_component/Chatroom';
-
+import CreateChat from './create-chat-component/createchat'
 
 function Dashboard (props){
     const {urdata,setUser} = useContext(UdContext) // use this to set user data and pull userdata
@@ -19,7 +20,7 @@ function Dashboard (props){
     const [currentchatid,changechat] = useState('booom bow') // the id of the 
     const [socket,setsocket]=useState(null)
     const [roomidarr,sridarr]  = useState([])
-    
+    const [displaycc,setcc]= useState(false)    
     const dashdata = JSON.parse(localStorage.getItem('UD')) // login persistence data
     const [,forceUpdate] = useReducer(x => x + 1, 0); // force update 
     
@@ -99,7 +100,7 @@ function Dashboard (props){
             return(
                 <div class = 'dbackground' >
                     <div class='dinbox'>
-
+                        {displaycc === true && <CreateChatContext.Provider value={{chats,setchats,displaycc,setcc}}><CreateChat/></CreateChatContext.Provider>}
                         <div class ='topbar'>
 
                             <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
@@ -111,6 +112,7 @@ function Dashboard (props){
 
                             <div class = 'chatbar'>
                                 <div><span class= 'chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></div>
+                                <div class  = "chatbtnouter"><span class ='create_chat_btn'><button onClick={()=>{setcc(!displaycc)}}>Create chat</button></span></div>
                                 {convomp}
                             </div>
 

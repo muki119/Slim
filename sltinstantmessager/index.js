@@ -15,6 +15,7 @@ const { Schema } = mong;
 const registerops = require('./regiops/register.js');//register middleware 
 const loginops = require('./loginops/login.js');//login middleware 
 const messops = require('./message_handle/messproc.js') // message handling middleware
+const miscops = require('./Miscops/miscops.js')
 
 
 app.use(cookieParser())
@@ -37,7 +38,7 @@ app.use((req,res,next)=>{
 app.use(registerops);//calls register middleware 
 app.use(loginops); // login operations
 app.use(messops); // message handling
-
+app.use(miscops)
 
 //------------------------
 //connects to database 

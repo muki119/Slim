@@ -1,0 +1,97 @@
+.dimopacitybackground{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.createchatformcontainer{
+    width: 35%;
+    min-height: 50vh;
+    max-height: 60vh;
+    overflow-y: scroll;
+    background-color: #eeeeee;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    overflow: hidden;
+}
+.createchatformcontainer>span{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 1rem;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    flex-wrap: nowrap;
+}
+.dimopacitybackground>background{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: #363636;
+    opacity: 0.3;
+}
+
+
+.add-userinput>input{
+    width: 80%;
+    height: 3rem;
+    border-radius: 5px;
+    border-style: solid;
+    font-size: 1.25rem;
+}
+.basebutton{
+    height: 3rem;
+    border-radius: 5px;
+    font-weight: 600;
+    color: #e6e6e6;
+    outline: none;
+    font-size: medium;
+    border: #363636 solid 1px;
+    background-color: #39386e;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+.basebutton:hover{
+    background-color: #e6e6e6;
+    color: #39386f;
+    transition: all 0.4s ease;
+}
+.add-tolist-btn>button{
+    width: 50%;
+}
+.createchat-submit-btn>button{
+    width: 65%;
+}
+
+.similarusrscard{
+    width: 80%;
+    text-align: center;
+    height: 3rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #eeeeee;
+    border: #363636 2px solid;
+    margin: 10px;
+}
+.similarusrscard:hover{
+    background-color: #e6e6e6;
+    cursor: pointer;
+}
+
+.foundusrsfn{
+
+}
+.foundusrsun{}
