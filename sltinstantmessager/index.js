@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cors = require("cors")
 var cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
+const compression = require('compression')
 
 const mong = require('mongoose');//database connection (use environments)
 const dot =require('dotenv')
@@ -17,7 +18,7 @@ const loginops = require('./loginops/login.js');//login middleware
 const messops = require('./message_handle/messproc.js') // message handling middleware
 const miscops = require('./Miscops/miscops.js')
 
-
+app.use(compression()) // for perfromance enhancement
 app.use(cookieParser())
 app.use(bodyParser.json());
 
