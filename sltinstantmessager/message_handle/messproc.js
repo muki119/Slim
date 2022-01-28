@@ -53,15 +53,17 @@ io.on("connection", (socket) => {
     });
 });
 
-router.post('/api/m/crt_conv',userauth,(req,res)=>{ // creating a new conversation 
+router.post('/api/m/createconversation',(req,res)=>{ // creating a new conversation 
     //get usernames involved 
+    console.log(req.body.users_involved)
     var conv = new ccvmodel({
-        users_involved:['@robpelinky','@muki119','@jjk223']
+        users_involved:req.body.users_involved
     })
     conv.save((err)=>{
-        if (err){console.log(err)}else{
-            console.log('works i guess')
-            res.send('eh')
+        
+        if (err){res.send({success:false});console.log(err)}else{ 
+            console.log(conv)// sends back success and the chat that was created 
+            res.send({success:true,chat:conv})
         }
         
     })

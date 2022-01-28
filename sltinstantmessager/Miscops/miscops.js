@@ -11,7 +11,7 @@ regi.post("/api/misc/getsimilar",(req,res)=>{ // this function finds the
     regimodel.find({username:{$regex: req.body.username, $options: 'i'}},"firstname username",{limit:5},(error,data)=>{
         if (!error){
             console.log(data)
-          res.send(data)  
+            res.send(data)  
         }else if (error){
             console.log ("a error has arisent in the get similar route ")
         }

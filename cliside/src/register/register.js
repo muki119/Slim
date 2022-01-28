@@ -33,7 +33,6 @@ function Register (){
         if (path === 'email'){
             if (data === ''){return{out:false}};
             try{
-                console.log(data[0])
                 const axd = await Axios.post(`${process.env.REACT_APP_API_URL}/takencredentials` , {email:data})
                 if (axd.data.taken === false ){ // if theres no match in the database i.e username is not taken 
                     return {out:false}
@@ -91,70 +90,32 @@ function Register (){
 
     async function guimessnval(event){ 
         if (event.target.name === 'email'){ // email validation 
-
             const emailtaken  = await credtaken('email',event.target.value) // is email taken?
-            //console.table(regidetails.email,emailtaken.out)
-
             if (emailtaken.out === false ){ // if the email is not taken 
-
                 const validemail = validateEmail(event.target.value) // validity checker 
-                //console.log(this.emailmess) // valid email checker 
-                //this.emailmess=null; // remvoe email message
                 setmessvall({...messval,emailmess:''})
-                
-
                 if (validemail === false){
-                    //this.emailmess='Email is invalid';
-                    //this.emailval = false
-                    //this.forceUpdate()
-                    
                     setmessvall({...messval,emailmess:'Invalid',emailval:false})
                     document.getElementById('emailmess').style = "color: rgb(90, 15, 15);";
-
                 }else if (validemail === true){
-                    // this.emailmess='Email is valid';
-                    //this.emailval = true
-                    //this.forceUpdate()
                     setmessvall({...messval,emailmess:'Valid',emailval:true})
                     document.getElementById('emailmess').style = "color:green";
                 }else{
-                    //this.emailmess=null;
-                    //this.forceUpdate()
                     setmessvall({...messval,emailmess:''})
                 }
-
             }else if (emailtaken.out === true){ // if email is taken
-                //this.emailmess='Email taken';
-                //this.forceUpdate()
-
                 setmessvall({...messval,emailmess:'Taken'})
                 document.getElementById('emailmess').style = "color: rgb(90, 15, 15);";
             }
-
         }
-
         if (event.target.name === 'username'){
             const usernametaken = await credtaken('username',event.target.value)
-            //console.log(this.usernamemess)
-            console.log('username')
-            console.log(usernametaken)
-
             if (usernametaken.out === true){ // show username is taken
-
-                //this.usernamemess = 'Username is taken' 
-                //this.forceUpdate()
-
                 setmessvall({...messval,usernamemess:'Username is taken',usernamevall:false})
                 document.getElementById('usernamemess').style = "color: rgb(90, 15, 15);";
-
             }else if (usernametaken.out === false){ // show username is not taken
-
-                //this.usernamemess = 'Username is valid'
-                //this.forceUpdate() 
-
                 setmessvall({...messval,usernamemess:'Username is valid',usernamevall:true})
                 document.getElementById('usernamemess').style = "color:green";
-
             }else if (usernametaken.out === 'unctuoc'){
                 setmessvall({...messval,usernamemess:'Username Contains invalid characters',usernamevall:false})
                 document.getElementById('usernamemess').style = "color: rgb(90, 15, 15);";
@@ -167,18 +128,15 @@ function Register (){
 
     async function handleChange (event){ //hood for debouncee
         setrd({...regidetails,[event.target.name]:event.target.value.trim()})
-        //console.log(regidetails.phonenumber)
         // change the variable name of whoever called this event event.target gets everything of the thing that calls the event 
-        //console.log(regidetails)   
+        console.log(regidetails)   
         debcall(event) // debounce function call 
-        
-        //guimessnval(event) 
-        
     };
 
     async function regiproc(){ // register process
         //console.log('calling regipro')
-        if (messval.emailval === true && messval.usernamevall === true){
+        console.log(regidetails.password)
+        if (messval.emailval === true && messval.usernamevall === true && regidetails.password.length >1){
             var atc = "@"
             var new_con = atc.concat(regidetails.username.trim())
             const streg = await Axios.post(`${process.env.REACT_APP_API_URL}/register` ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:new_con,password:regidetails.password,pnum:regidetails.phonenumber})
@@ -186,7 +144,7 @@ function Register (){
 
         }
     };
-    const debrp = useCallback(debounce(()=>{regiproc()},700),[messval])
+    const debrp = useCallback(debounce(()=>{regiproc()},700),[regidetails]) //array should be things that are going to be used in debounced function
     return(
         <div class='logbackground'>
             <div class='maincontainer'> 
@@ -213,7 +171,7 @@ function Register (){
                     </span>
                     <span> 
                         <label for='Password'>Password</label>
-                        <input id = 'Password' type='password' value = {regidetails.password}  placeholder = 'Password' onChange = { handleChange} name = 'password' required/>
+                        <input id = 'Password' type='password' value = {regidetails.password}  placeholder = 'Password' onChange = {handleChange} name = 'password' required/>
                     </span>
                     <span>
                         <label for='email'>Email</label>

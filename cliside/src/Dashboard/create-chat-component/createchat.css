@@ -22,6 +22,7 @@
     justify-content: center;
     z-index: 2;
     overflow: hidden;
+    max-width: 20vw;
 }
 .createchatformcontainer>span{
     width: 100%;
@@ -48,6 +49,7 @@
     border-radius: 5px;
     border-style: solid;
     font-size: 1.25rem;
+    border: #39386e solid 1px;
 }
 .basebutton{
     height: 3rem;
@@ -74,7 +76,7 @@
 }
 
 .similarusrscard{
-    width: 80%;
+    width: 65%;
     text-align: center;
     height: 3rem;
     display: flex;
@@ -85,6 +87,7 @@
     background-color: #eeeeee;
     border: #363636 2px solid;
     margin: 10px;
+    border-radius: 5px; 
 }
 .similarusrscard:hover{
     background-color: #e6e6e6;

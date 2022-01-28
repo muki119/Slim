@@ -6,7 +6,7 @@ const regimodel = require('./registerschem')// register schema
 const dot =require('dotenv').config();
 
 regi.post('/register',(req,res)=>{
-    console.log(req.body)
+    console.log(req.body) // removable
     const sr  = parseInt(process.env.SALT_ROUNDS)
     bcrypt.hash(req.body.password,sr,(err,hash)=>{ // .env the salt rounds
 

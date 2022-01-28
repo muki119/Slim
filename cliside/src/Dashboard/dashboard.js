@@ -100,7 +100,7 @@ function Dashboard (props){
             return(
                 <div class = 'dbackground' >
                     <div class='dinbox'>
-                        {displaycc === true && <CreateChatContext.Provider value={{chats,setchats,displaycc,setcc}}><CreateChat/></CreateChatContext.Provider>}
+                        {displaycc === true && <CreateChatContext.Provider value={{chats,setchats,displaycc,setcc,forceUpdate,socket}}><CreateChat/></CreateChatContext.Provider>}
                         <div class ='topbar'>
 
                             <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
