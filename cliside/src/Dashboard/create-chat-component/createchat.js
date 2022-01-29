@@ -1,18 +1,16 @@
-import React, { createContext,useContext, useEffect, useState ,useReducer,useCallback} from 'react';
+import React, { useContext, useState ,useCallback, useEffect} from 'react';
 import CreateChatContext from '../create-chat-component/c2context'
-import Axios from 'axios'
-import anime, { easings } from 'animejs'
-import {debounce}  from 'lodash';
+import {debounce, set}  from 'lodash';
 import './createchat.css'
 import axios from 'axios';
-import $ from "jquery"
+
 
 export default function CreateChat(){
-    const {chats,setchats,displaycc,setcc,forceUpdate,socket} = useContext(CreateChatContext) 
+    const {chats,displaycc,setcc,forceUpdate,socket,sets_cc} = useContext(CreateChatContext) 
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     const [selectedusers,setselected] = useState([dashdata.user.username])// array of the users selected 
     const [foundusers , setfoundusers] =useState([])
-    const [adduserinput,setaui]=useState("")
+    const [,setaui]=useState("")
    
     function closewindow(e){
         if (e.target.id === "dob"){
@@ -34,20 +32,19 @@ export default function CreateChat(){
         }  
     }
     async function createchatproc(){ //sends to backend
-        if (selectedusers.length == 1 && selectedusers.indexOf(dashdata.user.username) == 0  ){
+        if (selectedusers.length === 1 && selectedusers.indexOf(dashdata.user.username) === 0  ){
            
         }else if (selectedusers.length >1 ){
             try{
                 const createconv =await axios.post(`${process.env.REACT_APP_API_URL}/api/m/createconversation`,{users_involved :selectedusers})
                     var success = createconv.data.success 
-                    if (success == true ){ // if the creation was successful 
-                        chats.data.unshift(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
+                    if (success === true ){ // if the creation was successful 
+                        chats.data.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
                         socket.emit('join_rooms',createconv.data.chat.chat_id)
-                        console.log(chats.data)
-
                         forceUpdate()
-                    }else if (createconv.success == false){
-                        console.log('faliure')
+                        sets_cc(true) // successful conversation creation - this opens the snackbar 
+                        setcc(false) // this closes the menu
+                    }else if (createconv.success === false){
                     }
             }catch{
                 
@@ -57,10 +54,10 @@ export default function CreateChat(){
     }
 
     const mappedfoundusers = foundusers.map((value,index)=>{ // mapps all the users found from api call
-        return<span class ='similarusrscard'key={index} id = {value.username} onClick={(e)=>{addtoselected(e)}}><span class='foundusrsfn'>{value.firstname}</span ><span class="foundusrsun">{value.username}</span></span>
+        return<span class ='similarusrscard'key={index} id = {value.username}  tabindex={0} onClick={(e)=>{addtoselected(e)}}><span class='foundusrsfn'>{value.firstname}</span ><span class="foundusrsun">{value.username}</span></span>
     })
     
-    const debcall =useCallback(debounce((e)=>{displaysimilarusers(e)},700),[adduserinput])
+    const debcall =useCallback(debounce((e)=>{displaysimilarusers(e)},700),[setfoundusers,foundusers])
     
     return(
     
