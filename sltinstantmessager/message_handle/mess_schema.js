@@ -18,11 +18,11 @@ const newconv = Schema({
     },
     date_created:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     },
     last_messaged:{ // sort by last messaged
         type:Date,
-        default:Date.now()
+        default:Date.now
     },
     messages:{//array containing objects with{sender:string,message:string,timesent:date,}
         type:[] // initial one should be 

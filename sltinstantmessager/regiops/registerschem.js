@@ -44,7 +44,7 @@ const mainschem =  Schema({ // schema to register
 
     date_created:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     }
 
 })
