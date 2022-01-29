@@ -3,6 +3,7 @@ import '../general_css/gcss.css'
 import './register.css'
 import Axios from 'axios'
 import debounce  from 'lodash.debounce';
+import { set } from 'lodash';
 
 
 Axios.defaults.withCredentials = true
@@ -16,7 +17,8 @@ function Register (){
         email:'',
         phonenumber:''
     });
-
+    const [sent,setsent]=useState(false)
+    const [successfulcreation,setsc]=useState(false)
     const [messval,setmessvall] = useState({
         emailmess:'',
         emailval :null,// is email valid true = yes
@@ -128,26 +130,30 @@ function Register (){
 
     async function handleChange (event){ //hood for debouncee
         setrd({...regidetails,[event.target.name]:event.target.value.trim()})
-        // change the variable name of whoever called this event event.target gets everything of the thing that calls the event 
-        console.log(regidetails)   
+        // change the variable name of whoever called this event event.target gets everything of the thing that calls the event   
         debcall(event) // debounce function call 
     };
 
     async function regiproc(){ // register process
         //console.log('calling regipro')
-        console.log(regidetails.password)
+        //console.log(regidetails.password)
         if (messval.emailval === true && messval.usernamevall === true && regidetails.password.length >1){
             var atc = "@"
             var new_con = atc.concat(regidetails.username.trim())
             const streg = await Axios.post(`${process.env.REACT_APP_API_URL}/register` ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:new_con,password:regidetails.password,pnum:regidetails.phonenumber})
-            console.log(streg.data)
-
+            var success = streg.data.success
+            if(success && success === true){
+                setsent(true)
+                setsc(success)
+            }
         }
+          
     };
     const debrp = useCallback(debounce(()=>{regiproc()},700),[regidetails]) //array should be things that are going to be used in debounced function
     return(
         <div class='logbackground'>
             <div class='maincontainer'> 
+            {sent === false &&
                 <div class = 'Form_schem'>
                     
                     <span><h1>Create an account</h1></span>
@@ -194,6 +200,23 @@ function Register (){
                     </span>
 
                 </div>
+            }
+            {sent === true &&
+               <div class = 'container'>
+                   {successfulcreation === true && 
+                        <div class='indicationcontainer Form_schem'>
+                            <span><p>Registration complete!</p></span>
+                            <span><button onClick={()=>{document.location='/login'}}>Proceed to Login.</button></span>
+                        </div>
+                   }
+                   {successfulcreation===false &&
+                        <div class='indicationcontainer Form_schem'>
+                            <span><p>Registration Unsuccessful</p></span>
+                            <span><button onClick={()=>{setsent(false);setsc(false)}}>Click to try again.</button></span>
+                        </div>
+                   }
+               </div>
+            }
             </div>
         </div>
 

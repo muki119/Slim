@@ -69,3 +69,20 @@
     display: flex;
 }
 
+
+
+.indicationcontainer{
+    min-height: fit-content;
+    height: 25vh;
+    margin-right: 12.5%;
+}
+.container{
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}

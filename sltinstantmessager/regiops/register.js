@@ -34,14 +34,13 @@ regi.post('/register',(req,res)=>{
                     console.log("theres a error in the process of saving a register")
                     console.log(err)
                     res.status(500).send({
-                        successful:false,
+                        success:false,
                         msg:'There was a problem creating your account, please try again later.'
                     })
 
                 }else{
-
                     res.status(200).send({
-                        succesful:true,
+                        success:true,
                         msg:'Account has been created successfully.'
                     });
 
