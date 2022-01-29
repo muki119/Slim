@@ -31,7 +31,7 @@ function Chatroom(){
                     timesent:new Date(Date.now()).toISOString() // gets the time the message was sent 
                 }
                 socket.emit('send_message',currentchatid,messageobj,(response)=>{
-                    console.log(response.sent)
+                    //console.log(response.sent)
                 }) // change to get username
                 const indx = chats.data.findIndex((e)=>{return e.chat_id == currentchatid}) 
                 const cht = chats
@@ -42,7 +42,7 @@ function Chatroom(){
                 forceUpdate()
                 $(".styles_scrollable-div__prSCv div ")[0].scrollIntoView({block:'end'});
             } catch (error) {
-                console.log('error in attempt to send ')
+                //console.log('error in attempt to send ')
             }
             
             
@@ -69,7 +69,7 @@ function Chatroom(){
                     //chats.data[indx].messages.push(incmessage) // adds message to username array that will be displayed 
                     //change time of last messaged 
                 } catch (error) {
-                    console.log('error recieving message')
+                    //console.log('error recieving message')
                 }
                 
             })
