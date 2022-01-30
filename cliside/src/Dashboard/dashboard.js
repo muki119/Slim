@@ -39,7 +39,7 @@ function Dashboard (props){
     }
 
     function chatchanger(e){ // changes the chat 
-        changechat(e.currentTarget.id)
+        changechat(e.currentTarget.dataset.chatid)
     }
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
@@ -106,7 +106,7 @@ function Dashboard (props){
                 //console.log(element)
                 var lastmessaged = moment(element.last_messaged).fromNow() // finds the time since last messaged - turns it into 
                 var usersinvolved = [(element.users_involved.slice(0,element.users_involved.indexOf(dashdata.user.username))).toString(),(element.users_involved.slice(element.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-                return <div key = {index}id={element.chat_id} onClick={chatchanger} tabIndex={0}><p class= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span class ='last_messaged'>Last Messaged:{lastmessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+                return <div key = {index} data-chatid={element.chat_id} onClick={chatchanger} tabIndex={0}><p class= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span class ='last_messaged'>Last Messaged:{lastmessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
             })
 
             return(

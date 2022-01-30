@@ -26,6 +26,7 @@
     z-index: 2;
     overflow: hidden;
     max-width: 20vw;
+    border: #39386e 2px solid;
 }
 .createchatformcontainer>span{
     width: 100%;
@@ -37,7 +38,7 @@
     align-content: center;
     flex-wrap: nowrap;
 }
-.dimopacitybackground>background{
+.dimopacitybackground>span{
     position: absolute;
     width: 100vw;
     height: 100vh;
@@ -53,6 +54,11 @@
     border-style: solid;
     font-size: 1.25rem;
     border: #39386e solid 1px;
+    background: none;
+    color: #39386e;
+}
+.add-userinput>input:focus{
+    outline-color: #39386e;
 }
 .basebutton{
     height: 3rem;
@@ -97,3 +103,29 @@
     cursor: pointer;
 }
 
+.recipients_list{
+    color: #39386f;
+}
+.recipients_list>p, .recipients_list>span{
+    font-size: medium;
+    font-weight: 500;
+}
+
+.selected_recipients{
+    color: #ffffff;
+    width: fit-content;
+    height: 30%;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    background-color: #39386e;
+    border: #39386e 2px solid;
+    transition: all 0.4s ease;
+}
+.selected_recipients:hover{
+    background-color: #e6e6e6;
+    color: #39386f;
+    transition: all 0.4s ease;
+    cursor: pointer;
+}

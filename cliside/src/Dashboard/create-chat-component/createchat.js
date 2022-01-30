@@ -12,7 +12,7 @@ export default function CreateChat(){
     const [foundusers , setfoundusers] =useState([])
     const [,setaui]=useState("")
    
-    function closewindow(e){
+    function closewindow(e){ // clickaway handler
         if (e.target.id === "dob"){
          setcc(!displaycc)
         }
@@ -26,9 +26,9 @@ export default function CreateChat(){
         
     }
     async function addtoselected(e){
-        var var2 = selectedusers.indexOf(e.currentTarget.id) 
+        var var2 = selectedusers.indexOf(e.target.dataset.foundusername) 
         if (var2=== -1){
-           setselected([...selectedusers,e.currentTarget.id]) 
+           setselected([...selectedusers,e.target.dataset.foundusername]) 
         }  
     }
     async function createchatproc(){ //sends to backend
@@ -61,19 +61,34 @@ export default function CreateChat(){
         
     }
 
+    function removeselected (e){
+        var indexofuser = selectedusers.indexOf(e.target.dataset.selected_username)
+        selectedusers.splice(indexofuser,1)
+        forceUpdate()
+    }
+
     const mappedfoundusers = foundusers.map((value,index)=>{ // mapps all the users found from api call
-        return<span class ='similarusrscard'key={index} id = {value.username}  tabindex={0} onClick={(e)=>{addtoselected(e)}}><span class='foundusrsfn'>{value.firstname}</span ><span class="foundusrsun">{value.username}</span></span>
+        return<span class ='similarusrscard'key={index} data-foundusername = {value.username}  tabindex={0} onClick={(e)=>{addtoselected(e)}}><span class='foundusrsfn'>{value.firstname}</span ><span class="foundusrsun">{value.username}</span></span>
     })
     
+    const mappedselectedusers = selectedusers.map((element,index)=>{
+        if (element !== dashdata.user.username){
+            return <span  key = {index+12} class ='selected_recipients' data-selected_username = {element} onClick={removeselected}>{element}</span>
+        }
+        
+    })
     const debcall =useCallback(debounce((e)=>{displaysimilarusers(e)},700),[setfoundusers,foundusers])
     
     return(
     
     <div class ='dimopacitybackground'> 
-        <background id = 'dob' onClick={(e)=>{closewindow(e)}}></background>
+        <span id = 'dob' onClick={(e)=>{closewindow(e)}}></span>
         <div class = "createchatformcontainer">
             <span class = 'add-userinput'><input placeholder='Input A Username' onChange={e=>{debcall(e)}}></input>{mappedfoundusers}</span> 
-            <span class = 'recipiennts-list '>{JSON.stringify(selectedusers)}</span>
+            <span class = 'recipients_list '>
+                <p>Selected Recipients:</p>
+                {mappedselectedusers}
+            </span>
             <span class = 'createchat-submit-btn'><button class = 'basebutton' onClick={createchatproc}>Create Conversation</button></span>
         </div>
     </div>)
