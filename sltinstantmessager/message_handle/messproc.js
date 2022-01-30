@@ -53,7 +53,7 @@ io.on("connection", (socket) => {
     });
 });
 
-router.post('/api/m/createconversation',(req,res)=>{ // creating a new conversation 
+router.post('/api/m/createconversation',userauth,(req,res)=>{ // creating a new conversation 
     //get usernames involved 
     console.log(req.body.users_involved)
     var conv = new ccvmodel({

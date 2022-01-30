@@ -14,33 +14,47 @@ function userauth (req,res,next){// this checks the jwt sent alongside to verify
         res.send("error")
     }else if (req.body.Uat){
         const uat = req.body.Uat
-        const decrypted_jwt= jwt.verify(uat,process.env.JWTSK);
-        if (decrypted_jwt.username === req.body.username){
-            regimodel.findOne({username:decrypted_jwt.username},'password',(error,data)=>{ // data is the found user 
-                //console.log(data)
-                if (!error){
-                    if (data == null) { // if theres no user matching the description then say that user cannot be found 
-                        console.log('user is not found')
-                        res.status(200).send({login_error:'Invalid jwt'});
-                    }else{ //otherwise there is a matching user 
-                        bcrypt.compare(decrypted_jwt.password,data.password,async (err, result) =>{
-                            if (!err && result == true){  // if everything checks out
-                                next()
-                            }else if (!err && result == false){ // if the password in the jwt is incorrect to the user 
-                                console.log("user not authentic")
-                            }else if (err){ // if there is a error
-                                res.status(500).send("error")
-                            }
-                        })  
-                    } // comapares passwords 
-                }else if (error){
-                    console.log(error)
-                }   
-            })
-        }else if (decrypted_jwt.username !== req.body.username){
-            console.log("jwt isnt the same as username ?")
-            res.status(200).send({login_error:'Invalid jwt'});
-        }
+        jwt.verify(uat,process.env.JWTSK,(err,decrypted_jwt)=>{
+            try {
+                if ( decrypted_jwt.username && decrypted_jwt.username === req.body.username){
+                    regimodel.findOne({username:decrypted_jwt.username},'password',(error,data)=>{ // data is the found user 
+                        //console.log(data)
+                        if (!error){
+                            if (data == null) { // if theres no user matching the description then say that user cannot be found 
+                                console.log('user is not found')
+                                res.status(200).send({login_error:'Invalid jwt',validjwt:false});
+                            }else{ //otherwise there is a matching user 
+                                bcrypt.compare(decrypted_jwt.password,data.password,async (err, result) =>{
+                                    if (!err && result == true){  // if everything checks out
+                                        next()
+                                    }else if (!err && result == false){ // if the password in the jwt is incorrect to the user 
+                                        console.log("user not authentic")
+                                        res.status(200).send({login_error:'Invalid jwt',validjwt:false})
+                                    }else if (err){ // if there is a error
+                                        res.status(500).send("error")
+                                        console.log(err)
+                                    }
+                                })  
+                            } // comapares passwords 
+                        }else if (error){
+                            res.status(500).send("error")
+                            console.log(error)
+                        }   
+                    })
+                }else if ((decrypted_jwt.username && decrypted_jwt.username !== req.body.username) || !decrypted_jwt.username ){
+                    console.log("jwt isnt the same as username ?")
+                    res.status(200).send({login_error:'Invalid jwt',validjwt:false});
+                }else if (err){
+                    console.log(err)
+                    res.status(500).send("error")
+                }
+            } catch (error) { // for case of the jwt not being correct at the undefined values level
+                res.status(200).send({login_error:'Invalid jwt',validjwt:false})
+                console.log(error)
+            }
+            
+            
+        });
         
     }
 }

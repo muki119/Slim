@@ -1,12 +1,12 @@
-import React, { useContext, useState ,useCallback, useEffect} from 'react';
+import React, { useContext, useState ,useCallback} from 'react';
 import CreateChatContext from '../create-chat-component/c2context'
-import {debounce, set}  from 'lodash';
+import {debounce}  from 'lodash';
 import './createchat.css'
 import axios from 'axios';
 
 
 export default function CreateChat(){
-    const {chats,displaycc,setcc,forceUpdate,socket,sets_cc} = useContext(CreateChatContext) 
+    const {chats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc} = useContext(CreateChatContext) 
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     const [selectedusers,setselected] = useState([dashdata.user.username])// array of the users selected 
     const [foundusers , setfoundusers] =useState([])
@@ -32,22 +32,30 @@ export default function CreateChat(){
         }  
     }
     async function createchatproc(){ //sends to backend
-        if (selectedusers.length === 1 && selectedusers.indexOf(dashdata.user.username) === 0  ){
-           
-        }else if (selectedusers.length >1 ){
+        if (selectedusers.length >1 ){
             try{
-                const createconv =await axios.post(`${process.env.REACT_APP_API_URL}/api/m/createconversation`,{users_involved :selectedusers})
-                    var success = createconv.data.success 
+                var uat = localStorage.getItem("Uat")
+                const createconv =await axios.post(`${process.env.REACT_APP_API_URL}/api/m/createconversation`,{users_involved :selectedusers,Uat:uat,username:dashdata.user.username})
+                var success = createconv.data.success 
+                if (createconv.data.validjwt === false){
+                    setcc(false)
+                    logoutproc()
+                }else{
                     if (success === true ){ // if the creation was successful 
                         chats.data.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
                         socket.emit('join_rooms',createconv.data.chat.chat_id)
                         forceUpdate()
                         sets_cc(true) // successful conversation creation - this opens the snackbar 
                         setcc(false) // this closes the menu
-                    }else if (createconv.success === false){
+                    }else if (createconv.success === false){ // if the creation was a failiure 
+                        setf_cc(true) // failed create conversation state 
+                        setcc(false) // closes the menu
                     }
-            }catch{
+                }
                 
+            }catch{
+                setf_cc(true) // failed create conversation state 
+                setcc(false) // closes the menu  
             }
         }
         
