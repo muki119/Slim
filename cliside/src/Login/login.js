@@ -6,7 +6,7 @@ import {
     Redirect
   } from "react-router-dom";
 import UdContext from '../usercontext/usercontext';
-import { createContext, useContext } from "react";
+import { useContext } from "react";
 
 
 function Login (){
@@ -60,10 +60,7 @@ function Login (){
                     setredirect(usdata.data.redirect);
                     
                 } else if (usdata.data.login_error!== null){ // if there is a error message found 
-    
-                    seterm(usdata.data.login_error)
-                   // console.log(usdata.data.login_error)
-                    
+                    localStorage.clear()
                 }
             } catch (error) {
                 console.log(error)

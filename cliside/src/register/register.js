@@ -3,7 +3,7 @@ import '../general_css/gcss.css'
 import './register.css'
 import Axios from 'axios'
 import debounce  from 'lodash.debounce';
-import { set } from 'lodash';
+
 
 
 Axios.defaults.withCredentials = true
@@ -135,8 +135,6 @@ function Register (){
     };
 
     async function regiproc(){ // register process
-        //console.log('calling regipro')
-        //console.log(regidetails.password)
         if (messval.emailval === true && messval.usernamevall === true && regidetails.password.length >1){
             var atc = "@"
             var new_con = atc.concat(regidetails.username.trim())
@@ -147,7 +145,6 @@ function Register (){
                 setsc(success)
             }
         }
-          
     };
     const debrp = useCallback(debounce(()=>{regiproc()},700),[regidetails]) //array should be things that are going to be used in debounced function
     return(
@@ -209,12 +206,14 @@ function Register (){
                             <span><button onClick={()=>{document.location='/login'}}>Proceed to Login.</button></span>
                         </div>
                    }
+
                    {successfulcreation===false &&
                         <div class='indicationcontainer Form_schem'>
                             <span><p>Registration Unsuccessful</p></span>
                             <span><button onClick={()=>{setsent(false);setsc(false)}}>Click to try again.</button></span>
                         </div>
                    }
+
                </div>
             }
             </div>

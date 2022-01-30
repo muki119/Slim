@@ -1,23 +1,14 @@
-
-import React, { createContext,useContext, useEffect, useState ,useReducer} from 'react';
-import {
-    Redirect
-} from "react-router-dom";
+import React, {useContext, useEffect, useState} from 'react';
 //import UdContext from '../usercontext/usercontext';
 import Messagecontext from '../messagecontext';
-import CreateChatContext from '../create-chat-component/c2context'
-import Axios from 'axios'
 import '../dashboard.css';
 import './chatroom.css'
-//import '.../general_css/gcss.css';
-import { io } from "socket.io-client" ; 
-import _ from 'lodash';
 import ScrollableFeed from 'react-scrollable-feed'
 import TextareaAutosize from 'react-textarea-autosize';
 import $ from "jquery";
 
-function Chatroom(){
-    const {chats,setchats,currentchatid,socket,setsocket,forceUpdate} = useContext(Messagecontext) //chats are all the available chats from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
+function Chatroom(){ // this is wwhere the messages are displayed from 
+    const {chats,currentchatid,socket,forceUpdate} = useContext(Messagecontext) //chats are all the available chats from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
     const [message,setmessage]=useState('')
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     
@@ -33,7 +24,7 @@ function Chatroom(){
                 socket.emit('send_message',currentchatid,messageobj,(response)=>{
                     //console.log(response.sent)
                 }) // change to get username
-                const indx = chats.data.findIndex((e)=>{return e.chat_id == currentchatid}) 
+                const indx = chats.data.findIndex((e)=>{return e.chat_id === currentchatid}) 
                 const cht = chats
                 cht.data[indx].messages.push(messageobj)
                 cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
@@ -41,6 +32,7 @@ function Chatroom(){
                 setmessage('')
                 forceUpdate()
                 $(".styles_scrollable-div__prSCv div ")[0].scrollIntoView({block:'end'});
+                $("#text_area").focus();
             } catch (error) {
                 //console.log('error in attempt to send ')
             }
@@ -52,13 +44,12 @@ function Chatroom(){
         //clear input setmessage()
         //if error show it 
     }
-
     useEffect(()=>{ // incoming message handling 
         if (socket!== null ){
             socket.on('incomming_message',(room,incmessage)=>{ // handling a incoming message 
                 try {
                     //console.log(`incoming message from room ${room}:${JSON.stringify(incmessage)}`)
-                    const indx = chats.data.findIndex((e)=>{return e.chat_id == room}) 
+                    const indx = chats.data.findIndex((e)=>{return e.chat_id === room}) 
                     const cht = chats
                     cht.data[indx].messages.push(incmessage) // adds message to array to be displayed 
                     cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
@@ -81,15 +72,15 @@ function Chatroom(){
         
     },[socket,chats])
 
-    if (chats.data != [] && socket!== null ){ // if the user has available chats 
+    if (chats.data !== [] && socket!== null ){ // if the user has available chats 
 
-        const p = chats.data.findIndex((e)=>{return e.chat_id == currentchatid}) // finds
+        const p = chats.data.findIndex((e)=>{return e.chat_id === currentchatid}) // finds
         const currentchat = chats.data[p] // change the contents using setchats
 
-        if (currentchat != undefined){
+        if (currentchat !== undefined){
             const currentcmsgs = currentchat.messages // current chat messages 
 
-            const mappedmsgs = currentcmsgs.map((e,index,arr)=>{
+            const mappedmsgs = currentcmsgs.map((e,index,arr)=>{ // this maps the incoming messages and users messages
                 var prevarr = arr[index-1]
                 var nextarr = arr[index+1]
                 if (e.sender !== dashdata.user.username){ // if the sender 
@@ -114,15 +105,13 @@ function Chatroom(){
             const mappedresp =  [currentchat.users_involved.slice(0,currentchat.users_involved.indexOf(dashdata.user.username)).toString(),currentchat.users_involved.slice(currentchat.users_involved.indexOf(dashdata.user.username)+1).toString()] // recipients  
             return (
                 <div class = 'chatroom_container'>
-                    <div class = 'Recipients'>{mappedresp}</div>
                     <div class ='message_section '>
-                        <ScrollableFeed >
+                        <ScrollableFeed>
                             {mappedmsgs}
                         </ScrollableFeed>
                     </div>
                     <div class = 'message_input_box' >
-                        <TextareaAutosize id = 'test' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={2}style={{fontsize:'2rem'}}></TextareaAutosize>
-                        
+                        <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={2}style={{fontsize:'2rem'}}></TextareaAutosize>  
                         <button id='sendbtn'onClick={sendmsg}>Send</button>
                     </div>
                     

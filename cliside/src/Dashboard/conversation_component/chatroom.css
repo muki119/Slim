@@ -95,7 +95,7 @@
 }
 
 
-#test{
+#text_area{
     resize: none;
     font-size: large;
     font-weight: 500;
@@ -110,7 +110,7 @@
     transition: 0.3s height ease;
 }
 
-#test:focus{
+#text_area:focus{
     outline: none;
 }
 

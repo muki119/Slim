@@ -1,8 +1,5 @@
-import React, { createContext,useContext, useEffect, useState ,useReducer} from 'react';
-import {
-    Redirect
-} from "react-router-dom";
-import anime, { easings } from 'animejs'
+import React, { useEffect} from 'react';
+import anime from 'animejs'
 import "./landing.css";
 
 export default function Landing(){
