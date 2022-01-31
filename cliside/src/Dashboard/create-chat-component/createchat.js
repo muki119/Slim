@@ -18,7 +18,7 @@ export default function CreateChat(){
         }
     }
     async function displaysimilarusers(e){
-        setaui(e.target.value)
+        //setaui(e.target.value)
         if ((e.target.value).length >= 2 ){
             const similar =await axios.post(`${process.env.REACT_APP_API_URL}/api/misc/getsimilar`,{username:e.target.value})
             setfoundusers(similar.data)
@@ -26,9 +26,10 @@ export default function CreateChat(){
         
     }
     async function addtoselected(e){
-        var var2 = selectedusers.indexOf(e.target.dataset.foundusername) 
-        if (var2=== -1){
-           setselected([...selectedusers,e.target.dataset.foundusername]) 
+        var found_username = e.currentTarget.dataset.foundusername;
+        var var2 = selectedusers.indexOf(found_username) 
+        if (var2=== -1){ // if not already within the array 
+           setselected([...selectedusers,found_username]) 
         }  
     }
     async function createchatproc(){ //sends to backend
@@ -62,7 +63,7 @@ export default function CreateChat(){
     }
 
     function removeselected (e){
-        var indexofuser = selectedusers.indexOf(e.target.dataset.selected_username)
+        var indexofuser = selectedusers.indexOf(e.currentTarget.dataset.selected_username)
         selectedusers.splice(indexofuser,1)
         forceUpdate()
     }
@@ -71,11 +72,10 @@ export default function CreateChat(){
         return<span class ='similarusrscard'key={index} data-foundusername = {value.username}  tabindex={0} onClick={(e)=>{addtoselected(e)}}><span class='foundusrsfn'>{value.firstname}</span ><span class="foundusrsun">{value.username}</span></span>
     })
     
-    const mappedselectedusers = selectedusers.map((element,index)=>{
+    const mappedselectedusers = selectedusers.map((element,index)=>{ // displays the users u selected 
         if (element !== dashdata.user.username){
-            return <span  key = {index+12} class ='selected_recipients' data-selected_username = {element} onClick={removeselected}>{element}</span>
-        }
-        
+            return <span class ='selected_recipients' data-selected_username = {element} onClick={removeselected}>{element}</span>
+        }   
     })
     const debcall =useCallback(debounce((e)=>{displaysimilarusers(e)},700),[setfoundusers,foundusers])
     

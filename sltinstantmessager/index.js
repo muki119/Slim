@@ -1,4 +1,3 @@
-//main manager 
 const express = require('express');
 const app = express();
 
