@@ -8,6 +8,9 @@ const userauth = require("./userauth.js")
 const { Server } = require("socket.io"); // server
 const { instrument } = require("@socket.io/admin-ui");
 const dot = require("dotenv").config()
+const  { createAdapter } = require("@socket.io/redis-adapter");
+const  { createClient } = require("redis");
+
 const io = new Server(8210 || 4080,{
     cors:{
         origin: [process.env.CORS_ORIGIN,"https://admin.socket.io"]
@@ -18,7 +21,12 @@ instrument(io, {
     auth: false,
     namespaceName:"/"
 });
+const pubClient = createClient({ url: "redis://redis-16812.c263.us-east-1-2.ec2.cloud.redislabs.com:16812",password:'76MndBHuQJkhhO62T00KLz9F92DT9XFm' });
+const subClient = pubClient.duplicate();
 
+Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+  io.adapter(createAdapter(pubClient, subClient));
+});
 io.on("connection", (socket) => {
     console.log(socket.id)
 
