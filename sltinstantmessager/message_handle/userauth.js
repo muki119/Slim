@@ -7,15 +7,20 @@ const regimodel = require('../regiops/registerschem')// register schema
 const jwt = require('jsonwebtoken');
 const dot =require('dotenv').config();
 const bcrypt = require('bcrypt');
+const AES = require("crypto-js/aes");
+const Utf8 = require('crypto-js/enc-utf8')
 
 function userauth (req,res,next){// this checks the jwt sent alongside to verify that what is sent is the user // this process should also be rate limited as the login one and register 
    
     if (!req.body.Uat){
+
         res.send("error")
+
     }else if (req.body.Uat){
         const uat = req.body.Uat
         jwt.verify(uat,process.env.JWTSK,(err,decrypted_jwt)=>{
             try {
+                decrypted_jwt = JSON.parse(AES.decrypt(decrypted_jwt.UD,'secret123').toString(Utf8))  // decrypts the ud
                 if ( decrypted_jwt.username && decrypted_jwt.username === req.body.username){
                     regimodel.findOne({username:decrypted_jwt.username},'password',(error,data)=>{ // data is the found user 
                         //console.log(data)

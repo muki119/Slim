@@ -1,6 +1,8 @@
 const regimodel = require('../regiops/registerschem')// register schema 
 const express = require('express');
 const bcrypt = require('bcrypt');
+const AES = require("crypto-js/aes");
+const Utf8 = require('crypto-js/enc-utf8')
 const logi = express.Router();
 const mong = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -84,15 +86,15 @@ function jwtauth(req,res,next){  // jwt checker
         //console.log(req.body);// -- thebody that comes in --really for soving problems 
         //console.log ('^^befor body') ;
         var userauth =req.body.userauth; // gets userauth cookies from the request 
-
         try{
             const dcjwt = jwt.verify(userauth,process.env.JWTSK);//decodes jwt
-            req.body.un = dcjwt.username;// sets username as the decrypted jwt username 
-            req.body.pass = dcjwt.password;// sets password ass the decrypted jwt password 
+            var decryptedUserdetails = JSON.parse(AES.decrypt(dcjwt.UD,'secret123').toString(Utf8)) // decrypts userdetails
+
+            req.body.un = decryptedUserdetails.username;// sets username as the decrypted jwt username 
+            req.body.pass = decryptedUserdetails.password;// sets password ass the decrypted jwt password 
 
             if(req.body.remember_me){delete req.body.remember_me} // if theres a remember me - just delete it because theres already a jwt token
-            //console.log(dcjwt) //solving problems 
-            //console.log('^^dcjwt')
+
             next() // passes on to main function 
         }catch{
             console.log('Jwt verify error')
@@ -103,8 +105,10 @@ function jwtauth(req,res,next){  // jwt checker
  
 }
 function token_create(dtu){ // make a jwt token  with username and password
-    var jwtsk = process.env.JWTSK; // secret key 
-    const tokenout = jwt.sign(dtu, jwtsk, { expiresIn:'7d' }); // encrypts data - dies in 7 days 
+    var jwtsk = process.env.JWTSK; // secret key for signing
+    var encryptedUserDetails =AES.encrypt(JSON.stringify(dtu),'secret123').toString() // encrypts user details 
+    const tokenout = jwt.sign({UD:encryptedUserDetails}, jwtsk, { expiresIn:'14d' }); // encrypts data - dies in 7 days 
+
     return tokenout // return the token
   
 };
