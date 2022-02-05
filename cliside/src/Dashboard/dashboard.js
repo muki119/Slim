@@ -50,9 +50,8 @@ function Dashboard (props){
         //console.log('dome') 
         async function get_chats(){ // get the user's chats 
             try {
-                var uat = localStorage.getItem("Uat")
-                var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username,Uat:uat})  // URL WILL BE FROM .ENV+ROUTE
-                if (chat.data.validjwt === false){
+                var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  // URL WILL BE FROM .ENV+ROUTE
+                if (chat.data.validjwt === false){ // if invalid jwt then logout
                     logoutproc()
                 }else{
                    setchats(chat) 
@@ -153,7 +152,7 @@ function Dashboard (props){
         }  
     }else{
         return(
-            <Redirect push to = '/' />
+            <Redirect push to = '/login' />
         )
     }
     
