@@ -50,7 +50,7 @@ logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the
                         //send data process start ----------
 
                         //if (jwtout){res.cookie('userauth',jwtout,{httpOnly:true,maxAge:604800000}) }// sends the jwt to the client as a cookie // fixes problem of cookie switching from jwt to undefined where undefined is caused by no remember me in jwt so the jwtout is nothing and as a result the output is nothing - adding a if stamemnt makes sure that if there is somethin in the jwt out then it will send it as a cookie - not just sending it out even with no remember_me == true 
-                        res.cookie('SID',jwtout,{maxAge:1209600})// then send the user authentication token (userauth in jwt)
+                        res.cookie('SID',jwtout,{maxAge:1209600000})// then send the user authentication token (userauth in jwt)
                         res.send({ // sends the data 
                             successful:true,
                             user:{
@@ -94,7 +94,7 @@ function jwtauth(req,res,next){  // jwt checker
             var userauth =req.cookies.SID; // gets userauth cookies from the request 
             try{
                 const dcjwt = jwt.verify(userauth,process.env.JWTSK);//decodes jwt
-                var decryptedUserdetails = JSON.parse(AES.decrypt(dcjwt.UD,'secret123').toString(Utf8)) // decrypts userdetails
+                var decryptedUserdetails = JSON.parse(AES.decrypt(dcjwt.UD,`${process.env.AES_KEY}`).toString(Utf8)) // decrypts userdetails
 
                 if (decryptedUserdetails.username && decryptedUserdetails.password){
                     req.body.un = decryptedUserdetails.username;// sets username as the decrypted jwt username 
@@ -121,7 +121,7 @@ function jwtauth(req,res,next){  // jwt checker
 }
 function token_create(dtu){ // make a jwt token  with username and password
     var jwtsk = process.env.JWTSK; // secret key for signing
-    var encryptedUserDetails =AES.encrypt(JSON.stringify(dtu),'secret123').toString() // encrypts user details 
+    var encryptedUserDetails =AES.encrypt(JSON.stringify(dtu),`${process.env.AES_KEY}`).toString() // encrypts user details 
     const tokenout = jwt.sign({UD:encryptedUserDetails}, jwtsk, { expiresIn:'14d' }); // encrypts data - dies in 7 days 
 
     return tokenout // return the token

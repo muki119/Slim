@@ -24,7 +24,7 @@ function userauth (req,res,next){// this checks the jwt sent alongside to verify
                 jwt.verify(uat,process.env.JWTSK,(err,decrypted_jwt)=>{
 
                     try {
-                        decrypted_jwt = JSON.parse(AES.decrypt(decrypted_jwt.UD,'secret123').toString(Utf8))  // decrypts the ud
+                        decrypted_jwt = JSON.parse(AES.decrypt(decrypted_jwt.UD,`${process.env.AES_KEY}`).toString(Utf8))  // decrypts the ud
 
                         if ( decrypted_jwt.username && decrypted_jwt.username === req.body.username){
                             regimodel.findOne({username:decrypted_jwt.username},'password',(error,data)=>{ // data is the found user 
