@@ -11,3 +11,4 @@ build
 build/*
 .env
 .vscode
+.jshintrc

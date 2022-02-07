@@ -19,4 +19,7 @@ regi.post("/api/misc/getsimilar",(req,res)=>{ // this function finds the
     })
 })
 
+regi.delete("/api/misc/removecookie",(req,res)=>{
+    res.clearCookie("SID").send()
+})
 module.exports = regi
