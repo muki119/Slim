@@ -8,13 +8,17 @@ const mong = require('mongoose');
 const jwt = require('jsonwebtoken');
 const dot =require('dotenv').config();
 var x = 1
-logi.post('/login',jwtauth,async (req,res)=>{ //login middleware -- jauth is the pre-process to this so before doing this process - do jauth 
+var RateLimit = require('express-rate-limit');
+var loginlimiter = RateLimit({ // 20 logins every 5 mins
+  windowMs: 5*60*1000, // 5 minute
+  max: 20
+});
+logi.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware -- jauth is the pre-process to this so before doing this process - do jauth 
 
     console.log(x+':post request to login ')
-    x = x+ 1 
-    const un =req.body.un; // username from request 
-    const pass = req.body.pass;//password from request 
-    const remember_me  = req.body.remember_me; // do they want their account to be remebered on their client (creates jwt that )
+    x = x + 1 
+    const un =req.body.un.toString()// username from request 
+    const pass = req.body.pass.toString();//password from request 
 
     console.log(req.body)
     //console.log('^^incomeing body ')
