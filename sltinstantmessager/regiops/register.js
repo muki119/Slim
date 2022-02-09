@@ -4,8 +4,13 @@ const bcrypt = require('bcrypt');
 const regi = express.Router();
 const regimodel = require('./registerschem')// register schema 
 const dot =require('dotenv').config();
+var RateLimit = require('express-rate-limit');
+var registerlimiter = RateLimit({
+  windowMs: 10*60*1000, // 10 minutes
+  max: 40
+});
 
-regi.post('/register',(req,res)=>{
+regi.post('/register',registerlimiter,(req,res)=>{
     console.log(req.body) // removable
     const sr  = parseInt(process.env.SALT_ROUNDS)
     bcrypt.hash(req.body.password,sr,(err,hash)=>{ // .env the salt rounds
@@ -54,7 +59,11 @@ regi.post('/register',(req,res)=>{
 })
 
 //check for taken username 
-regi.post('/takencredentials' , (req,res)=>{
+var takencredlimiter = RateLimit({
+    windowMs: 5*60*1000, // 1 minute
+    max: 50
+  });
+regi.post('/takencredentials' ,takencredlimiter, (req,res)=>{
     console.log('attempt to post at /takencred')
     console.log(req.body)
 

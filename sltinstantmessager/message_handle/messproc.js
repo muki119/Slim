@@ -7,6 +7,7 @@ const regimodel = require('../regiops/registerschem')// register schema
 const userauth = require("./userauth.js")
 const { Server } = require("socket.io"); // server
 const { instrument } = require("@socket.io/admin-ui");
+const RateLimit = require('express-rate-limit');
 const dot = require("dotenv").config()
 const io = new Server(8210 || 4080,{
     cors:{
@@ -70,7 +71,13 @@ router.post('/api/m/createconversation',userauth,(req,res)=>{ // creating a new 
     //make and join room - socket.io 
 })
 
-router.post('/api/m/getmsgs',userauth,(req,res)=>{
+
+var getmsglimiter = RateLimit({
+  windowMs: 5*60*1000, // 5 minutes
+  max: 35
+});
+
+router.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
     var utbf = req.body.username // user to be found (utbf)
     regimodel.exists({username:utbf},(error,out)=>{  /// checks if user exists 
         if (!error && out === true ){

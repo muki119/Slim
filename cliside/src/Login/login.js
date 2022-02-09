@@ -28,49 +28,35 @@ function Login (){
             const userdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,logindetails)
             //console.log(userdata)
             if (userdata.data.redirect === true){
-                
                 var ud = JSON.stringify({user:userdata.data.user,redirect:userdata.data.redirect})
-                localStorage.setItem('UD',ud)// user data
-                localStorage.setItem('Uat',userdata.data.uat) // jwt 
+                localStorage.setItem('UD',ud)// user data 
                 setredirect(userdata.data.redirect);
  
-            } else if (userdata.data.login_error!== null){
-
+            } else if (userdata.data.successful === false){
                 seterm(userdata.data.login_error)
-               // console.log(userdata.data.login_error)
-                
             }
         } catch (error) {
-            console.log(error)
-            throw 'Error in Attempt to send';
+            //throw 'Error in Attempt to send';
             
         }
         
     }
     async function onloadlogin (){
-        var uat = localStorage.getItem('Uat') // user authentication token
-        if (uat){
-            var sentuat = {userauth:uat}
+        var uat = document.cookie
+        if (uat.length !== 0){
             try {
-                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,sentuat)
+                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`)
                 if (usdata.data.redirect === true){
-
                     localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect}))
-                    localStorage.setItem('Uat',usdata.data.uat)
                     setredirect(usdata.data.redirect);
-                    
-                } else if (usdata.data.login_error!== null){ // if there is a error message found 
+                } else if (usdata.data.successful === false){ // if there is a error message found 
                     localStorage.clear()
                 }
             } catch (error) {
-                console.log(error)
-                throw 'Error in Attempt to send'; 
+                //console.log(error)
+                //throw 'Error in Attempt to send'; 
             }
         }
-        
-        // check if jwt in local storrage
-        // send to server 
-        // if ok then redirect and change user data local storage (UD)
         
     }
 
