@@ -76,6 +76,7 @@
     background-color: #e6e6e6;
     color: #39386f;
     transition: all 0.4s ease;
+
 }
 .add-tolist-btn>button{
     width: 50%;
@@ -88,12 +89,14 @@
     width: 65%;
     text-align: center;
     height: 3rem;
+    font-weight: 500;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
     background-color: #eeeeee;
+    color: #39386f;
     border: #39386e 2px solid;
     margin: 10px;
     border-radius: 5px; 
@@ -126,6 +129,7 @@
 .selected_recipients:hover{
     background-color: #e6e6e6;
     color: #39386f;
+    transform: scale(1.05);
     transition: all 0.4s ease;
     cursor: pointer;
 }
