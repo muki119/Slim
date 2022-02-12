@@ -20,17 +20,17 @@ export default function Landing(){
     },[])
 
     return(
-        <div class = 'Name'>
-            <div class = "slim-side ">
-                <span class = "slim">S<span>enior</span></span>
-                <span class = "slim">L<span>eadership</span></span>
-                <span class = "slim">I<span>nstant</span></span>
-                <span class = "slim">M<span>essenger</span></span>
+        <div className = 'Name'>
+            <div className = "slim-side ">
+                <span className = "slim">S<span>enior</span></span>
+                <span className = "slim">L<span>eadership</span></span>
+                <span className = "slim">I<span>nstant</span></span>
+                <span className = "slim">M<span>essenger</span></span>
             </div>
-            <div class = "menu-side">
-                <span class = 'links msanim'><a href='/login'>Login</a></span>
-                <span class = 'orspan msanim'>Or</span>
-                <span class = 'links msanim'><a href='/register'>Register</a></span>
+            <div className = "menu-side">
+                <span className = 'links msanim'><a href='/login'>Login</a></span>
+                <span className = 'orspan msanim'>Or</span>
+                <span className = 'links msanim'><a href='/register'>Register</a></span>
             </div>
         </div>
     )

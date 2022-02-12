@@ -74,9 +74,9 @@ function Login (){
         return(<Redirect push to = '/dashboard' />)
     }else{
         return(
-            <div class = 'logbackground'>
-                <div class = 'maincontainer'>
-                    <div class ='Form_schem'>
+            <div className = 'logbackground'>
+                <div className = 'maincontainer'>
+                    <div className ='Form_schem'>
                         <span>
                             {erm !== null && <h2>{erm}</h2>}
                         </span>
@@ -91,9 +91,9 @@ function Login (){
                         <span>
                             <button id = 'login_button'onClick = {loginproce}>Login</button>
                         </span>
-                        <span class = 'fn'>
+                        <span className = 'fn'>
                             <span><a href='/login'>Forgotten Your Password?</a></span>
-                            <span class = 'regilink'>Need An account? <a href ='/register'>Register</a></span>
+                            <span className = 'regilink'>Need An account? <a href ='/register'>Register</a></span>
                         </span>
                     </div>
                 </div> 

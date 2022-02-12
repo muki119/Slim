@@ -86,31 +86,31 @@ function Chatroom(){ // this is wwhere the messages are displayed from
                 if (e.sender !== dashdata.user.username){ // if the sender 
                     if (index>0 && index!==(arr.length-1)){
                         if (e.sender === nextarr.sender && e.sender !== prevarr.sender){ /// if its the top of the sandwhich
-                            return <span class = 'incoming_message_container' key={index}><span class = 'incoming_message_top' key={index} >{e.message}</span></span>
+                            return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message_top' key={index} >{e.message}</span></span>
                         }else if (e.sender === nextarr.sender && e.sender === prevarr.sender){ // if middle of sandwhich 
-                            return <span class = 'incoming_message_sandwich_container' key={index}><span class = 'incoming_message_middle' key={index} >{e.message}</span></span>
+                            return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_middle' key={index} >{e.message}</span></span>
                         }else if (e.sender !== nextarr.sender && e.sender === prevarr.sender){ // if bottom of sandwhich 
-                            return <span class = 'incoming_message_sandwich_container' key={index}><span class = 'incoming_message_bottom' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span> 
+                            return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_bottom' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
                         }else{
-                            return <span class = 'incoming_message_container' key={index}><span class = 'incoming_message' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span> 
+                            return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
                         }
                     }else{
-                        return <span class = 'incoming_message_container' key={index}><span class = 'incoming_message' key={index} >{e.message}</span><span class ='sentby'>{e.sender}</span></span> 
+                        return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
                     }  
                 }else if (e.sender === dashdata.user.username){
-                    return <span class = 'users_message_container' key={index} ><span class = 'users_message'>{e.message}</span></span>
+                    return <span className = 'users_message_container' key={index} ><span className = 'users_message'>{e.message}</span></span>
                 }
             })
 
             const mappedresp =  [currentchat.users_involved.slice(0,currentchat.users_involved.indexOf(dashdata.user.username)).toString(),currentchat.users_involved.slice(currentchat.users_involved.indexOf(dashdata.user.username)+1).toString()] // recipients  
             return (
-                <div class = 'chatroom_container'>
-                    <div class ='message_section '>
+                <div className = 'chatroom_container'>
+                    <div className ='message_section '>
                         <ScrollableFeed>
                             {mappedmsgs}
                         </ScrollableFeed>
                     </div>
-                    <div class = 'message_input_box' >
+                    <div className = 'message_input_box' >
                         <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={2}style={{fontsize:'2rem'}}></TextareaAutosize>  
                         <button id='sendbtn'onClick={sendmsg}>Send</button>
                     </div>

@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const AES = require("crypto-js/aes");
 const Utf8 = require('crypto-js/enc-utf8')
 const logi = express.Router();
-const mong = require('mongoose');
 const jwt = require('jsonwebtoken');
 const dot =require('dotenv').config();
 var x = 1
@@ -15,12 +14,12 @@ var loginlimiter = RateLimit({ // 20 logins every 5 mins
 });
 logi.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware -- jauth is the pre-process to this so before doing this process - do jauth 
 
-    console.log(x+':post request to login ')
+   // console.log(x+':post request to login ')
     x = x + 1 
     const un =req.body.un.toString()// username from request 
     const pass = req.body.pass.toString();//password from request 
 
-    console.log(req.body)
+    //console.log(req.body)
     //console.log('^^incomeing body ')
     if (req.body == null){
         console.log(null)
@@ -43,7 +42,7 @@ logi.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware 
                             // if they choose to be remembered in the client  - as of 15/9/21 this is not the sueres decision - this only operates if the person dosent have a jwt already and has to sign in  
                             // no choice now as of 11/11/21 jwt is now in localstorage
 
-                        var jwtout = token_create(obj = { // jwt output 
+                        var jwtout = token_create({ // jwt output 
                             username: data.username,
                             password: pass // sets password to the login form password to avoid hashing problems in bcrypt because us cant compare between two hashed passwords
                         }) 
@@ -74,7 +73,7 @@ logi.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware 
 
                     }else if (result == false ){ // if the passwords are different 
                         res.send({successful:false,login_error:'Incorrect username/password'}) //send uncuccesfull and a incorrect messge in json 
-                    };
+                    }
                         
                 }
     
@@ -130,5 +129,5 @@ function token_create(dtu){ // make a jwt token  with username and password
 
     return tokenout // return the token
   
-};
+}
 module.exports = logi;

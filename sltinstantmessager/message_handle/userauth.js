@@ -1,8 +1,3 @@
-const express = require('express');
-const router = express.Router();
-const mongoose = require('mongoose');
-const messdb = require('./mess_db') // message database connection 
-const ccvmodel = require('./mess_schema')// schema to create new conversation
 const regimodel = require('../regiops/registerschem')// register schema 
 const jwt = require('jsonwebtoken');
 const dot =require('dotenv').config();

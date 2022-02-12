@@ -10,7 +10,6 @@ export default function CreateChat(){
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     const [selectedusers,setselected] = useState([dashdata.user.username])// array of the users selected 
     const [foundusers , setfoundusers] =useState([])
-    const [,setaui]=useState("")
    
     function closewindow(e){ // clickaway handler
         if (e.target.id === "dob"){
@@ -69,27 +68,27 @@ export default function CreateChat(){
     }
 
     const mappedfoundusers = foundusers.map((value,index)=>{ // mapps all the users found from api call
-        return<span class ='similarusrscard'key={index} data-foundusername = {value.username}  tabindex={0} onClick={(e)=>{addtoselected(e)}}><span class='foundusrsfn'>{value.firstname}</span ><span class="foundusrsun">{value.username}</span></span>
+        return<span className ='similarusrscard'key={index} data-foundusername = {value.username}  tabIndex={0} onClick={(e)=>{addtoselected(e)}}><span className='foundusrsfn'>{value.firstname}</span ><span className="foundusrsun">{value.username}</span></span>
     })
     
-    const mappedselectedusers = selectedusers.map((element,index)=>{ // displays the users u selected 
+    const mappedselectedusers = selectedusers.map((element)=>{ // displays the users u selected 
         if (element !== dashdata.user.username){
-            return <span class ='selected_recipients' data-selected_username = {element} onClick={removeselected}>{element}</span>
+            return <span className ='selected_recipients' data-selected_username = {element} onClick={removeselected}>{element}</span>
         }   
     })
     const debcall =useCallback(debounce((e)=>{displaysimilarusers(e)},700),[setfoundusers,foundusers])
     
     return(
     
-    <div class ='dimopacitybackground'> 
+    <div className ='dimopacitybackground'> 
         <span id = 'dob' onClick={(e)=>{closewindow(e)}}></span>
-        <div class = "createchatformcontainer">
-            <span class = 'add-userinput'><input placeholder='Input A Username' onChange={e=>{debcall(e)}}></input>{mappedfoundusers}</span> 
-            <span class = 'recipients_list '>
+        <div className = "createchatformcontainer">
+            <span className = 'add-userinput'><input placeholder='Input A Username' onChange={e=>{debcall(e)}}></input>{mappedfoundusers}</span> 
+            <span className = 'recipients_list '>
                 <p>Selected Recipients:</p>
                 {mappedselectedusers}
             </span>
-            <span class = 'createchat-submit-btn'><button class = 'basebutton' onClick={createchatproc}>Create Conversation</button></span>
+            <span className = 'createchat-submit-btn'><button className = 'basebutton' onClick={createchatproc}>Create Conversation</button></span>
         </div>
     </div>)
 }

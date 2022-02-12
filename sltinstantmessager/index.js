@@ -10,7 +10,6 @@ const compression = require('compression')
 const mong = require('mongoose');//database connection (use environments)
 const dot =require('dotenv')
 dot.config();
-const { Schema } = mong;
 
 const registerops = require('./regiops/register.js');//register middleware 
 const loginops = require('./loginops/login.js');//login middleware 
@@ -56,4 +55,4 @@ const usrdb = mong.connect(url,{useNewUrlParser: true,useUnifiedTopology: true,u
 //schema to send to 
 
 module.exports = usrdb;
-module.exports = app;
+

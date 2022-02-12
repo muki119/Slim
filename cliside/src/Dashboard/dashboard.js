@@ -1,8 +1,7 @@
-import React, {useContext, useEffect, useState ,useReducer} from 'react';
+import React, {useEffect, useState ,useReducer} from 'react';
 import {
     Redirect
 } from "react-router-dom";
-import UdContext from '../usercontext/usercontext';
 import Messagecontext from './messagecontext';
 import CreateChatContext from './create-chat-component/c2context'
 import Axios from 'axios'
@@ -20,7 +19,7 @@ import axios from 'axios';
 
 
 
-function Dashboard (props){
+function Dashboard (){
     //const {urdata,setUser} = useContext(UdContext) // use this to set user data and pull userdata
     const [logout,setlog] = useState(false)
     const [chats,setchats] = useState({data:[]})
@@ -58,9 +57,9 @@ function Dashboard (props){
                 }else{
                    setchats(chat) 
                 }
-            } catch {
-                
-            } 
+            }catch{
+                get_chats()
+            }
         }
         get_chats() //calls the get_chats function 
         return ()=>{newsocket.close()} // once the dashboard closes the socket will be disconnected  - cleanup function
@@ -107,28 +106,28 @@ function Dashboard (props){
                 //console.log(element)
                 var lastmessaged = moment(element.last_messaged).fromNow() // finds the time since last messaged - turns it into 
                 var usersinvolved = [(element.users_involved.slice(0,element.users_involved.indexOf(dashdata.user.username))).toString(),(element.users_involved.slice(element.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-                return <div key = {index} data-chatid={element.chat_id} onClick={chatchanger} tabIndex={0}><p class= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span class ='last_messaged'>Last Messaged:{lastmessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+                return <div key = {index} data-chatid={element.chat_id} onClick={chatchanger} tabIndex={0}><p className= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span className ='last_messaged'>Last Messaged:{lastmessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
             })
 
             return(
-                <div class = 'dbackground' >
-                    <div class='dinbox'>
+                <div className = 'dbackground' >
+                    <div className='dinbox'>
                         {displaycc === true && <CreateChatContext.Provider value={{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}><CreateChat/></CreateChatContext.Provider>}
-                        <div class ='topbar'>
+                        <div className ='topbar'>
 
                             <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
                             <button tabIndex={0} id='lout'onClick={logoutproc}>Logout</button>
                             
                         </div>
 
-                        <div class = 'chatandbar'>
-                            <div class = 'chatbar'>
-                                <div><span class= 'chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></div>
-                                <div class  = "chatbtnouter"><span class ='create_chat_btn'><button onClick={()=>{setcc(!displaycc)}}>Create chat</button></span></div>
+                        <div className = 'chatandbar'>
+                            <div className = 'chatbar'>
+                                <div><span className= 'chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></div>
+                                <div className  = "chatbtnouter"><span className ='create_chat_btn'><button onClick={()=>{setcc(!displaycc)}}>Create chat</button></span></div>
                                 {convomp}
                             </div>
 
-                            <div class = 'openchat'>
+                            <div className = 'openchat'>
                                 <Messagecontext.Provider value = {{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}>
                                     <Chatroom/>
                                 </Messagecontext.Provider>

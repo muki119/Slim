@@ -33,7 +33,7 @@ function Register (){
         //console.log(data)
         
         if (path === 'email'){
-            if (data === ''){return{out:false}};
+            if (data === ''){return{out:false}}
             try{
                 const axd = await Axios.post(`${process.env.REACT_APP_API_URL}/takencredentials` , {email:data})
                 if (axd.data.taken === false ){ // if theres no match in the database i.e username is not taken 
@@ -86,6 +86,7 @@ function Register (){
     }
 
     function validateEmail(email) { // email validation process
+        //eslint-disable-next-line
         const re = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
         return re.test(email);
     }
@@ -132,7 +133,7 @@ function Register (){
         setrd({...regidetails,[event.target.name]:event.target.value.trim()})
         // change the variable name of whoever called this event event.target gets everything of the thing that calls the event   
         debcall(event) // debounce function call 
-    };
+    }
 
     async function regiproc(){ // register process
         if (messval.emailval === true && messval.usernamevall === true && regidetails.password.length >1){
@@ -145,44 +146,44 @@ function Register (){
                 setsc(success)
             }
         }
-    };
+    }
     const debrp = useCallback(debounce(()=>{regiproc()},700),[regidetails]) //array should be things that are going to be used in debounced function
     return(
-        <div class='logbackground'>
-            <div class='maincontainer'> 
+        <div className='logbackground'>
+            <div className='maincontainer'> 
             {sent === false &&
-                <div class = 'Form_schem'>
+                <div className = 'Form_schem'>
                     
                     <span><h1>Create an account</h1></span>
                     <span>
-                        <label for='first_name'>Firstname</label>
+                        <label htmlFor='first_name'>Firstname</label>
                         <input id ='first_name' placeholder='Forename' type='text' value = {regidetails.firstname} onChange = { handleChange} name = 'firstname' required/>
                     </span>
                     <span>
-                        <label for='sur_name'>Surname</label>
+                        <label htmlFor='sur_name'>Surname</label>
                         <input id ='sur_name' placeholder='Surname'type='text' value = {regidetails.surname} onChange = { handleChange} name = 'surname' required/>
                     </span>
-                    <span class ='usernamewpfx' >
-                        <span class ='usernameprt'>
-                            <label for='Username'>Username</label>
+                    <span className ='usernamewpfx' >
+                        <span className ='usernameprt'>
+                            <label htmlFor='Username'>Username</label>
                             <span id ='pfxcontainer'>
-                                <span class = 'pfx'>@</span>
+                                <span className = 'pfx'>@</span>
                                 <input id = 'Username' value = {regidetails.username} type='text' placeholder = 'Username' onChange = {handleChange} name = 'username' required/>
                             </span>
                             {messval.usernamemess.length >0 && <p id='usernamemess'>{messval.usernamemess}</p>}
                         </span>
                     </span>
                     <span> 
-                        <label for='Password'>Password</label>
+                        <label htmlFor='Password'>Password</label>
                         <input id = 'Password' type='password' value = {regidetails.password}  placeholder = 'Password' onChange = {handleChange} name = 'password' required/>
                     </span>
                     <span>
-                        <label for='email'>Email</label>
+                        <label htmlFor='email'>Email</label>
                         <input id ='email' type = 'email' placeholder='Email' autoComplete='email'  value = {regidetails.email} onChange = {handleChange} name ='email' maxLength = '320' required/>
                         {messval.emailmess.length > 0 &&<p id='emailmess'>{messval.emailmess}</p>}
                     </span>
                     <span>
-                        <label for='phonenumber'>Phonenumber</label>
+                        <label htmlFor='phonenumber'>Phonenumber</label>
                         <input id ='phonenumber' placeholder='Phonenumber'type='text' value = {regidetails.phonenumber} onChange = {handleChange} name = 'phonenumber'/>
                     </span>
         
@@ -192,23 +193,23 @@ function Register (){
                     <span id = 'tctxt'>
                         <p>By clicking Register you are agreeing to the <a href= 'https://www.google.com'>Terms and Conditions</a></p>
                     </span>
-                    <span class = 'logbtn'>
+                    <span className = 'logbtn'>
                         <span>Already have an account?<a href='/login'>Login</a></span>
                     </span>
 
                 </div>
             }
             {sent === true &&
-               <div class = 'container'>
+               <div className = 'container'>
                    {successfulcreation === true && 
-                        <div class='indicationcontainer Form_schem'>
+                        <div className='indicationcontainer Form_schem'>
                             <span><p>Registration complete!</p></span>
                             <span><button onClick={()=>{document.location='/login'}}>Proceed to Login.</button></span>
                         </div>
                    }
 
                    {successfulcreation===false &&
-                        <div class='indicationcontainer Form_schem'>
+                        <div className='indicationcontainer Form_schem'>
                             <span><p>Registration Unsuccessful</p></span>
                             <span><button onClick={()=>{setsent(false);setsc(false)}}>Click to try again.</button></span>
                         </div>
