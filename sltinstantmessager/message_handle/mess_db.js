@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const dot =require('dotenv').config();
+require('dotenv').config();
 
 
 //connect to messages database 

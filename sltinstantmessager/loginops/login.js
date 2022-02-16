@@ -5,7 +5,7 @@ const AES = require("crypto-js/aes");
 const Utf8 = require('crypto-js/enc-utf8')
 const logi = express.Router();
 const jwt = require('jsonwebtoken');
-const dot =require('dotenv').config();
+require('dotenv').config();
 var x = 1
 var RateLimit = require('express-rate-limit');
 var loginlimiter = RateLimit({ // 20 logins every 5 mins

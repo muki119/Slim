@@ -1,9 +1,7 @@
 const express = require('express');
-const mong = require('mongoose');
-const bcrypt = require('bcrypt');
 const regi = express.Router();
 const regimodel = require('../regiops/registerschem')// register schema 
-const dot =require('dotenv').config();
+require('dotenv').config();
 
 
 regi.post("/api/misc/getsimilar",(req,res)=>{ // this function finds the 
