@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const messdb = require('./mess_db') // message database connection 
 const ccvmodel = require('./mess_schema')// schema to create new conversation
 const regimodel = require('../regiops/registerschem')// register schema 
 const userauth = require("./userauth.js")
 const { Server } = require("socket.io"); // server
 const { instrument } = require("@socket.io/admin-ui");
 const RateLimit = require('express-rate-limit');
-const dot = require("dotenv").config()
+require("dotenv").config()
 const io = new Server(8210 || 4080,{
     cors:{
         origin: [process.env.CORS_ORIGIN,"https://admin.socket.io"]
@@ -55,18 +53,17 @@ io.on("connection", (socket) => {
 });
 
 router.post('/api/m/createconversation',userauth,(req,res)=>{ // creating a new conversation 
-    //get usernames involved 
-    console.log(req.body.users_involved)
     var conv = new ccvmodel({
         users_involved:req.body.users_involved
     })
     conv.save((err)=>{
-        
         if (err){res.send({success:false});console.log(err)}else{ 
-            console.log(conv)// sends back success and the chat that was created 
+            //console.log(conv)// sends back success and the chat that was created 
+            var userwhocreatedchat = req.body.username
+            var userstosendto = req.body.users_involved.filter(user=> user !== userwhocreatedchat)   
+            io.to(userstosendto).emit("new_chat",conv) // send to everyone a newchat has been created 
             res.send({success:true,chat:conv})
         }
-        
     })
     //make and join room - socket.io 
 })

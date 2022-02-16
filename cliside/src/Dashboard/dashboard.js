@@ -21,6 +21,7 @@ import axios from 'axios';
 
 function Dashboard (){
     //const {urdata,setUser} = useContext(UdContext) // use this to set user data and pull userdata
+    const dashdata = JSON.parse(localStorage.getItem('UD')) // login persistence data
     const [logout,setlog] = useState(false)
     const [chats,setchats] = useState({data:[]})
     const [currentchatid,changechat] = useState('') // the id of the 
@@ -29,7 +30,6 @@ function Dashboard (){
     const [displaycc,setcc]= useState(false)  //display create conversation   
     const [success_cc,sets_cc]=useState(false) // on successfull creation this is turnt to true - this causes a pop-up  that the app has been created
     const [failed_cc,setf_cc]=useState(false)
-    const dashdata = JSON.parse(localStorage.getItem('UD')) // login persistence data
     const [,forceUpdate] = useReducer(x => x + 1, 0); // force update 
     
     async function logoutproc(){ // log out process
@@ -47,8 +47,6 @@ function Dashboard (){
         document.title = 'Dashboard'
         const newsocket = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
         setsocket(newsocket)
-
-        //console.log('dome') 
         async function get_chats(){ // get the user's chats 
             try {
                 var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  // URL WILL BE FROM .ENV+ROUTE
@@ -58,7 +56,7 @@ function Dashboard (){
                    setchats(chat) 
                 }
             }catch{
-                get_chats()
+                
             }
         }
         get_chats() //calls the get_chats function 
@@ -67,8 +65,8 @@ function Dashboard (){
 
     useEffect(()=>{ // if theres chats found that the user is a part of - the chat ids will be gathered and used as seperate socket rooms 
         if (chats.data !== [] ){
+            sridarr(roomidarr=>[dashdata.user.username]) // connect to private room 
             chats.data.forEach((e)=>{
-                //console.log(e)
                 sridarr(roomidarr=>[...roomidarr,e.chat_id]) 
             })
         }  
@@ -77,37 +75,50 @@ function Dashboard (){
 
     useEffect(()=>{ // joins rooms once everything is established - if the user also has no rooms then the function will not run 
         if (roomidarr !== [] && socket !== null){
-            socket.emit('join_rooms',roomidarr)
-            //console.log(roomidarr)
+            function joinrooms(){
+                socket.emit('join_rooms',roomidarr)
+            }
+            joinrooms()
+
         }
     },[socket,roomidarr])
 
+    useEffect(()=>{
+        if (socket !== null){
+            socket.on("new_chat",(conv)=>{
+                chats.data.push(conv)
+                socket.emit('join_rooms',conv.chat_id)
+                forceUpdate()
+            })
+            return(()=>{
+                socket.off()
+            })
+        }
+        
+    },[socket,chats,forceUpdate])
 
+    function sort_display(){ // sort messages and  display them
+        const sortalgor = (a,b)=>{
+            return Date.parse(b.last_messaged)-Date.parse(a.last_messaged)
+        }
+        var sk  = chats.data
+        sk.sort(sortalgor) // sorts the chats by last messaged 
+        
+        return chats.data.map((element,index)=>{ // maps the lists into tiles clickable tiles 
+            var lastmessaged = moment(element.last_messaged).fromNow() // finds the time since last messaged - turns it into 
+            var usersinvolved = [(element.users_involved.slice(0,element.users_involved.indexOf(dashdata.user.username))).toString(),(element.users_involved.slice(element.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
+            return <div key = {index} data-chatid={element.chat_id} onClick={chatchanger} tabIndex={0}><p className= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span className ='last_messaged'>Last Messaged:{lastmessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+        })
+    }
 
     
     if (dashdata){
         if (dashdata.redirect === false){ // if not authorized 
-
             return(
                 <Redirect push to = '/login' />
             )
-
         }else if (dashdata.redirect === true ){ // if there is a redirect allowance 
-
-            
-            const sortalgor = (a,b)=>{
-                //console.table(Date.parse(b.last_messaged))
-                return Date.parse(b.last_messaged)-Date.parse(a.last_messaged)
-            }
-            var sk  = chats.data
-            sk.sort(sortalgor) // sorts the chats by last messaged 
-            
-            var convomp = chats.data.map((element,index)=>{ // maps the lists into tiles clickable tiles 
-                //console.log(element)
-                var lastmessaged = moment(element.last_messaged).fromNow() // finds the time since last messaged - turns it into 
-                var usersinvolved = [(element.users_involved.slice(0,element.users_involved.indexOf(dashdata.user.username))).toString(),(element.users_involved.slice(element.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-                return <div key = {index} data-chatid={element.chat_id} onClick={chatchanger} tabIndex={0}><p className= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span className ='last_messaged'>Last Messaged:{lastmessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
-            })
+            var convomp = sort_display()
 
             return(
                 <div className = 'dbackground' >

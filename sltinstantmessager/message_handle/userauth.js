@@ -1,6 +1,6 @@
 const regimodel = require('../regiops/registerschem')// register schema 
 const jwt = require('jsonwebtoken');
-const dot =require('dotenv').config();
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const AES = require("crypto-js/aes");
 const Utf8 = require('crypto-js/enc-utf8')
@@ -70,7 +70,7 @@ function userauth (req,res,next){// this checks the jwt sent alongside to verify
                     
                 });
             }catch(error){
-
+                console.log(error)
             }
             
         }

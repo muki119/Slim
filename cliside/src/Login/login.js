@@ -65,7 +65,7 @@ function Login (){
     },[])
 
     function enterlp (e){
-        if (e.key == 'Enter'){
+        if (e.key === 'Enter'){
             loginproce()
         }
     }

@@ -8,7 +8,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import $ from "jquery";
 
 function Chatroom(){ // this is wwhere the messages are displayed from 
-    const {chats,currentchatid,socket,forceUpdate} = useContext(Messagecontext) //chats are all the available chats from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
+    const {chats,setchats,currentchatid,socket,forceUpdate} = useContext(Messagecontext) //chats are all the available chats from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
     const [message,setmessage]=useState('')
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     
@@ -46,21 +46,13 @@ function Chatroom(){ // this is wwhere the messages are displayed from
     }
     useEffect(()=>{ // incoming message handling 
         if (socket!== null ){
-            socket.on('incomming_message',(room,incmessage)=>{ // handling a incoming message 
+            socket.on('incomming_message',async(room,incmessage)=>{ // handling a incoming message 
                 try {
                     //console.log(`incoming message from room ${room}:${JSON.stringify(incmessage)}`)
-                    const indx = chats.data.findIndex((e)=>{return e.chat_id === room}) 
-                    const cht = chats
-                    cht.data[indx].messages.push(incmessage) // adds message to array to be displayed 
-                    cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
-                    //setchats(chats=>[...chats.data[indx].messages,incmessage])
-                    //onsole.log(chats.data)
-                    //console.log(indx)
+                    await addchat(incmessage,room)
                     forceUpdate() // forces update so its displayed 
-                    //chats.data[indx].messages.push(incmessage) // adds message to username array that will be displayed 
-                    //change time of last messaged 
                 } catch (error) {
-                    //console.log('error recieving message')
+                    
                 }
                 
             })
@@ -68,9 +60,21 @@ function Chatroom(){ // this is wwhere the messages are displayed from
             return ()=>{ // cleanup function so there arent multiple listeners 
                 socket.off()
             }
+
+            function addchat(incmessage,room){
+                try {
+                    const indx = chats.data.findIndex((e)=>{return e.chat_id === room}) 
+                    const cht = chats
+                    cht.data[indx].messages.push(incmessage) // adds message to array to be displayed 
+                    cht.data[indx].last_messaged = new Date(Date.now()).toISOString() 
+                } catch (error) {
+                    return error
+                }
+
+            }
         }
         
-    },[socket,chats])
+    },[socket, chats, forceUpdate])
 
     if (chats.data !== [] && socket!== null ){ // if the user has available chats 
 
@@ -78,30 +82,7 @@ function Chatroom(){ // this is wwhere the messages are displayed from
         const currentchat = chats.data[p] // change the contents using setchats
 
         if (currentchat !== undefined){
-            const currentcmsgs = currentchat.messages // current chat messages 
-
-            const mappedmsgs = currentcmsgs.map((e,index,arr)=>{ // this maps the incoming messages and users messages
-                var prevarr = arr[index-1]
-                var nextarr = arr[index+1]
-                if (e.sender !== dashdata.user.username){ // if the sender 
-                    if (index>0 && index!==(arr.length-1)){
-                        if (e.sender === nextarr.sender && e.sender !== prevarr.sender){ /// if its the top of the sandwhich
-                            return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message_top' key={index} >{e.message}</span></span>
-                        }else if (e.sender === nextarr.sender && e.sender === prevarr.sender){ // if middle of sandwhich 
-                            return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_middle' key={index} >{e.message}</span></span>
-                        }else if (e.sender !== nextarr.sender && e.sender === prevarr.sender){ // if bottom of sandwhich 
-                            return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_bottom' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
-                        }else{
-                            return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
-                        }
-                    }else{
-                        return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
-                    }  
-                }else if (e.sender === dashdata.user.username){
-                    return <span className = 'users_message_container' key={index} ><span className = 'users_message'>{e.message}</span></span>
-                }
-            })
-
+            const mappedmsgs = mapallmessages(currentchat.messages,dashdata)
             const mappedresp =  [currentchat.users_involved.slice(0,currentchat.users_involved.indexOf(dashdata.user.username)).toString(),currentchat.users_involved.slice(currentchat.users_involved.indexOf(dashdata.user.username)+1).toString()] // recipients  
             return (
                 <div className = 'chatroom_container'>
@@ -114,11 +95,8 @@ function Chatroom(){ // this is wwhere the messages are displayed from
                         <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={2}style={{fontsize:'2rem'}}></TextareaAutosize>  
                         <button id='sendbtn'onClick={sendmsg}>Send</button>
                     </div>
-                    
-             
                 </div>
             )
-
         }else{
             return(<h1>No Chat selected</h1>)
         }
@@ -127,6 +105,31 @@ function Chatroom(){ // this is wwhere the messages are displayed from
             <h1>No Available conversations</h1>
         )
     }
+}
+
+function mapallmessages(currentcmsgs,dashdata){ // this function displays the messages
+    return currentcmsgs.map((e,index,arr)=>{ // this maps the incoming messages and users messages
+        var prevarr = arr[index-1]
+        var nextarr = arr[index+1]
+        if (e.sender !== dashdata.user.username){ // if the sender 
+            if (index>0 && index!==(arr.length-1)){
+                if (e.sender === nextarr.sender && e.sender !== prevarr.sender){ /// if its the top of the sandwhich
+                    return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message_top' key={index} >{e.message}</span></span>
+                }else if (e.sender === nextarr.sender && e.sender === prevarr.sender){ // if middle of sandwhich 
+                    return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_middle' key={index} >{e.message}</span></span>
+                }else if (e.sender !== nextarr.sender && e.sender === prevarr.sender){ // if bottom of sandwhich 
+                    return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_bottom' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
+                }else{
+                    return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
+                }
+            }else{
+                return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message' key={index} >{e.message}</span><span className ='sentby'>{e.sender}</span></span> 
+            }  
+        }else if (e.sender === dashdata.user.username){
+            return <span className = 'users_message_container' key={index} ><span className = 'users_message'>{e.message}</span></span>
+        }
+    })
+    
 }
 
 export default Chatroom
