@@ -1,9 +1,8 @@
 const express = require('express');
-const mong = require('mongoose');
 const bcrypt = require('bcrypt');
 const regi = express.Router();
 const regimodel = require('./registerschem')// register schema 
-const dot =require('dotenv').config();
+require('dotenv').config();
 var RateLimit = require('express-rate-limit');
 var registerlimiter = RateLimit({
   windowMs: 10*60*1000, // 10 minutes
@@ -44,7 +43,7 @@ regi.post('/register',registerlimiter,(req,res)=>{
                     })
 
                 }else{
-                    res.status(200).send({
+                    res.status(201).send({
                         success:true,
                         msg:'Account has been created successfully.'
                     });
