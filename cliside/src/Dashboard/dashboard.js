@@ -83,7 +83,6 @@ function Dashboard (){
         if (roomidarr !== [] && socket !== null){
             joinrooms()
             socket.on("disconnect",(reason)=>{
-                console.log(reason)
                 if(reason==="transport close" || reason === "transport error"){
                     joinrooms();
                 }
