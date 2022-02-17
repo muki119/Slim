@@ -42,44 +42,52 @@ function Dashboard (){
     function chatchanger(e){ // changes the chat 
         changechat(e.currentTarget.dataset.chatid)
     }
+    function joinrooms(){
+        socket.emit('join_rooms',roomidarr)
+    }
+    function loadchats(){
+        sridarr(roomidarr=>[dashdata.user.username]) // connect to private room 
+        chats.data.forEach((e)=>{
+            sridarr(roomidarr=>[...roomidarr,e.chat_id]) 
+        })
+    }
+    async function get_chats(){ // get the user's chats 
+        try {
+            var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  // URL WILL BE FROM .ENV+ROUTE
+            if (chat.data.validjwt === false){ // if invalid jwt then logout
+                logoutproc()
+            }else{
+               setchats(chat) 
+            }
+        }catch{
+            
+        }
+    }
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
         document.title = 'Dashboard'
         const newsocket = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
         setsocket(newsocket)
-        async function get_chats(){ // get the user's chats 
-            try {
-                var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  // URL WILL BE FROM .ENV+ROUTE
-                if (chat.data.validjwt === false){ // if invalid jwt then logout
-                    logoutproc()
-                }else{
-                   setchats(chat) 
-                }
-            }catch{
-                
-            }
-        }
         get_chats() //calls the get_chats function 
         return ()=>{newsocket.close()} // once the dashboard closes the socket will be disconnected  - cleanup function
     },[])
 
     useEffect(()=>{ // if theres chats found that the user is a part of - the chat ids will be gathered and used as seperate socket rooms 
         if (chats.data !== [] ){
-            sridarr(roomidarr=>[dashdata.user.username]) // connect to private room 
-            chats.data.forEach((e)=>{
-                sridarr(roomidarr=>[...roomidarr,e.chat_id]) 
-            })
+            loadchats()
         }  
         return ()=>{sridarr([])} 
     },[chats])
 
     useEffect(()=>{ // joins rooms once everything is established - if the user also has no rooms then the function will not run 
         if (roomidarr !== [] && socket !== null){
-            function joinrooms(){
-                socket.emit('join_rooms',roomidarr)
-            }
             joinrooms()
-
+            socket.on("disconnect",(reason)=>{
+                console.log(reason)
+                if(reason==="transport close" || reason === "transport error"){
+                    joinrooms();
+                }
+            })
         }
     },[socket,roomidarr])
 
