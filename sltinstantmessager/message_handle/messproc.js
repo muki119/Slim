@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const Messagerouter = express.Router();
 const ccvmodel = require('./mess_schema')// schema to create new conversation
 const regimodel = require('../regiops/registerschem')// register schema 
 const userauth = require("./userauth.js")
@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
     });
 });
 
-router.post('/api/m/createconversation',userauth,(req,res)=>{ // creating a new conversation 
+Messagerouter.post('/api/m/createconversation',userauth,(req,res)=>{ // creating a new conversation 
     var conv = new ccvmodel({
         users_involved:req.body.users_involved
     })
@@ -74,12 +74,12 @@ var getmsglimiter = RateLimit({
   max: 35
 });
 
-router.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
-    var utbf = req.body.username // user to be found (utbf)
-    regimodel.exists({username:utbf},(error,out)=>{  /// checks if user exists 
+Messagerouter.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
+    var userToBeFound = req.body.username // user to be found (userToBeFound)
+    regimodel.exists({username:userToBeFound},(error,out)=>{  /// checks if user exists 
         if (!error && out === true ){
-            console.log(`${utbf} exists`)
-            ccvmodel.find({users_involved:{"$in":[utbf]}},"users_involved date_created last_messaged messages chat_id ",{projection:{_id:0}}).sort({'last_messaged':-1}).exec((err,data)=>{ // finds user 
+            console.log(`${userToBeFound} exists`)
+            ccvmodel.find({users_involved:{"$in":[userToBeFound]}},"users_involved date_created last_messaged messages chat_id ",{projection:{_id:0}}).sort({'last_messaged':-1}).exec((err,data)=>{ // finds user 
                 if (err){ // if an error occured send a message that an error has occured 
                     res.send({error:'A error has occured'})
                     console.log(err)
@@ -89,7 +89,7 @@ router.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
                 }
             })
         }else if (!error && out === false ){
-            console.log(`${utbf} dosent exist`)
+            console.log(`${userToBeFound} dosent exist`)
             res.send("User not Found !")
         }else if (error){
             console.log("error in attempt to find is a user exists ")
@@ -100,7 +100,7 @@ router.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
 })
 
 
-module.exports = router
+module.exports = Messagerouter
 
 
 

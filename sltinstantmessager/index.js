@@ -11,9 +11,9 @@ const mong = require('mongoose');//database connection (use environments)
 const dot =require('dotenv')
 dot.config();
 
-const registerops = require('./regiops/register.js');//register middleware 
-const loginops = require('./loginops/login.js');//login middleware 
-const messops = require('./message_handle/messproc.js') // message handling middleware
+const registerRoutes = require('./regiops/register.js');//register middleware 
+const loginRoute = require('./loginops/login.js');//login middleware 
+const messageRoute = require('./message_handle/messproc.js') // message handling middleware
 const miscops = require('./Miscops/miscops.js')
 
 
@@ -35,9 +35,9 @@ app.use((req,res,next)=>{
 //----- login --------
 
 
-app.use(registerops);//calls register middleware 
-app.use(loginops); // login operations
-app.use(messops); // message handling
+app.use(registerRoutes);//calls register middleware 
+app.use(loginRoute); // login operations
+app.use(messageRoute); // message handling
 app.use(miscops)
 
 //------------------------

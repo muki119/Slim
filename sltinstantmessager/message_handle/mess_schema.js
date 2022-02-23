@@ -5,7 +5,7 @@ const { Schema } = mong
 
 
 //new conversation schema
-const newconv = Schema({
+const newConv = Schema({
     chat_id:{
         type:String,
         required:true,
@@ -29,6 +29,6 @@ const newconv = Schema({
     }
 });
 
-const ncmodel = mesdb.model('mess_col',newconv,'mess_col') // create conversation model
+const newConversationModel = mesdb.model('mess_col',newConv,'mess_col') // create conversation model
 
-module.exports = ncmodel // newconversation model
+module.exports = newConversationModel // newconversation model

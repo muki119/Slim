@@ -5,13 +5,13 @@ require('dotenv').config();
 
 
 regi.post("/api/misc/getsimilar",(req,res)=>{ // this function finds the 
-    console.log(req.body.username)
+    //console.log(req.body.username)
     regimodel.find({username:{$regex: req.body.username, $options: 'i'}},"firstname username",{limit:5},(error,data)=>{
         if (!error){
-            console.log(data)
+            //console.log(data)
             res.send(data)  
         }else if (error){
-            console.log ("a error has arisent in the get similar route ")
+            console.log ("a error has arisent in the get-similar route ")
         }
         
     })

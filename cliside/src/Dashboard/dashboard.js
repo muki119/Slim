@@ -63,6 +63,7 @@ function Dashboard (){
             
         }
     }
+    useEffect(()=>{},[logout])
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
         document.title = 'Dashboard'
@@ -105,70 +106,64 @@ function Dashboard (){
     },[socket,chats,forceUpdate])
 
     function sort_display(){ // sort messages and  display them
-        const sortalgor = (a,b)=>{
+        const sortAlgorithm = (a,b)=>{
             return Date.parse(b.last_messaged)-Date.parse(a.last_messaged)
         }
         var sk  = chats.data
-        sk.sort(sortalgor) // sorts the chats by last messaged 
-        
+        sk.sort(sortAlgorithm) // sorts the chats by last messaged 
         return chats.data.map((element,index)=>{ // maps the lists into tiles clickable tiles 
-            var lastmessaged = moment(element.last_messaged).fromNow() // finds the time since last messaged - turns it into 
+            var lastMessaged = moment(element.last_messaged).fromNow() // finds the time since last messaged - turns it into 
             var usersinvolved = [(element.users_involved.slice(0,element.users_involved.indexOf(dashdata.user.username))).toString(),(element.users_involved.slice(element.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-            return <div key = {index} data-chatid={element.chat_id} onClick={chatchanger} tabIndex={0}><p className= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span className ='last_messaged'>Last Messaged:{lastmessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+            return <div key = {index} data-chatid={element.chat_id} onClick={chatchanger} tabIndex={0}><p className= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span className ='last_messaged'>Last Messaged:{lastMessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
         })
     }
 
     
-    if (dashdata){
+    if (dashdata && logout!== true){
         if (dashdata.redirect === false){ // if not authorized 
             return(
                 <Redirect push to = '/login' />
             )
         }else if (dashdata.redirect === true ){ // if there is a redirect allowance 
             var convomp = sort_display()
-
             return(
-                <div className = 'dbackground' >
-                    <div className='dinbox'>
-                        {displaycc === true && <CreateChatContext.Provider value={{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}><CreateChat/></CreateChatContext.Provider>}
-                        <div className ='topbar'>
+               <div>
+                    {logout === false && 
+                        <div className = 'dbackground' >
+                                <div className='dinbox'>
+                                    {displaycc === true && <CreateChatContext.Provider value={{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}><CreateChat/></CreateChatContext.Provider>}
+                                    <div className ='topbar'>
+                                        <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
+                                        <button tabIndex={0} id='lout'onClick={logoutproc}>Logout</button>
+                                    </div>
 
-                            <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
-                            <button tabIndex={0} id='lout'onClick={logoutproc}>Logout</button>
-                            
+                                    <div className = 'chatandbar'>
+                                        <div className = 'chatbar'>
+                                            <div><span className= 'chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></div>
+                                            <div className  = "chatbtnouter"><span className ='create_chat_btn'><button onClick={()=>{setcc(!displaycc)}}>Create chat</button></span></div>
+                                            {convomp}
+                                        </div>
+
+                                        <div className = 'openchat'>
+                                            <Messagecontext.Provider value = {{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}>
+                                                <Chatroom/>
+                                            </Messagecontext.Provider>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}>
+                                    <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
+                                </Snackbar>    
+                                <Snackbar open={failed_cc} onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){setf_cc(false)}}} autoHideDuration={5000}>
+                                <Alert severity="error">Unable to create Conversation.Please try again later</Alert>
+                                </Snackbar>
                         </div>
-
-                        <div className = 'chatandbar'>
-                            <div className = 'chatbar'>
-                                <div><span className= 'chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></div>
-                                <div className  = "chatbtnouter"><span className ='create_chat_btn'><button onClick={()=>{setcc(!displaycc)}}>Create chat</button></span></div>
-                                {convomp}
-                            </div>
-
-                            <div className = 'openchat'>
-                                <Messagecontext.Provider value = {{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}>
-                                    <Chatroom/>
-                                </Messagecontext.Provider>
-                            </div>
-
-                        </div>
-                    </div>
-                    <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}>
-                        <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
-                    </Snackbar>    
-                    <Snackbar open={failed_cc} onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){setf_cc(false)}}} autoHideDuration={5000}>
-                    <Alert severity="error">Unable to create Conversation.Please try again later</Alert>
-                    </Snackbar>
+                    }
+                    {logout === true && <Redirect push to = '/login' /> }
                 </div>
             )
-
         }
-        else if(logout === true) {
-            return(
-                <Redirect push to = '/login' />
-            )
-
-        }  
     }else{
         return(
             <Redirect push to = '/login' />

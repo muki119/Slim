@@ -3,7 +3,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const AES = require("crypto-js/aes");
 const Utf8 = require('crypto-js/enc-utf8')
-const logi = express.Router();
+const loginRoute = express.Router();
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 var x = 1
@@ -12,12 +12,12 @@ var loginlimiter = RateLimit({ // 20 logins every 5 mins
   windowMs: 5*60*1000, // 5 minute
   max: 20
 });
-logi.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware -- jauth is the pre-process to this so before doing this process - do jauth 
+loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware -- jauth is the pre-process to this so before doing this process - do jauth 
 
    // console.log(x+':post request to login ')
     x = x + 1 
-    const un =req.body.un.toString()// username from request 
-    const pass = req.body.pass.toString();//password from request 
+    const un =req.body.username// username from request 
+    const pass = req.body.password//password from request 
 
     //console.log(req.body)
     //console.log('^^incomeing body ')
@@ -42,7 +42,7 @@ logi.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware 
                             // if they choose to be remembered in the client  - as of 15/9/21 this is not the sueres decision - this only operates if the person dosent have a jwt already and has to sign in  
                             // no choice now as of 11/11/21 jwt is now in localstorage
 
-                        var jwtout = token_create({ // jwt output 
+                        var jwtout = await token_create({ // jwt output 
                             username: data.username,
                             password: pass // sets password to the login form password to avoid hashing problems in bcrypt because us cant compare between two hashed passwords
                         }) 
@@ -72,6 +72,7 @@ logi.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware 
                         //end+++++++++++++++++++++++
 
                     }else if (result == false ){ // if the passwords are different 
+                        if (req.cookies.SID){res.clearCookie("SID")}
                         res.send({successful:false,login_error:'Incorrect username/password'}) //send uncuccesfull and a incorrect messge in json 
                     }
                         
@@ -89,29 +90,23 @@ logi.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware 
 })
 
 
-function jwtauth(req,res,next){  // jwt checker 
+async function jwtauth(req,res,next){  // jwt checker  - uses jwt to login 
     try{
         if ((req.cookies.SID) || (req.cookies.SID != null )||(req.cookies.SID != undefined)){// if theres a jwt present it sets that as the username and password then passes it to the main login function 
             //console.log(req.body);// -- thebody that comes in --really for soving problems 
             //console.log ('^^befor body') ;
             var userauth =req.cookies.SID; // gets userauth cookies from the request 
             try{
-                const dcjwt = jwt.verify(userauth,process.env.JWTSK);//decodes jwt
-                var decryptedUserdetails = JSON.parse(AES.decrypt(dcjwt.UD,`${process.env.AES_KEY}`).toString(Utf8)) // decrypts userdetails
-
+                const decodedJwt = jwt.verify(userauth,process.env.JWTSK);//decodes jwt
+                var decryptedUserdetails = await decryptUd(decodedJwt.UD) // decrypts userdetails in the jwt 
                 if (decryptedUserdetails.username && decryptedUserdetails.password){
-                    req.body.un = decryptedUserdetails.username;// sets username as the decrypted jwt username 
-                    req.body.pass = decryptedUserdetails.password;// sets password ass the decrypted jwt password 
+                    req.body.username = decryptedUserdetails.username;// sets username as the decrypted jwt username 
+                    req.body.password = decryptedUserdetails.password;// sets password ass the decrypted jwt password 
                     next() // passes on to main function 
                 }else{ // if theres none of them - therefore the cookie is invalid 
                     res.clearCookie('SID')
                     res.status(200).send({auth_error:'Invalid auth',validjwt:false});
                 }
-                
-    
-                if(req.body.remember_me){delete req.body.remember_me} // if theres a remember me - just delete it because theres already a jwt token
-    
-                
             }catch{
                 console.log('Jwt verify error')
                 res.status(500).send({successful:false,login_error:'internal server error'})
@@ -122,12 +117,17 @@ function jwtauth(req,res,next){  // jwt checker
         res.status(500).send({successful:false,login_error:'internal server error'})
     }
 }
-function token_create(dtu){ // make a jwt token  with username and password
+async function decryptUd (ud){
+    try{
+        return JSON.parse(AES.decrypt(ud,`${process.env.AES_KEY}`).toString(Utf8))
+    }catch(error){
+        return error
+    }
+}
+async function token_create(dtu){ // make a jwt token  with username and password
     var jwtsk = process.env.JWTSK; // secret key for signing
     var encryptedUserDetails =AES.encrypt(JSON.stringify(dtu),`${process.env.AES_KEY}`).toString() // encrypts user details 
     const tokenout = jwt.sign({UD:encryptedUserDetails}, jwtsk, { expiresIn:'14d' }); // encrypts data - dies in 7 days 
-
     return tokenout // return the token
-  
 }
-module.exports = logi;
+module.exports = loginRoute;

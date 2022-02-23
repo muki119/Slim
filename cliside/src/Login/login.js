@@ -10,7 +10,7 @@ import { useContext } from "react";
 
 
 function Login (){
-    const [logindetails,setdetails] = useState({un:'',pass:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
+    const [logindetails,setdetails] = useState({username:'',password:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
     const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
     const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
     const [erm,seterm] = useState(null) // error message if incorrect login
@@ -82,11 +82,11 @@ function Login (){
                         </span>
                         <span>
                             <label htmlFor='Username'>Username</label>
-                            <input value = {logindetails.un} type='text' name = 'un' id = 'Username'placeholder = 'Username'  onChange={handleChange}/>
+                            <input value = {logindetails.username} type='text' name = 'username' id = 'Username'placeholder = 'Username'  onChange={handleChange}/>
                         </span>
                         <span>
                             <label htmlFor= 'Password'>Password</label>
-                            <input value = {logindetails.pass} name = 'pass' id = 'Password'placeholder = 'Password' type = 'password' onChange={handleChange} onKeyPress={enterlp} />
+                            <input value = {logindetails.password} name = 'password' id = 'Password'placeholder = 'Password' type = 'password' onChange={handleChange} onKeyPress={enterlp} />
                         </span>
                         <span>
                             <button id = 'login_button'onClick = {loginproce}>Login</button>

@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const regi = express.Router();
+const registerRoutes = express.Router();
 const regimodel = require('./registerschem')// register schema 
 require('dotenv').config();
 var RateLimit = require('express-rate-limit');
@@ -9,7 +9,7 @@ var registerlimiter = RateLimit({
   max: 40
 });
 
-regi.post('/register',registerlimiter,(req,res)=>{
+registerRoutes.post('/register',registerlimiter,(req,res)=>{
     console.log(req.body) // removable
     const sr  = parseInt(process.env.SALT_ROUNDS)
     bcrypt.hash(req.body.password,sr,(err,hash)=>{ // .env the salt rounds
@@ -62,7 +62,7 @@ var takencredlimiter = RateLimit({
     windowMs: 5*60*1000, // 1 minute
     max: 50
   });
-regi.post('/takencredentials' ,takencredlimiter, (req,res)=>{
+registerRoutes.post('/takencredentials' ,takencredlimiter, (req,res)=>{
     console.log('attempt to post at /takencred')
     console.log(req.body)
 
@@ -111,4 +111,4 @@ regi.post('/takencredentials' ,takencredlimiter, (req,res)=>{
 });
 
 
-module.exports = regi
+module.exports = registerRoutes
