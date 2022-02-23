@@ -32,6 +32,7 @@
 .users_message,.incoming_message,.incoming_message_top,.incoming_message_middle,.incoming_message_bottom{
     text-align: left;
     font-weight: 500;
+    font-size: large;
     max-width: 50%;
     word-break: break-word;
     color: white;
