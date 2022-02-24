@@ -42,8 +42,6 @@ function Login (){
         
     }
     async function onloadlogin (){
-        var uat = document.cookie
-        if (uat.length !== 0){
             try {
                 const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`)
                 if (usdata.data.redirect === true){
@@ -53,11 +51,7 @@ function Login (){
                     localStorage.clear()
                 }
             } catch (error) {
-                //console.log(error)
-                //throw 'Error in Attempt to send'; 
             }
-        }
-        
     }
 
     useEffect(()=>{
