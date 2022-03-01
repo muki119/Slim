@@ -10,10 +10,11 @@ import { useContext } from "react";
 
 
 function Login (){
+    
     const [logindetails,setdetails] = useState({username:'',password:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
     const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
     const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
-    const [erm,seterm] = useState(null) // error message if incorrect login
+    const [errorMessage,seterm] = useState(null) // error message if incorrect login
     document.title = 'Login'
     Axios.defaults.withCredentials = true
     
@@ -72,7 +73,7 @@ function Login (){
                 <div className = 'maincontainer'>
                     <div className ='Form_schem'>
                         <span>
-                            {erm !== null && <h2>{erm}</h2>}
+                            {errorMessage !== null && <h2>{errorMessage}</h2>}
                         </span>
                         <span>
                             <label htmlFor='Username'>Username</label>

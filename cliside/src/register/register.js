@@ -1,8 +1,9 @@
-import React, { useState,useCallback} from 'react';
+import { useState,useCallback} from 'react';
 import '../general_css/gcss.css'
 import './register.css'
 import Axios from 'axios'
 import debounce  from 'lodash.debounce';
+import RegisterForm from './RegisterForm';
 
 
 
@@ -149,76 +150,7 @@ function Register (){
     }
     const debrp = useCallback(debounce(()=>{regiproc()},700),[regidetails]) //array should be things that are going to be used in debounced function
     return(
-        <div className='logbackground'>
-            <div className='maincontainer'> 
-            {sent === false &&
-                <div className = 'Form_schem'>
-                    
-                    <span><h1>Create an account</h1></span>
-                    <span>
-                        <label htmlFor='first_name'>Firstname</label>
-                        <input id ='first_name' placeholder='Forename' type='text' value = {regidetails.firstname} onChange = { handleChange} name = 'firstname' required/>
-                    </span>
-                    <span>
-                        <label htmlFor='sur_name'>Surname</label>
-                        <input id ='sur_name' placeholder='Surname'type='text' value = {regidetails.surname} onChange = { handleChange} name = 'surname' required/>
-                    </span>
-                    <span className ='usernamewpfx' >
-                        <span className ='usernameprt'>
-                            <label htmlFor='Username'>Username</label>
-                            <span id ='pfxcontainer'>
-                                <span className = 'pfx'>@</span>
-                                <input id = 'Username' value = {regidetails.username} type='text' placeholder = 'Username' onChange = {handleChange} name = 'username' required/>
-                            </span>
-                            {messval.usernamemess.length >0 && <p id='usernamemess'>{messval.usernamemess}</p>}
-                        </span>
-                    </span>
-                    <span> 
-                        <label htmlFor='Password'>Password</label>
-                        <input id = 'Password' type='password' value = {regidetails.password}  placeholder = 'Password' onChange = {handleChange} name = 'password' required/>
-                    </span>
-                    <span>
-                        <label htmlFor='email'>Email</label>
-                        <input id ='email' type = 'email' placeholder='Email' autoComplete='email'  value = {regidetails.email} onChange = {handleChange} name ='email' maxLength = '320' required/>
-                        {messval.emailmess.length > 0 &&<p id='emailmess'>{messval.emailmess}</p>}
-                    </span>
-                    <span>
-                        <label htmlFor='phonenumber'>Phonenumber</label>
-                        <input id ='phonenumber' placeholder='Phonenumber'type='text' value = {regidetails.phonenumber} onChange = {handleChange} name = 'phonenumber'/>
-                    </span>
-        
-                    <span>
-                        <button type='submit' onClick={debrp}>Register</button>    
-                    </span>
-                    <span id = 'tctxt'>
-                        <p>By clicking Register you are agreeing to the <a href= 'https://www.google.com'>Terms and Conditions</a></p>
-                    </span>
-                    <span className = 'logbtn'>
-                        <span>Already have an account?<a href='/login'>Login</a></span>
-                    </span>
-
-                </div>
-            }
-            {sent === true &&
-               <div className = 'container'>
-                   {successfulcreation === true && 
-                        <div className='indicationcontainer Form_schem'>
-                            <span><p>Registration complete!</p></span>
-                            <span><button onClick={()=>{document.location='/login'}}>Proceed to Login.</button></span>
-                        </div>
-                   }
-
-                   {successfulcreation===false &&
-                        <div className='indicationcontainer Form_schem'>
-                            <span><p>Registration Unsuccessful</p></span>
-                            <span><button onClick={()=>{setsent(false);setsc(false)}}>Click to try again.</button></span>
-                        </div>
-                   }
-
-               </div>
-            }
-            </div>
-        </div>
+        RegisterForm(sent, regidetails, handleChange, messval, debrp, successfulcreation, setsent, setsc)
 
 
     )
@@ -226,3 +158,5 @@ function Register (){
 
 }
 export default Register
+
+

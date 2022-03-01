@@ -1,14 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 //import UdContext from '../usercontext/usercontext';
-import Messagecontext from '../messagecontext';
 import '../dashboard.css';
 import './chatroom.css'
 import ScrollableFeed from 'react-scrollable-feed'
 import TextareaAutosize from 'react-textarea-autosize';
 import $ from "jquery";
 
-function Chatroom(){ // this is wwhere the messages are displayed from 
-    const {chats,setchats,currentchatid,socket,forceUpdate} = useContext(Messagecontext) //chats are all the available chats from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
+function Chatroom({chats,setchats,currentchatid,socket,setsocket,forceUpdate}){ // this is wwhere the messages are displayed from 
+//chats are all the available chats from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
     const [message,setmessage]=useState('')
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     
@@ -36,8 +35,6 @@ function Chatroom(){ // this is wwhere the messages are displayed from
             } catch (error) {
                 //console.log('error in attempt to send ')
             }
-            
-            
         }
         //send message socket.emit('send_message',currentchatid,{message:message})
         //add message to chats state

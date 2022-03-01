@@ -1,12 +1,10 @@
-import React, { useContext, useState ,useCallback} from 'react';
-import CreateChatContext from '../create-chat-component/c2context'
+import React, { useState ,useCallback} from 'react';
 import {debounce}  from 'lodash';
 import './createchat.css'
 import axios from 'axios';
 
 
-export default function CreateChat(){
-    const {chats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc} = useContext(CreateChatContext) 
+export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}){
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     const [selectedusers,setselected] = useState([dashdata.user.username])// array of the users selected 
     const [foundusers , setfoundusers] =useState([])

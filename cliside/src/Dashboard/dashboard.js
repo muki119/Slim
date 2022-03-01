@@ -2,8 +2,6 @@ import React, {useEffect, useState ,useReducer} from 'react';
 import {
     Redirect
 } from "react-router-dom";
-import Messagecontext from './messagecontext';
-import CreateChatContext from './create-chat-component/c2context'
 import Axios from 'axios'
 
 import moment from 'moment'
@@ -14,6 +12,7 @@ import '../general_css/gcss.css';
 
 import { io } from "socket.io-client" ; 
 import Chatroom from './conversation_component/Chatroom';
+import ChatBar from './chatbar.js';
 import CreateChat from './create-chat-component/createchat'
 import axios from 'axios';
 
@@ -34,7 +33,7 @@ function Dashboard (){
     
     async function logoutproc(){ // log out process
         localStorage.clear()
-        await axios.delete(`${process.env.REACT_APP_API_URL}/api/misc/removecookie`)
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/misc/removecookie`) // deletes cookies
         socket.disconnect()
         setlog(true) // do every thing above before this because this redirects to login
     }
@@ -91,7 +90,7 @@ function Dashboard (){
         }
     },[socket,roomidarr])
 
-    useEffect(()=>{
+    useEffect(()=>{ // listens for a new conversation
         if (socket !== null){
             socket.on("new_chat",(conv)=>{
                 chats.data.push(conv)
@@ -127,27 +126,20 @@ function Dashboard (){
         }else if (dashdata.redirect === true ){ // if there is a redirect allowance 
             var convomp = sort_display()
             return(
-               <div>
+               <>
                     {logout === false && 
                         <div className = 'dbackground' >
                                 <div className='dinbox'>
-                                    {displaycc === true && <CreateChatContext.Provider value={{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}><CreateChat/></CreateChatContext.Provider>}
+                                    {displaycc === true && <CreateChat {...{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>}
                                     <div className ='topbar'>
                                         <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
                                         <button tabIndex={0} id='lout'onClick={logoutproc}>Logout</button>
                                     </div>
 
                                     <div className = 'chatandbar'>
-                                        <div className = 'chatbar'>
-                                            <div><span className= 'chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></div>
-                                            <div className  = "chatbtnouter"><span className ='create_chat_btn'><button onClick={()=>{setcc(!displaycc)}}>Create chat</button></span></div>
-                                            {convomp}
-                                        </div>
-
+                                        <ChatBar  setcc={setcc} displaycc={displaycc} convomp={convomp}  />
                                         <div className = 'openchat'>
-                                            <Messagecontext.Provider value = {{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}>
-                                                <Chatroom/>
-                                            </Messagecontext.Provider>
+                                             <Chatroom {...{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}/>
                                         </div>
 
                                     </div>
@@ -161,7 +153,7 @@ function Dashboard (){
                         </div>
                     }
                     {logout === true && <Redirect push to = '/login' /> }
-                </div>
+                </>
             )
         }
     }else{
