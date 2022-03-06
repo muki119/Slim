@@ -124,9 +124,9 @@ async function decryptUd (ud){
         return error
     }
 }
-async function token_create(dtu){ // make a jwt token  with username and password
+async function token_create(tokenContents){ // make a jwt token  with username and password
     var jwtsk = process.env.JWTSK; // secret key for signing
-    var encryptedUserDetails =AES.encrypt(JSON.stringify(dtu),`${process.env.AES_KEY}`).toString() // encrypts user details 
+    var encryptedUserDetails =AES.encrypt(JSON.stringify(tokenContents),`${process.env.AES_KEY}`).toString() // encrypts user details 
     const tokenout = jwt.sign({UD:encryptedUserDetails}, jwtsk, { expiresIn:'14d' }); // encrypts data - dies in 7 days 
     return tokenout // return the token
 }

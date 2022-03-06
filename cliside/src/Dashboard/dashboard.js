@@ -137,11 +137,10 @@ function Dashboard (){
                                     </div>
 
                                     <div className = 'chatandbar'>
-                                        <ChatBar  setcc={setcc} displaycc={displaycc} convomp={convomp}  />
+                                        <ChatBar {...{setcc, displaycc, convomp}} /> 
                                         <div className = 'openchat'>
                                              <Chatroom {...{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}/>
                                         </div>
-
                                     </div>
                                 </div>
                                 <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}>

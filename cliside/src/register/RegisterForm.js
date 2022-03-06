@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function RegisterForm(sent, regidetails, handleChange, messval, debrp, successfulcreation, setsent, setsc) {
+export default function RegisterForm({sent, registerDetails, handleChange, messval, debrp, successfulcreation, setsent, setsc}) {
     return <div className='logbackground'>
         <div className='maincontainer'>
             {sent === false &&
@@ -9,34 +9,34 @@ export default function RegisterForm(sent, regidetails, handleChange, messval, d
                     <span><h1>Create an account</h1></span>
                     <span>
                         <label htmlFor='first_name'>Firstname</label>
-                        <input id='first_name' placeholder='Forename' type='text' value={regidetails.firstname} onChange={handleChange} name='firstname' required />
+                        <input id='first_name' placeholder='Forename' type='text' value={registerDetails.firstname} onChange={handleChange} name='firstname' required />
                     </span>
                     <span>
                         <label htmlFor='sur_name'>Surname</label>
-                        <input id='sur_name' placeholder='Surname' type='text' value={regidetails.surname} onChange={handleChange} name='surname' required />
+                        <input id='sur_name' placeholder='Surname' type='text' value={registerDetails.surname} onChange={handleChange} name='surname' required />
                     </span>
                     <span className='usernamewpfx'>
                         <span className='usernameprt'>
                             <label htmlFor='Username'>Username</label>
                             <span id='pfxcontainer'>
                                 <span className='pfx'>@</span>
-                                <input id='Username' value={regidetails.username} type='text' placeholder='Username' onChange={handleChange} name='username' required />
+                                <input id='Username' value={registerDetails.username} type='text' placeholder='Username' onChange={handleChange} name='username' required />
                             </span>
                             {messval.usernamemess.length > 0 && <p id='usernamemess'>{messval.usernamemess}</p>}
                         </span>
                     </span>
                     <span>
                         <label htmlFor='Password'>Password</label>
-                        <input id='Password' type='password' value={regidetails.password} placeholder='Password' onChange={handleChange} name='password' required />
+                        <input id='Password' type='password' value={registerDetails.password} placeholder='Password' onChange={handleChange} name='password' required />
                     </span>
                     <span>
                         <label htmlFor='email'>Email</label>
-                        <input id='email' type='email' placeholder='Email' autoComplete='email' value={regidetails.email} onChange={handleChange} name='email' maxLength='320' required />
+                        <input id='email' type='email' placeholder='Email' autoComplete='email' value={registerDetails.email} onChange={handleChange} name='email' maxLength='320' required />
                         {messval.emailmess.length > 0 && <p id='emailmess'>{messval.emailmess}</p>}
                     </span>
                     <span>
                         <label htmlFor='phonenumber'>Phonenumber</label>
-                        <input id='phonenumber' placeholder='Phonenumber' type='text' value={regidetails.phonenumber} onChange={handleChange} name='phonenumber' />
+                        <input id='phonenumber' placeholder='Phonenumber' type='text' value={registerDetails.phonenumber} onChange={handleChange} name='phonenumber' />
                     </span>
 
                     <span>

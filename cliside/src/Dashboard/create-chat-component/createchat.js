@@ -19,8 +19,7 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
         if ((e.target.value).length >= 2 ){
             const similar =await axios.post(`${process.env.REACT_APP_API_URL}/api/misc/getsimilar`,{username:e.target.value})
             setfoundusers(similar.data)
-        }
-        
+        }   
     }
     async function addtoselected(e){
         var found_username = e.currentTarget.dataset.foundusername;
@@ -69,7 +68,7 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
         return<span className ='similarusrscard'key={index} data-foundusername = {value.username}  tabIndex={0} onClick={(e)=>{addtoselected(e)}}><span className='foundusrsfn'>{value.firstname}</span ><span className="foundusrsun">{value.username}</span></span>
     })
     
-    const mappedselectedusers = selectedusers.map((element)=>{ // displays the users u selected 
+    const mappedSelectedUsers = selectedusers.map((element)=>{ // displays the users u selected 
         if (element !== dashdata.user.username){
             return <span className ='selected_recipients' data-selected_username = {element} onClick={removeselected}>{element}</span>
         }   
@@ -84,7 +83,7 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
             <span className = 'add-userinput'><input placeholder='Input A Username' onChange={e=>{debcall(e)}}></input>{mappedfoundusers}</span> 
             <span className = 'recipients_list '>
                 <p>Selected Recipients:</p>
-                {mappedselectedusers}
+                {mappedSelectedUsers}
             </span>
             <span className = 'createchat-submit-btn'><button className = 'basebutton' onClick={createchatproc}>Create Conversation</button></span>
         </div>

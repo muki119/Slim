@@ -10,7 +10,7 @@ import RegisterForm from './RegisterForm';
 Axios.defaults.withCredentials = true
 
 function Register (){
-    const [regidetails,setrd] = useState({
+    const [registerDetails,setrd] = useState({
         firstname:'',
         surname:'',
         username:'',
@@ -30,7 +30,7 @@ function Register (){
     document.title = 'Register'; 
 
 
-    async function credtaken(path , data){ // check if user credentials are already taken 
+    async function credentialsTaken(path , data){ // check if user credentials are already taken 
         //console.log(data)
         
         if (path === 'email'){
@@ -57,10 +57,10 @@ function Register (){
             if (utest === false ){ // if there are no matches for unathorised characters
 
                 var atstring = '@'
-                var dtbs = atstring.concat(data)
+                var dataToBeSent = atstring.concat(data)
 
                 try {
-                    const axdata = await Axios.post(`${process.env.REACT_APP_API_URL}/takencredentials` , {username:dtbs}) // asks if username has been taken 
+                    const axdata = await Axios.post(`${process.env.REACT_APP_API_URL}/takencredentials` , {username:dataToBeSent}) // asks if username has been taken 
                     //console.log(axdata)
                     if (axdata.data.taken === false ){ // if username aint taken 
                         //this.usernamevall = true // is username valid -true === yes
@@ -94,7 +94,7 @@ function Register (){
 
     async function guimessnval(event){ 
         if (event.target.name === 'email'){ // email validation 
-            const emailtaken  = await credtaken('email',event.target.value) // is email taken?
+            const emailtaken  = await credentialsTaken('email',event.target.value) // is email taken?
             if (emailtaken.out === false ){ // if the email is not taken 
                 const validemail = validateEmail(event.target.value) // validity checker 
                 setmessvall({...messval,emailmess:''})
@@ -113,7 +113,7 @@ function Register (){
             }
         }
         if (event.target.name === 'username'){
-            const usernametaken = await credtaken('username',event.target.value)
+            const usernametaken = await credentialsTaken('username',event.target.value)
             if (usernametaken.out === true){ // show username is taken
                 setmessvall({...messval,usernamemess:'Username is taken',usernamevall:false})
                 document.getElementById('usernamemess').style = "color: rgb(90, 15, 15);";
@@ -131,16 +131,16 @@ function Register (){
     const debcall =useCallback(debounce((event)=>{guimessnval(event)},700),[messval])// debounce calls to guimessnvall - array are dependencies
 
     async function handleChange (event){ //hood for debouncee
-        setrd({...regidetails,[event.target.name]:event.target.value.trim()})
+        setrd({...registerDetails,[event.target.name]:event.target.value.trim()})
         // change the variable name of whoever called this event event.target gets everything of the thing that calls the event   
         debcall(event) // debounce function call 
     }
 
     async function regiproc(){ // register process
-        if (messval.emailval === true && messval.usernamevall === true && regidetails.password.length >1){
+        if (messval.emailval === true && messval.usernamevall === true && registerDetails.password.length >1){
             var atc = "@"
-            var new_con = atc.concat(regidetails.username.trim())
-            const streg = await Axios.post(`${process.env.REACT_APP_API_URL}/register` ,{fnm:regidetails.firstname,surn:regidetails.surname,email:regidetails.email ,usrnm:new_con,password:regidetails.password,pnum:regidetails.phonenumber})
+            var new_con = atc.concat(registerDetails.username.trim())
+            const streg = await Axios.post(`${process.env.REACT_APP_API_URL}/register` ,{fnm:registerDetails.firstname,surn:registerDetails.surname,email:registerDetails.email ,usrnm:new_con,password:registerDetails.password,pnum:registerDetails.phonenumber})
             var success = streg.data.success
             if(success && success === true){
                 setsent(true)
@@ -148,11 +148,9 @@ function Register (){
             }
         }
     }
-    const debrp = useCallback(debounce(()=>{regiproc()},700),[regidetails]) //array should be things that are going to be used in debounced function
+    const debrp = useCallback(debounce(()=>{regiproc()},700),[registerDetails]) //array should be things that are going to be used in debounced function
     return(
-        RegisterForm(sent, regidetails, handleChange, messval, debrp, successfulcreation, setsent, setsc)
-
-
+        <RegisterForm {...{sent, registerDetails, handleChange, messval, debrp, successfulcreation, setsent, setsc}}/>
     )
 
 
