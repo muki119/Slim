@@ -4,16 +4,13 @@ import './login.css'
 import '../general_css/gcss.css'
 import {
     Redirect
-  } from "react-router-dom";
-import UdContext from '../usercontext/usercontext';
-import { useContext } from "react";
+} from "react-router-dom";
 
 
 function Login (){
     
     const [logindetails,setdetails] = useState({username:'',password:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
     const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
-    const {urdata ,setUser} = useContext(UdContext) // use this to set userdata to use any where
     const [errorMessage,seterm] = useState(null) // error message if incorrect login
     document.title = 'Login'
     Axios.defaults.withCredentials = true

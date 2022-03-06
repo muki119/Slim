@@ -1,36 +1,29 @@
+import  React,{Suspense,lazy } from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
 import './App.css';
-import Login from './Login/login.js'; // goes to the login page 
-import Register from "./register/register.js" 
-import Dashboard from "./Dashboard/dashboard.js";
 import Landing from "./Landing/Landing.js"
-import UdContext from './usercontext/usercontext.js'
-import  React,{ useState } from "react";
+import { CircularProgress } from "@mui/material";
+const Register = lazy(()=> import("./register/register.js") )
+const Login =lazy(()=> import('./Login/login.js')); // goes to the login page 
+const Dashboard = lazy(()=> import("./Dashboard/dashboard.js"))
+
 function App() {
-  const [urdata,setUser] = useState({user:null , redirect:false}) // default user info // urdata and setuser from use state are the parametersthat u can use in these routes
   return (
     <div className="App">
       <Router>  
         <Switch>
 
-          <UdContext.Provider value = {{urdata,setUser}}>     
-
-            <Route exact path="/">
-              <Landing />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/register">
-              <Register />
-            </Route>
-            <Route exact path ='/dashboard' component = {Dashboard}/>
-
-          </UdContext.Provider>
+            <Route exact path="/" component={Landing}/>
+            
+            <Suspense fallback={<Circ/>}>
+              <Route exact path="/login" component={Login}/>
+              <Route exact path="/register" component={Register}/>
+              <Route exact path ='/dashboard' component = {Dashboard}/>  
+            </Suspense>
 
           </Switch>
       </Router>
@@ -38,5 +31,13 @@ function App() {
   );
 }
 
+
+function Circ (){
+  return(
+    <div id = "circ">
+      <CircularProgress size= {"3rem"} sx={{color:"#39386e"}}/>
+    </div>
+  )
+}
 
 export default App;
