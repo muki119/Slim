@@ -7,7 +7,7 @@ const Utf8 = require('crypto-js/enc-utf8')
 
 
 function sendinvalid(res){
-    res.clearCookie('SID')
+    //res.clearCookie('SID')
     res.status(200).send({auth_error:'Invalid auth',validjwt:false});
 }
 function decryptuserdetails(decrypted_jwt){

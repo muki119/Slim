@@ -34,7 +34,7 @@ function Dashboard (){
     async function logoutproc(){ // log out process
         localStorage.clear()
         await axios.delete(`${process.env.REACT_APP_API_URL}/api/misc/removecookie`) // deletes cookies
-        socket.disconnect()
+        if(socket!== null){socket.disconnect()}
         setlog(true) // do every thing above before this because this redirects to login
     }
 
@@ -52,7 +52,7 @@ function Dashboard (){
     }
     async function get_chats(){ // get the user's chats 
         try {
-            var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  // URL WILL BE FROM .ENV+ROUTE
+            var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username},{withCredentials:true})  // URL WILL BE FROM .ENV+ROUTE
             if (chat.data.validjwt === false){ // if invalid jwt then logout
                 logoutproc()
             }else{
@@ -62,7 +62,6 @@ function Dashboard (){
             
         }
     }
-    useEffect(()=>{},[logout])
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
         document.title = 'Dashboard'

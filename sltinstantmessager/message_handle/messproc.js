@@ -71,7 +71,7 @@ Messagerouter.post('/api/m/createconversation',userauth,(req,res)=>{ // creating
 
 var getmsglimiter = RateLimit({
   windowMs: 5*60*1000, // 5 minutes
-  max: 35
+  max: 25
 });
 
 Messagerouter.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
