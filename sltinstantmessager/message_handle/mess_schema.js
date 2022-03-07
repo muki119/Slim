@@ -1,4 +1,4 @@
-const mesdb = require('./mess_db') // message database connection
+const mesdb = require('../Database/database.js') // message database connection
 const mong = require('mongoose')
 const { v4: uuidv4 } = require('uuid'); // unique chat identifier -different from document _id 
 const { Schema } = mong
@@ -29,6 +29,6 @@ const newConv = Schema({
     }
 });
 
-const newConversationModel = mesdb.model('mess_col',newConv,'mess_col') // create conversation model
+const newConversationModel = mesdb.model('messageCollection',newConv,'messageCollection') // create conversation model
 
 module.exports = newConversationModel // newconversation model

@@ -7,9 +7,6 @@ var cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const compression = require('compression')
 
-const mong = require('mongoose');//database connection (use environments)
-const dot =require('dotenv')
-dot.config();
 
 const registerRoutes = require('./regiops/register.js');//register middleware 
 const loginRoute = require('./loginops/login.js');//login middleware 
@@ -42,17 +39,9 @@ app.use(miscops)
 
 //------------------------
 //connects to database 
-var url = process.env.DATABASE_CONURL
-const usrdb = mong.connect(url,{useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true},(err)=>{
-    if (err){
-        console.log('maindb connection error')
-        console.log(err)
-    }else{
-      console.log('Successfull main db connection')  
-    }
-})
+
 
 //schema to send to 
 
-module.exports = usrdb;
+
 

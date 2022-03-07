@@ -1,5 +1,6 @@
 const mong = require('mongoose');
 const { Schema } = mong
+const database = require("../Database/database.js")
 // changing schema may cause MongoError: E11000 duplicate key error collection: cluster0.users index: name_1 dup key: { name: null }
 const mainschem =  Schema({ // schema to register 
     firstname:{
@@ -49,6 +50,7 @@ const mainschem =  Schema({ // schema to register
 
 })
 
-const regimodel = mong.model('users',mainschem,'users')
 
-module.exports = regimodel; // exports model for later use 
+const userModel = database.model('users',mainschem,'users')
+
+module.exports = userModel; // exports model for later use 

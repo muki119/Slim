@@ -1,4 +1,4 @@
-const regimodel = require('../regiops/registerschem')// register schema 
+const Usermodel = require('../userschema/userschema')// register schema 
 const express = require('express');
 const bcrypt = require('bcrypt');
 const AES = require("crypto-js/aes");
@@ -24,7 +24,7 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
     if (req.body == null){
         console.log(null)
     }
-    regimodel.findOne({username:un},' firstname surname email username password friends date_created verified phonenumber',(error,data)=>{ // data is the found user 
+    Usermodel.findOne({username:un},' firstname surname email username password friends date_created verified phonenumber',(error,data)=>{ // data is the found user 
         //console.log(data)
         if (data == null) { // if theres no user matching the description then say that user cannot be found 
             console.log('user is not found')

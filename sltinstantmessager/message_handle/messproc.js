@@ -1,7 +1,7 @@
 const express = require('express');
 const Messagerouter = express.Router();
 const ccvmodel = require('./mess_schema')// schema to create new conversation
-const regimodel = require('../regiops/registerschem')// register schema 
+const Usermodel = require('../userschema/userschema')// register schema 
 const userauth = require("./userauth.js")
 const { Server } = require("socket.io"); // server
 const { instrument } = require("@socket.io/admin-ui");
@@ -76,7 +76,7 @@ var getmsglimiter = RateLimit({
 
 Messagerouter.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
     var userToBeFound = req.body.username // user to be found (userToBeFound)
-    regimodel.exists({username:userToBeFound},(error,out)=>{  /// checks if user exists 
+    Usermodel.exists({username:userToBeFound},(error,out)=>{  /// checks if user exists 
         if (!error && out === true ){
             console.log(`${userToBeFound} exists`)
             ccvmodel.find({users_involved:{"$in":[userToBeFound]}},"users_involved date_created last_messaged messages chat_id ",{projection:{_id:0}}).sort({'last_messaged':-1}).exec((err,data)=>{ // finds user 

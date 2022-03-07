@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const registerRoutes = express.Router();
-const regimodel = require('./registerschem')// register schema 
+const Usermodel = require('../userschema/userschema')// register schema 
 require('dotenv').config();
 var RateLimit = require('express-rate-limit');
 var registerlimiter = RateLimit({
@@ -24,7 +24,7 @@ registerRoutes.post('/register',registerlimiter,(req,res)=>{
             })
         }else{
 
-            var regifill = new regimodel({
+            var regifill = new Usermodel({
                 firstname:req.body.fnm,
                 surname:req.body.surn,
                 email:req.body.email,
@@ -35,7 +35,6 @@ registerRoutes.post('/register',registerlimiter,(req,res)=>{
 
             regifill.save((err)=>{
                 if (err){
-                    console.log("theres a error in the process of saving a register")
                     console.log(err)
                     res.status(500).send({
                         success:false,
@@ -67,7 +66,7 @@ registerRoutes.post('/takencredentials' ,takencredlimiter, (req,res)=>{
     console.log(req.body)
 
     if (req.body.username){
-        regimodel.exists({username:req.body.username},(err,data)=>{
+        Usermodel.exists({username:req.body.username},(err,data)=>{
             if (err){console.log(err);console.log('an error has occurred tying to find if a username exists')}
             if (data===true){
                 console.log('username match')
@@ -85,7 +84,7 @@ registerRoutes.post('/takencredentials' ,takencredlimiter, (req,res)=>{
             }
         })
     }else if (req.body.email){
-        regimodel.exists({email:req.body.email},(err,data)=>{
+        Usermodel.exists({email:req.body.email},(err,data)=>{
             if (err){console.log(err)}
             if (data===true){ // if there is a match 
                 console.log('datamatch')

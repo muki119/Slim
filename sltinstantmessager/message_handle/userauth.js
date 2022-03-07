@@ -1,4 +1,4 @@
-const regimodel = require('../regiops/registerschem')// register schema 
+const Usermodel = require('../userschema/userschema')// register schema 
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const bcrypt = require('bcrypt');
@@ -25,7 +25,7 @@ function userauth (req,res,next){// this checks the jwt sent alongside to verify
                     try {
                         decrypted_jwt = decryptuserdetails(decrypted_jwt)  // decrypts the ud
                         if ( decrypted_jwt.username && decrypted_jwt.username === req.body.username){
-                            regimodel.findOne({username:decrypted_jwt.username},'password',(error,data)=>{ // data is the found user 
+                            Usermodel.findOne({username:decrypted_jwt.username},'password',(error,data)=>{ // data is the found user 
                                 if (!error){
                                     if (data == null) { // if theres no user matching the description then say that user cannot be found 
                                         console.log('user is not found')
