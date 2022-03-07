@@ -28,7 +28,7 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
         //console.log(data)
         if (data == null) { // if theres no user matching the description then say that user cannot be found 
             res.clearCookie('SID')
-            res.status(200).send({login_error:'Invalid username/password'});
+            res.status(200).send({successful:false,login_error:'Invalid username/password'});
         }else if(data !== null){ //otherwise there is a matchin user 
 
             bcrypt.compare(pass,data.password,async (err, result) =>{ // comapares passwords 

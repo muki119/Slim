@@ -13,7 +13,6 @@ function Login (){
     const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
     const [errorMessage,seterm] = useState(null) // error message if incorrect login
     document.title = 'Login'
-    Axios.defaults.withCredentials = true
     
     function handleChange (event){
         setdetails({...logindetails ,[event.target.name]: event.target.value}) // changes 
@@ -41,7 +40,7 @@ function Login (){
     }
     async function onloadlogin (){
             try {
-                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`)
+                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,null,{withCredentials:true})
                 if (usdata.data.redirect === true){
                     localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect}))
                     setredirect(usdata.data.redirect);

@@ -30,7 +30,8 @@ function Dashboard (){
     const [success_cc,sets_cc]=useState(false) // on successfull creation this is turnt to true - this causes a pop-up  that the app has been created
     const [failed_cc,setf_cc]=useState(false)
     const [,forceUpdate] = useReducer(x => x + 1, 0); // force update 
-    
+    //Axios.defaults.withCredentials=true
+
     async function logoutproc(){ // log out process
         localStorage.clear()
         await axios.delete(`${process.env.REACT_APP_API_URL}/api/misc/removecookie`) // deletes cookies
