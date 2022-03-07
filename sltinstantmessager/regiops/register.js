@@ -10,7 +10,7 @@ var registerlimiter = RateLimit({
 });
 
 registerRoutes.post('/register',registerlimiter,(req,res)=>{
-    console.log(req.body) // removable
+    //console.log(req.body) // removable
     const sr  = parseInt(process.env.SALT_ROUNDS)
     bcrypt.hash(req.body.password,sr,(err,hash)=>{ // .env the salt rounds
 
@@ -62,22 +62,18 @@ var takencredlimiter = RateLimit({
     max: 50
   });
 registerRoutes.post('/takencredentials' ,takencredlimiter, (req,res)=>{
-    console.log('attempt to post at /takencred')
-    console.log(req.body)
+
 
     if (req.body.username){
         Usermodel.exists({username:req.body.username},(err,data)=>{
             if (err){console.log(err);console.log('an error has occurred tying to find if a username exists')}
             if (data===true){
-                console.log('username match')
                 res.status(200).send({
                     taken:true,
-                    works:'yah'
                 })
             }else if (data===false){
                 res.send({
-                    taken:false,
-                    works:'yah'
+                    taken:false,    
                 })
             }else{
                 res.status(404).send()
@@ -87,16 +83,12 @@ registerRoutes.post('/takencredentials' ,takencredlimiter, (req,res)=>{
         Usermodel.exists({email:req.body.email},(err,data)=>{
             if (err){console.log(err)}
             if (data===true){ // if there is a match 
-                console.log('datamatch')
                 res.status(200).send({
                     taken:true,
-                    works:'yah'
-
                 })
             }else if (data===false){
                 res.status(200).send({ // if there isnt a match
                     taken:false,
-                    works:'yah'
                 })
             }
         })

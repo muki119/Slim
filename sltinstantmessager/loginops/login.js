@@ -6,7 +6,7 @@ const Utf8 = require('crypto-js/enc-utf8')
 const loginRoute = express.Router();
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-var x = 1
+
 var RateLimit = require('express-rate-limit');
 var loginlimiter = RateLimit({ // 20 logins every 5 mins
   windowMs: 5*60*1000, // 5 minute
@@ -15,7 +15,7 @@ var loginlimiter = RateLimit({ // 20 logins every 5 mins
 loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middleware -- jauth is the pre-process to this so before doing this process - do jauth 
 
    // console.log(x+':post request to login ')
-    x = x + 1 
+
     const un =req.body.username// username from request 
     const pass = req.body.password//password from request 
 
@@ -27,7 +27,6 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
     Usermodel.findOne({username:un},' firstname surname email username password friends date_created verified phonenumber',(error,data)=>{ // data is the found user 
         //console.log(data)
         if (data == null) { // if theres no user matching the description then say that user cannot be found 
-            console.log('user is not found')
             res.clearCookie('SID')
             res.status(200).send({login_error:'Invalid username/password'});
         }else if(data !== null){ //otherwise there is a matchin user 
@@ -46,7 +45,7 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
                             username: data.username,
                             password: pass // sets password to the login form password to avoid hashing problems in bcrypt because us cant compare between two hashed passwords
                         }) 
-                        console.log('true')
+                        //console.log('true')
                        
                         // end +++++++++++++
 

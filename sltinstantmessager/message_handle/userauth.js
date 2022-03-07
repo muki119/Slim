@@ -28,7 +28,6 @@ function userauth (req,res,next){// this checks the jwt sent alongside to verify
                             Usermodel.findOne({username:decrypted_jwt.username},'password',(error,data)=>{ // data is the found user 
                                 if (!error){
                                     if (data == null) { // if theres no user matching the description then say that user cannot be found 
-                                        console.log('user is not found')
                                         sendinvalid(res)
                                     }else{ //otherwise there is a matching user 
                                         bcrypt.compare(decrypted_jwt.password,data.password,async (err, result) =>{
@@ -47,8 +46,7 @@ function userauth (req,res,next){// this checks the jwt sent alongside to verify
                                     console.log(error)
                                 }   
                             })
-                        }else if ((decrypted_jwt.username && decrypted_jwt.username !== req.body.username) || !decrypted_jwt.username ){
-                            console.log("jwt isnt the same as username ?")
+                        }else if ((decrypted_jwt.username && decrypted_jwt.username !== req.body.username) || !decrypted_jwt.username ){ // if jwt username isnt the same as the username sent 
                             sendinvalid(res)
                         }else if (err){
                             res.status(500).send("error")

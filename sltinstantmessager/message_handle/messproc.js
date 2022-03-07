@@ -19,15 +19,13 @@ instrument(io, {
 });
 
 io.on("connection", (socket) => {
-    console.log(socket.id)
+    //console.log(socket.id)
 
     socket.on('join_rooms',(rooms)=>{ // function for joining rooms(rooms should be an array of roooms of the user (rooms should be chat_id ))
-        console.log(rooms)// testing
         socket.join(rooms)
     })
 
     socket.on('sendMessage',(room,message,callback)=>{ // room should be chat_id
-        console.log(room,message)
         // update database find by chat id 
         ccvmodel.findOneAndUpdate({chat_id:room},{$push:{messages:message},$currentDate:{last_messaged:true}},(err)=>{ // adds message to database 
             if (err){
@@ -36,7 +34,6 @@ io.on("connection", (socket) => {
                     sent:false
                 })
             }else if (!err){
-                console.log('success')
                 socket.to(room).emit('incomming_message', room,message)//message should be {sender,message,timesent}
                 callback({
                     sent:true
@@ -47,9 +44,6 @@ io.on("connection", (socket) => {
 
     })
 
-    socket.on("disconnect", (reason) => {
-        console.log(reason)
-    });
 });
 
 Messagerouter.post('/api/m/createconversation',userauth,(req,res)=>{ // creating a new conversation 
@@ -78,7 +72,7 @@ Messagerouter.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
     var userToBeFound = req.body.username // user to be found (userToBeFound)
     Usermodel.exists({username:userToBeFound},(error,out)=>{  /// checks if user exists 
         if (!error && out === true ){
-            console.log(`${userToBeFound} exists`)
+            //console.log(`${userToBeFound} exists`)
             ccvmodel.find({users_involved:{"$in":[userToBeFound]}},"users_involved date_created last_messaged messages chat_id ",{projection:{_id:0}}).sort({'last_messaged':-1}).exec((err,data)=>{ // finds user 
                 if (err){ // if an error occured send a message that an error has occured 
                     res.send({error:'A error has occured'})
