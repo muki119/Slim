@@ -31,7 +31,7 @@ function Dashboard (){
     const [failed_cc,setf_cc]=useState(false)
     const [,forceUpdate] = useReducer(x => x + 1, 0); // force update 
     axios.defaults.withCredentials=true
-
+    
     async function logoutproc(){ // log out process
         localStorage.clear()
         await axios.delete(`${process.env.REACT_APP_API_URL}/api/misc/removecookie`) // deletes cookies

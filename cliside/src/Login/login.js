@@ -5,7 +5,7 @@ import '../general_css/gcss.css'
 import {
     Redirect
 } from "react-router-dom";
-
+Axios.defaults.withCredentials = true
 
 function Login (){
     
@@ -40,7 +40,7 @@ function Login (){
     }
     async function onloadlogin (){
             try {
-                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,null,{withCredentials:true})
+                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,null)
                 if (usdata.data.redirect === true){
                     localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect}))
                     setredirect(usdata.data.redirect);
