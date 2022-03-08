@@ -73,7 +73,7 @@ function Login (){
                         </span>
                         <span>
                             <label htmlFor='Username'>Username</label>
-                            <input value = {logindetails.username} type='text' name = 'username' id = 'Username'placeholder = 'Username'  onChange={handleChange}/>
+                            <input value = {logindetails.username} type='text' name = 'username' id = 'Username'placeholder = 'Username or Email'  onChange={handleChange}/>
                         </span>
                         <span>
                             <label htmlFor= 'Password'>Password</label>

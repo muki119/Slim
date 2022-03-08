@@ -2,7 +2,7 @@ import React, {useEffect, useState ,useReducer} from 'react';
 import {
     Redirect
 } from "react-router-dom";
-import Axios from 'axios'
+
 
 import moment from 'moment'
 import Snackbar from '@mui/material/Snackbar';
@@ -30,7 +30,7 @@ function Dashboard (){
     const [success_cc,sets_cc]=useState(false) // on successfull creation this is turnt to true - this causes a pop-up  that the app has been created
     const [failed_cc,setf_cc]=useState(false)
     const [,forceUpdate] = useReducer(x => x + 1, 0); // force update 
-    //Axios.defaults.withCredentials=true
+    axios.defaults.withCredentials=true
 
     async function logoutproc(){ // log out process
         localStorage.clear()
@@ -53,7 +53,7 @@ function Dashboard (){
     }
     async function get_chats(){ // get the user's chats 
         try {
-            var chat= await Axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username},{withCredentials:true})  // URL WILL BE FROM .ENV+ROUTE
+            var chat= await axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  // URL WILL BE FROM .ENV+ROUTE
             if (chat.data.validjwt === false){ // if invalid jwt then logout
                 logoutproc()
             }else{

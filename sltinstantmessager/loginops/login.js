@@ -24,7 +24,7 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
     if (req.body == null){
         console.log(null)
     }
-    Usermodel.findOne({username:un},' firstname surname email username password friends date_created verified phonenumber',(error,data)=>{ // data is the found user 
+    Usermodel.findOne({$or:[{username:un},{email:un}]},' firstname surname email username password friends date_created verified phonenumber',(error,data)=>{ // data is the found user 
         //console.log(data)
         if (data == null) { // if theres no user matching the description then say that user cannot be found 
             res.clearCookie('SID')
