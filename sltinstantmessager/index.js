@@ -28,20 +28,13 @@ app.use((req,res,next)=>{
   res.set('Server','H26') // H26 server moniker
   next()
 })
-//----
-//----- login --------
 
 
-app.use(registerRoutes);//calls register middleware 
-app.use(loginRoute); // login operations
-app.use(messageRoute); // message handling
-app.use(miscops)
+app.use(registerRoutes);//register routes
+app.use(loginRoute); // login routes 
+app.use(messageRoute); // message routes
+app.use(miscops) // misc routes
 
-//------------------------
-//connects to database 
-
-
-//schema to send to 
 
 
 

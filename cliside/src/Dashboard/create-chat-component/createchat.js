@@ -76,16 +76,16 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
     const debcall =useCallback(debounce((e)=>{displaysimilarusers(e)},700),[setfoundusers,foundusers])
     
     return(
-    
-    <div className ='dimopacitybackground'> 
-        <span id = 'dob' onClick={(e)=>{closewindow(e)}}></span>
-        <div className = "createchatformcontainer">
-            <span className = 'add-userinput'><input placeholder='Input A Username' onChange={e=>{debcall(e)}}></input>{mappedfoundusers}</span> 
-            <span className = 'recipients_list '>
-                <p>Selected Recipients:</p>
-                {mappedSelectedUsers}
-            </span>
-            <span className = 'createchat-submit-btn'><button className = 'basebutton' onClick={createchatproc}>Create Conversation</button></span>
+        <div className ='dimopacitybackground'> 
+            <span id = 'dob' onClick={(e)=>{closewindow(e)}}></span>
+            <div className = "createchatformcontainer">
+                <span className = 'add-userinput'><input placeholder='Input A Username' onChange={e=>{debcall(e)}}></input>{mappedfoundusers}</span> 
+                <span className = 'recipients_list '>
+                    <p>Selected Recipients:</p>
+                    {mappedSelectedUsers}
+                </span>
+                <span className = 'createchat-submit-btn'><button className = 'basebutton' onClick={createchatproc}>Create Conversation</button></span>
+            </div>
         </div>
-    </div>)
+    )
 }
