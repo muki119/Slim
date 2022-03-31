@@ -72,7 +72,7 @@ function Chatroom({chats,setchats,currentchatid,socket,setsocket,forceUpdate}){ 
         
     },[socket, chats, forceUpdate])
 
-    if (chats.data !== [] && socket!== null ){ // if the user has available chats 
+    if (chats.data.length !== 0 && socket!== null ){ // if the user has available chats 
 
         const p = chats.data.findIndex((e)=>{return e.chat_id === currentchatid}) // finds
         const currentchat = chats.data[p] // change the contents using setchats
@@ -94,11 +94,16 @@ function Chatroom({chats,setchats,currentchatid,socket,setsocket,forceUpdate}){ 
                 </div>
             )
         }else{
-            return(<h1>No Chat selected</h1>)
+            return(null)
         }
     }else{
         return(
-            <h1>No Available conversations</h1>
+            <>
+                <div className='noAvailableConversations'>
+                    <h1>No available chats</h1>
+                    <h2>Create a chat</h2>
+                </div>
+            </>
         )
     }
 }
