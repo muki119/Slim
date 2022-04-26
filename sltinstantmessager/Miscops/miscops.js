@@ -6,7 +6,7 @@ require('dotenv').config();
 
 regi.post("/api/misc/getsimilar",(req,res)=>{ // this function finds the 
     //console.log(req.body.username)
-    Usermodel.find({username:{$regex: req.body.username, $options: 'i'}},"firstname username",{limit:5},(error,data)=>{
+    Usermodel.find({username:{$regex: req.body.username, $options: 'i'}},"firstname username",{limit:5},(error,data)=>{ // find all usernames that are similar to the 
         if (!error){
             //console.log(data)
             res.send(data)  
@@ -17,7 +17,7 @@ regi.post("/api/misc/getsimilar",(req,res)=>{ // this function finds the
     })
 })
 
-regi.delete("/api/misc/removecookie",(req,res)=>{
-    res.clearCookie("SID").send()
+regi.delete("/api/misc/removecookie",(req,res)=>{ // route for deleteing the cookie (authentication token )
+    res.clearCookie("SID").send() // deletes the cookie
 })
 module.exports = regi

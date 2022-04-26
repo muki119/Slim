@@ -81,7 +81,7 @@ function Dashboard (){
             joinrooms()
             socket.on("disconnect",(reason)=>{ // if theres a disconnection to the servers 
                 if(reason==="transport close" || reason === "transport error"){ // and the reason is due to a lost connection or a netowkr error 
-                    joinrooms(); // try to rejoin the rooms and 
+                    joinrooms(); // try to rejoin the rooms 
                 }
             })
         }
@@ -105,12 +105,14 @@ function Dashboard (){
         const sortAlgorithm = (a,b)=>{
             return Date.parse(b.last_messaged)-Date.parse(a.last_messaged)
         }
+        
         var sk  = chats.data
         sk.sort(sortAlgorithm) // sorts the chats by last messaged 
-        return chats.data.map((element,index)=>{ // maps the lists into tiles clickable tiles 
-            var lastMessaged = moment(element.last_messaged).fromNow() // finds the time since last messaged - turns it into 
-            var usersinvolved = [(element.users_involved.slice(0,element.users_involved.indexOf(dashdata.user.username))).toString(),(element.users_involved.slice(element.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-            return <div key = {index} data-chatid={element.chat_id} onClick={chatchanger} tabIndex={0}><p className= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span className ='last_messaged'>Last Messaged:{lastMessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+
+        return chats.data.map((conversation,index)=>{ // maps the lists into tiles clickable tiles 
+            var lastMessaged = moment(conversation.last_messaged).fromNow() // finds the time since last messaged - turns it into 
+            var usersinvolved = [(conversation.users_involved.slice(0,conversation.users_involved.indexOf(dashdata.user.username))).toString(),(conversation.users_involved.slice(conversation.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
+            return <div key = {index} data-chatid={conversation.chat_id} onClick={chatchanger} tabIndex={0}><p className= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span className ='last_messaged'>Last Messaged:{lastMessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
         })
     }
 

@@ -6,36 +6,34 @@ const AES = require("crypto-js/aes");
 const Utf8 = require('crypto-js/enc-utf8')
 
 
-function sendinvalid(res){
-    //res.clearCookie('SID')
-    res.status(200).send({auth_error:'Invalid auth',validjwt:false});
+function sendinvalid(res){ // function for sending errors to client 
+    res.status(200).send({auth_error:'Invalid auth',validjwt:false}); // tells client that jwt isnt authentic.
 }
-function decryptuserdetails(decrypted_jwt){
-    return JSON.parse(AES.decrypt(decrypted_jwt.UD,`${process.env.AES_KEY}`).toString(Utf8))
+function decryptuserdetails(decryptedJwt){ // decrypts userdeatails in token 
+    return JSON.parse(AES.decrypt(decryptedJwt.UD,`${process.env.AES_KEY}`).toString(Utf8))
 }
 
 function userauth (req,res,next){// this checks the jwt sent alongside to verify that what is sent is the user // this process should also be rate limited as the login one and register 
    try{
-        if (!req.cookies.SID){
-            sendinvalid(res)
+        if (!req.cookies.SID){ // if no cookie 
+            sendinvalid(res) // send error 
         }else if (req.cookies.SID){
-            const uat = req.cookies.SID// Uat stands for user authentication /authorization token 
+            const uat = req.cookies.SID// Uat stands for user authentication/authorization token 
             try{
-                jwt.verify(uat,process.env.JWTSK,(err,decrypted_jwt)=>{
+                jwt.verify(uat,process.env.JWTSK,(err,decodedJwt)=>{
                     try {
-                        decrypted_jwt = decryptuserdetails(decrypted_jwt)  // decrypts the ud
-                        if ( decrypted_jwt.username && decrypted_jwt.username === req.body.username){
-                            Usermodel.findOne({username:decrypted_jwt.username},'password',(error,data)=>{ // data is the found user 
+                        var decryptedJwt = decryptuserdetails(decodedJwt)  // decrypts the ud
+                        if ( decryptedJwt.username && decryptedJwt.username === req.body.username){
+                            Usermodel.findOne({username:decryptedJwt.username},'password',(error,data)=>{ // data is the found user 
                                 if (!error){
                                     if (data == null) { // if theres no user matching the description then say that user cannot be found 
                                         sendinvalid(res)
                                     }else{ //otherwise there is a matching user 
-                                        bcrypt.compare(decrypted_jwt.password,data.password,async (err, result) =>{
+                                        bcrypt.compare(decryptedJwt.password,data.password,async (err, result) =>{ // compares password with one in datatabase
                                             if (!err && result == true){  // if everything checks out
                                                 next()
-                                            }else if (!err && result == false){ // if the password in the jwt is incorrect to the user 
-                                                //console.log("user not authentic")
-                                                sendinvalid(res)
+                                            }else if (!err && result == false){ // if the password in the jwt is incorrect to the user then the user isnt authentic 
+                                                sendinvalid(res) // send the error to the client 
                                             }else if (err){ // if there is a error
                                                 res.status(500).send("error")
                                             }
@@ -46,7 +44,7 @@ function userauth (req,res,next){// this checks the jwt sent alongside to verify
                                     console.log(error)
                                 }   
                             })
-                        }else if ((decrypted_jwt.username && decrypted_jwt.username !== req.body.username) || !decrypted_jwt.username ){ // if jwt username isnt the same as the username sent 
+                        }else if ((decryptedJwt.username && decryptedJwt.username !== req.body.username) || !decryptedJwt.username ){ // if jwt username isnt the same as the username sent 
                             sendinvalid(res)
                         }else if (err){
                             res.status(500).send("error")

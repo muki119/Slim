@@ -14,17 +14,17 @@ function Chatroom({chats,setchats,currentchatid,socket,setsocket,forceUpdate}){ 
     function sendmsg(){
         if (message.length > 0 || message.trim().length !== 0){
             try {
-                const messageobj = { // message object to be sent 
+                const messageObject = { // message object to be sent 
                     sender :dashdata.user.username,
                     message:message,
                     timesent:new Date(Date.now()).toISOString() // gets the time the message was sent 
                 }
-                socket.emit('sendMessage',currentchatid,messageobj,(response)=>{
+                socket.emit('sendMessage',currentchatid,messageObject,(response)=>{
                     //console.log(response.sent)
                 }) // change to get username
                 const indx = chats.data.findIndex((e)=>{return e.chat_id === currentchatid}) // current chat index in array
                 const cht = chats
-                cht.data[indx].messages.push(messageobj)
+                cht.data[indx].messages.push(messageObject)
                 cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
                 //console.log(cht.data[indx].last_messaged )
                 setmessage('')
