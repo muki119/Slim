@@ -12,7 +12,7 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
    
     function closewindow(e){ // clickaway handler
         if (e.target.id === "dob"){
-         setcc(!displaycc)
+            setcc(!displaycc)
         }
     }
     async function displaysimilarusers(e){
@@ -33,9 +33,7 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
         if (selectedusers.length >1 ){
             try{
                 var uat = localStorage.getItem("Uat")
-               
                 const createconv =await axios.post(`${process.env.REACT_APP_API_URL}/api/m/createconversation`,{chatName:chatName,users_involved :selectedusers,Uat:uat,username:dashdata.user.username})
-                console.log(createconv)
                 var success = createconv.data.success 
                 if (createconv.data.validjwt === false){
                     setcc(false)

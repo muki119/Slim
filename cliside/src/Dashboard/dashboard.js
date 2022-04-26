@@ -10,9 +10,9 @@ import '../general_css/gcss.css';
 
 import { io } from "socket.io-client" ; 
 import Chatroom from './conversation_component/Chatroom';
-import ChatBar from './chatbar.js';
+import ChatBar from './chatbarComponent/chatbar.js';
 import CreateChat from './create-chat-component/createchat'
-import {ChatName,ListOfUsers} from "./chatname.js"
+import {AvailableConversationTiles} from'./chatbarComponent/AvailableConversationIcon.js'
 import axios from 'axios';
 
 
@@ -24,12 +24,13 @@ function Dashboard (){
     const [chats,setchats] = useState({data:[]})
     const [currentchatid,changechat] = useState('') // the id of the 
     const [socket,setsocket]=useState(null)
-    const [roomidarr,sridarr]  = useState([])
+    const [roomidarr,sridarr]  = useState([]) // array of chatids to be used as room id's
     const [displaycc,setcc]= useState(false)  //display create conversation   
     const [success_cc,sets_cc]=useState(false) // on successfull creation this is turnt to true - this causes a pop-up  that the app has been created
     const [failed_cc,setf_cc]=useState(false)
-    const [,forceUpdate] = useReducer(x => x + 1, 0); // force update 
-    axios.defaults.withCredentials=true
+    const [,forceUpdate] = useReducer(x => x + 1, 0); // forces update
+
+    axios.defaults.withCredentials=true // makes it so that cookies are sent with every request. 
     
     async function logoutproc(){ // log out process
         localStorage.clear() // clears users basic data 
@@ -41,18 +42,19 @@ function Dashboard (){
     function chatchanger(e){ // changes the chat 
         changechat(e.currentTarget.dataset.chatid)
     }
+
     function joinrooms(){
-        socket.emit('join_rooms',roomidarr)
+        socket.emit('join_rooms',roomidarr) // emits join_rooms event to server and attaches room id array. This attempts to join all rooms in array. 
     }
     function loadchats(){
-        sridarr(roomidarr=>[dashdata.user.username]) // connect to private room 
+        sridarr(roomidarr=>[dashdata.user.username]) // connect to private rooms 
         chats.data.forEach((e)=>{
             sridarr(roomidarr=>[...roomidarr,e.chat_id]) 
         })
     }
     async function get_chats(){ // get the user's chats 
         try {
-            var chat= await axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  // URL WILL BE FROM .ENV+ROUTE
+            var chat= await axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server . 
             if (chat.data.validjwt === false){ // if invalid jwt then logout
                 logoutproc()
             }else{
@@ -114,7 +116,7 @@ function Dashboard (){
             var lastMessaged = moment(conversation.last_messaged).fromNow() // finds the time since last messaged - turns it into 
             var usersinvolved = [(conversation.users_involved.slice(0,conversation.users_involved.indexOf(dashdata.user.username))).toString(),(conversation.users_involved.slice(conversation.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
             var chatName = conversation.chat_name
-            return <div key = {index} data-chatid={conversation.chat_id} onClick={chatchanger} tabIndex={0}>{chatName? <ChatName {...{chatName}}/>:<ListOfUsers {...{usersinvolved}}/>}<span className ='last_messaged'>Last Messaged:{lastMessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+            return <AvailableConversationTiles {...{index, conversation, chatchanger, chatName, usersinvolved, lastMessaged}}/> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
         })
     }
 
@@ -131,22 +133,27 @@ function Dashboard (){
                     {logout === false && 
                         <div className = 'dbackground' >
                                 <div className='dinbox'>
-                                    {displaycc === true && <CreateChat {...{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>}
+
+                                    {displaycc? <CreateChat {...{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>:<></>} {/* displays the create chats menu when the displaycc value is == true  */}
+                                    
                                     <nav className ='topbar'>
                                         <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
                                         <button tabIndex={0} id='lout'onClick={logoutproc}>Logout</button>
                                     </nav>
 
                                     <div className = 'chatandbar'>
-                                        <ChatBar {...{setcc, displaycc, convomp}} /> 
+                                        <ChatBar {...{setcc, displaycc, convomp}} />
                                         <div className = 'openchat'>
                                             <Chatroom {...{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}/>
                                         </div>
                                     </div>
+
                                 </div>
+
                                 <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}>
                                     <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
                                 </Snackbar>    
+
                                 <Snackbar open={failed_cc} onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){setf_cc(false)}}} autoHideDuration={5000}>
                                     <Alert severity="error">Unable to create Conversation.Please try again later</Alert>
                                 </Snackbar>
@@ -167,5 +174,7 @@ function Dashboard (){
  
 
 export default Dashboard
+
+
 
 
