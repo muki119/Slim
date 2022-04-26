@@ -48,6 +48,7 @@ io.on("connection", (socket) => {
 
 Messagerouter.post('/api/m/createconversation',userauth,(req,res)=>{ // creating a new conversation 
     var conv = new ccvmodel({
+        chat_name:req.body.chatName,
         users_involved:req.body.users_involved
     })
     conv.save((err)=>{

@@ -12,6 +12,7 @@ import { io } from "socket.io-client" ;
 import Chatroom from './conversation_component/Chatroom';
 import ChatBar from './chatbar.js';
 import CreateChat from './create-chat-component/createchat'
+import {ChatName,ListOfUsers} from "./chatname.js"
 import axios from 'axios';
 
 
@@ -112,7 +113,8 @@ function Dashboard (){
         return chats.data.map((conversation,index)=>{ // maps the lists into tiles clickable tiles 
             var lastMessaged = moment(conversation.last_messaged).fromNow() // finds the time since last messaged - turns it into 
             var usersinvolved = [(conversation.users_involved.slice(0,conversation.users_involved.indexOf(dashdata.user.username))).toString(),(conversation.users_involved.slice(conversation.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-            return <div key = {index} data-chatid={conversation.chat_id} onClick={chatchanger} tabIndex={0}><p className= 'chatname'>{usersinvolved.map((users)=>{return users+' '})}</p><span className ='last_messaged'>Last Messaged:{lastMessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+            var chatName = conversation.chat_name
+            return <div key = {index} data-chatid={conversation.chat_id} onClick={chatchanger} tabIndex={0}>{chatName? <ChatName {...{chatName}}/>:<ListOfUsers {...{usersinvolved}}/>}<span className ='last_messaged'>Last Messaged:{lastMessaged}</span></div> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
         })
     }
 
@@ -165,3 +167,5 @@ function Dashboard (){
  
 
 export default Dashboard
+
+

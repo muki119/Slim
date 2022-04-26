@@ -11,6 +11,9 @@ const newConv = Schema({
         required:true,
         unique:true,
         default:uuidv4
+    },chat_name:{
+        type:String,
+        default:null
     },
     users_involved:{
         type:Array,
