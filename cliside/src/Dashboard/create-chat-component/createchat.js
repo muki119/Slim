@@ -18,26 +18,26 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
     async function displaysimilarusers(e){
         //setaui(e.target.value)
         if ((e.target.value).length >= 2 ){
-            const similar =await axios.post(`${process.env.REACT_APP_API_URL}/api/misc/getsimilar`,{username:e.target.value})
+            const similar =await axios.post(`${process.env.REACT_APP_API_URL}/api/misc/getsimilar`,{username:e.target.value}) // gets all the simmilar users to the input 
             setfoundusers(similar.data)
         }   
     }
-    async function addtoselected(e){
+    async function addtoselected(e){ // adds people to the array of the selected 
         var found_username = e.currentTarget.dataset.foundusername;
         var var2 = selectedusers.indexOf(found_username) 
         if (var2=== -1){ // if not already within the array 
-           setselected([...selectedusers,found_username]) 
+           setselected([...selectedusers,found_username])  // add to array 
         }  
     }
     async function createchatproc(){ //sends to backend
         if (selectedusers.length >1 ){
             try{
                 var uat = localStorage.getItem("Uat")
-                const createconv =await axios.post(`${process.env.REACT_APP_API_URL}/api/m/createconversation`,{chatName:chatName,users_involved :selectedusers,Uat:uat,username:dashdata.user.username})
-                var success = createconv.data.success 
-                if (createconv.data.validjwt === false){
-                    setcc(false)
-                    logoutproc()
+                const createconv =await axios.post(`${process.env.REACT_APP_API_URL}/api/m/createconversation`,{chatName:chatName,users_involved :selectedusers,Uat:uat,username:dashdata.user.username}) // send to server and set response as variable 
+                var success = createconv.data.success  
+                if (createconv.data.validjwt === false){ // if token send alongside is invalid 
+                    setcc(false) //stop rendering window
+                    logoutproc() //logout 
                 }else{
                     if (success === true ){ // if the creation was successful 
                         chats.data.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
@@ -74,7 +74,7 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
             return <span className ='selected_recipients' data-selected_username = {element} onClick={removeselected}>{element}</span>
         }   
     })
-    const debcall =useCallback(debounce((e)=>{displaysimilarusers(e)},700),[setfoundusers,foundusers])
+    const debcall =useCallback(debounce((e)=>{displaysimilarusers(e)},700),[setfoundusers,foundusers]) // debounces function so it only looks for users once user has stopped inputting for 700 ms +
     
     return(
         <div className ='dimopacitybackground'> 

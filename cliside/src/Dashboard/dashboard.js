@@ -20,14 +20,14 @@ document.title = 'Dashboard'
 function Dashboard (){
     //const {urdata,setUser} = useContext(UdContext) // use this to set user data and pull userdata
     const dashdata = JSON.parse(localStorage.getItem('UD')) // login persistence data
-    const [logout,setlog] = useState(false)
-    const [chats,setchats] = useState({data:[]})
+    const [logout,setlog] = useState(false) // if set to true the user wil be logged out
+    const [chats,setchats] = useState({data:[]}) // all the conversations 
     const [currentchatid,changechat] = useState('') // the id of the 
-    const [socket,setsocket]=useState(null)
+    const [socket,setsocket]=useState(null) // variable for the socket 
     const [roomidarr,sridarr]  = useState([]) // array of chatids to be used as room id's
     const [displaycc,setcc]= useState(false)  //display create conversation   
     const [success_cc,sets_cc]=useState(false) // on successfull creation this is turnt to true - this causes a pop-up  that the app has been created
-    const [failed_cc,setf_cc]=useState(false)
+    const [failed_cc,setf_cc]=useState(false) // on a failed creation of chat this will be toggled to true - causing the failed creation alleart to be displayed 
     const [,forceUpdate] = useReducer(x => x + 1, 0); // forces update
 
     axios.defaults.withCredentials=true // makes it so that cookies are sent with every request. 
@@ -54,7 +54,7 @@ function Dashboard (){
     }
     async function get_chats(){ // get the user's chats 
         try {
-            var chat= await axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server . 
+            var chat= await axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server .  // http post request 
             if (chat.data.validjwt === false){ // if invalid jwt then logout
                 logoutproc()
             }else{
@@ -142,15 +142,15 @@ function Dashboard (){
                                     </nav>
 
                                     <div className = 'chatandbar'>
-                                        <ChatBar {...{setcc, displaycc, convomp}} />
+                                        <ChatBar {...{setcc, displaycc, convomp}} />{/*Displays the chatbar component */}
                                         <div className = 'openchat'>
-                                            <Chatroom {...{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}/>
+                                            <Chatroom {...{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}/>{/*displays chatroom */}
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}>
+                                <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}> {/* displays alert that conversation was successfully creation  */}
                                     <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
                                 </Snackbar>    
 

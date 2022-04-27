@@ -6,13 +6,14 @@ import {
     Redirect
 } from "react-router-dom";
 Axios.defaults.withCredentials = true
+document.title = 'Login'
 
 function Login (){
     
     const [logindetails,setdetails] = useState({username:'',password:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
     const [redirect ,setredirect ] = useState(false) // redirect state // allow redirect to dashboard?
     const [errorMessage,seterm] = useState(null) // error message if incorrect login
-    document.title = 'Login'
+    
     
     function handleChange (event){
         setdetails({...logindetails ,[event.target.name]: event.target.value}) // changes 
@@ -22,15 +23,15 @@ function Login (){
 
     async function loginproce(){
         try {
-            const userdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,logindetails)
+            const userdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,logindetails) // send details to server and asign response as variable 
             //console.log(userdata)
-            if (userdata.data.redirect === true){
-                var ud = JSON.stringify({user:userdata.data.user,redirect:userdata.data.redirect})
-                localStorage.setItem('UD',ud)// user data 
-                setredirect(userdata.data.redirect);
+            if (userdata.data.redirect === true){ // if successfull and should go to dashboard 
+                var ud = JSON.stringify({user:userdata.data.user,redirect:userdata.data.redirect}) 
+                localStorage.setItem('UD',ud)// user data // save user info  in local storage 
+                setredirect(userdata.data.redirect); // redirectr to dashboard 
  
             } else if (userdata.data.successful === false){
-                seterm(userdata.data.login_error)
+                seterm(userdata.data.login_error) // display error message 
             }
         } catch (error) {
             //throw 'Error in Attempt to send';
@@ -38,24 +39,24 @@ function Login (){
         }
         
     }
-    async function onloadlogin (){
+    async function onloadlogin (){ // This is done automatically once you go onto the login page 
             try {
-                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,null)
-                if (usdata.data.redirect === true){
-                    localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect}))
-                    setredirect(usdata.data.redirect);
-                } else if (usdata.data.successful === false){ // if there is a error message found 
-                    localStorage.clear()
+                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,null) // sends cookie to server and asigns response as variable 
+                if (usdata.data.redirect === true){ // if can go to dashboard 
+                    localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect})) // save user data in localstorage
+                    setredirect(usdata.data.redirect); //redirect to dashboard 
+                } else if (usdata.data.successful === false){ // if token was false -
+                    localStorage.clear() // clear any data 
                 }
             } catch (error) {
             }
     }
 
     useEffect(()=>{
-        onloadlogin()
-    },[])
+        onloadlogin() // on first render- call the function 
+    },[]) // empty brackets means that its to only happen once 
 
-    function enterlp (e){
+    function enterlp (e){ // listens for enter button 
         if (e.key === 'Enter'){
             loginproce()
         }

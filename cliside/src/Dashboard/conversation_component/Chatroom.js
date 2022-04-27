@@ -59,7 +59,7 @@ function Chatroom({chats,setchats,currentchatid,socket,setsocket,forceUpdate}){ 
 
             function addchat(incmessage,room){
                 try {
-                    const indx = chats.data.findIndex((e)=>{return e.chat_id === room}) 
+                    const indx = chats.data.findIndex((e)=>{return e.chat_id === room})  //finds index of chat where chat id == room 
                     const cht = chats
                     cht.data[indx].messages.push(incmessage) // adds message to array to be displayed 
                     cht.data[indx].last_messaged = new Date(Date.now()).toISOString() 

@@ -4,7 +4,7 @@ import "./landing.css";
 
 export default function Landing(){
     useEffect(()=>{
-        const targets = ['.slim',".msanim"]
+        const targets = ['.slim',".msanim"] // animation targets
         anime({
             targets:targets,
             translateY:['-200%','0%'],
