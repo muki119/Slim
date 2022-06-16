@@ -24,7 +24,7 @@ function Chatroom({chats,setchats,currentchatid,socket,setsocket,forceUpdate}){ 
                 }) // change to get username
                 const indx = chats.data.findIndex((e)=>{return e.chat_id === currentchatid}) // current chat index in array
                 const cht = chats
-                cht.data[indx].messages.push(messageObject)
+                cht.data[indx].messages.push(messageObject) // appending to array 
                 cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
                 //console.log(cht.data[indx].last_messaged )
                 setmessage('')

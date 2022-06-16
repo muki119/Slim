@@ -24,7 +24,7 @@ function Dashboard (){
     const [chats,setchats] = useState({data:[]}) // all the conversations 
     const [currentchatid,changechat] = useState('') // the id of the 
     const [socket,setsocket]=useState(null) // variable for the socket 
-    const [roomidarr,sridarr]  = useState([]) // array of chatids to be used as room id's
+    const [roomidarr,setRoomIdArray]  = useState([]) // array of chatids to be used as room id's
     const [displaycc,setcc]= useState(false)  //display create conversation   
     const [success_cc,sets_cc]=useState(false) // on successfull creation this is turnt to true - this causes a pop-up  that the app has been created
     const [failed_cc,setf_cc]=useState(false) // on a failed creation of chat this will be toggled to true - causing the failed creation alleart to be displayed 
@@ -47,9 +47,9 @@ function Dashboard (){
         socket.emit('join_rooms',roomidarr) // emits join_rooms event to server and attaches room id array. This attempts to join all rooms in array. 
     }
     function loadchats(){
-        sridarr(roomidarr=>[dashdata.user.username]) // connect to private rooms 
+        setRoomIdArray(roomidarr=>[dashdata.user.username]) // connect to private rooms  // adds users name to array  -- their username will be used to send created chats  ,involving them, ,by other users to them
         chats.data.forEach((e)=>{
-            sridarr(roomidarr=>[...roomidarr,e.chat_id]) 
+            setRoomIdArray(roomidarr=>[...roomidarr,e.chat_id]) 
         })
     }
     async function get_chats(){ // get the user's chats 
@@ -67,7 +67,7 @@ function Dashboard (){
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
         const newsocket = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
-        setsocket(newsocket)
+        setsocket(newsocket) // variable asignment 
         get_chats() //calls the get_chats function 
         return ()=>{newsocket.close()} // once the dashboard closes the socket will be disconnected  - cleanup function
     },[])
@@ -76,7 +76,7 @@ function Dashboard (){
         if (chats.data !== [] ){
             loadchats()
         }  
-        return ()=>{sridarr([])} 
+        return ()=>{setRoomIdArray([])} 
     },[chats])
 
     useEffect(()=>{ // joins rooms once everything is established - if the user also has no rooms then the function will not run 
@@ -93,7 +93,7 @@ function Dashboard (){
     useEffect(()=>{ // listens for a new conversation
         if (socket !== null){
             socket.on("new_chat",(conv)=>{
-                chats.data.push(conv)
+                chats.data.push(conv) // appending to array
                 socket.emit('join_rooms',conv.chat_id)
                 forceUpdate()
             })
@@ -150,7 +150,7 @@ function Dashboard (){
 
                                 </div>
 
-                                <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}> {/* displays alert that conversation was successfully creation  */}
+                                <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}> 
                                     <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
                                 </Snackbar>    
 

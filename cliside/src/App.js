@@ -9,7 +9,7 @@ import Landing from "./Landing/Landing.js"
 import { CircularProgress } from "@mui/material";
 const Register = lazy(()=> import("./register/register.js") )
 const Login =lazy(()=> import('./Login/login.js')); // goes to the login page 
-const Dashboard = lazy(()=> import("./Dashboard/dashboard.js"))
+const Dashboard = lazy(()=> import("./Dashboard/dashboard.js")) // goes to dashboard
 
 function App() {
   return (
@@ -18,10 +18,10 @@ function App() {
         <Switch>
 
             <Suspense fallback={<Circ/>}>
-              <Route exact path="/" component={Landing}/>
+              <Route exact path="/" component={Landing}/> {/** url routes  */}
               <Route exact path="/login" component={Login}/>
               <Route exact path="/register" component={Register}/>
-              <Route exact path ='/dashboard' component = {Dashboard}/>  
+              <Route exact path ='/dashboard' component = {Dashboard}/>  {/** url/dashboard */}
             </Suspense>
 
           </Switch>
