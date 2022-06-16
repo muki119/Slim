@@ -34,23 +34,16 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
             bcrypt.compare(pass,data.password,async (err, result) =>{ // comapares passwords 
                 if (err) { // if an error has arisen
                     console.log('error:'+err)
+                    res.status(500).send({successful:false,login_error:'internal server error'})
                 }else{
-                    if (result == true) { // if the passwords are the same 
+                    if (result === true) { // if the passwords are the same 
                         //jwt creation process -----------
-                        
                             // if they choose to be remembered in the client  - as of 15/9/21 this is not the sueres decision - this only operates if the person dosent have a jwt already and has to sign in  
                             // no choice now as of 11/11/21 jwt is now in localstorage
-
                         var jwtout = await token_create({ // jwt output 
                             username: data.username,
                             password: pass // sets password to the login form password to avoid hashing problems in bcrypt because us cant compare between two hashed passwords
                         }) 
-                        //console.log('true')
-                       
-                        // end +++++++++++++
-
-                        //send data process start ----------
-
                         //if (jwtout){res.cookie('userauth',jwtout,{httpOnly:true,maxAge:604800000}) }// sends the jwt to the client as a cookie // fixes problem of cookie switching from jwt to undefined where undefined is caused by no remember me in jwt so the jwtout is nothing and as a result the output is nothing - adding a if stamemnt makes sure that if there is somethin in the jwt out then it will send it as a cookie - not just sending it out even with no remember_me == true 
                         res.cookie('SID',jwtout,{maxAge:1209600000,httpOnly:true})// then send the user authentication token (userauth in jwt)
                         res.send({ // sends the data 
@@ -67,10 +60,7 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
                             },
                             redirect:true
                         });
-                        
-                        //end+++++++++++++++++++++++
-
-                    }else if (result == false ){ // if the passwords are different 
+                    }else if (result === false ){ // if the passwords are different 
                         if (req.cookies.SID){res.clearCookie("SID")}
                         res.send({successful:false,login_error:'Incorrect username/password'}) //send uncuccesfull and a incorrect messge in json 
                     }
@@ -106,9 +96,10 @@ async function jwtauth(req,res,next){  // jwt checker  - uses jwt to login
                     res.clearCookie('SID')
                     res.status(200).send({auth_error:'Invalid auth',validjwt:false});
                 }
-            }catch{
-                console.log('Jwt verify error')
-                res.status(500).send({successful:false,login_error:'internal server error'})
+            }catch(err){
+                res.clearCookie('SID')
+                res.status(200).send({auth_error:'Invalid auth',validjwt:false});
+           
             }
     
         }else{next()} // if token is = null or is just not present then just conitinue with whole process

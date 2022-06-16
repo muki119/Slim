@@ -10,7 +10,7 @@ function sendinvalid(res){ // function for sending errors to client
     res.status(200).send({auth_error:'Invalid auth',validjwt:false}); // tells client that jwt isnt authentic.
 }
 function decryptuserdetails(decryptedJwt){ // decrypts userdeatails in token 
-    return JSON.parse(AES.decrypt(decryptedJwt.UD,`${process.env.AES_KEY}`).toString(Utf8))
+    return JSON.parse(AES.decrypt(decryptedJwt.UD,`${process.env.AES_KEY}`).toString(Utf8)) // decryption 
 }
 
 function userauth (req,res,next){// this checks the jwt sent alongside to verify that what is sent is the user // this process should also be rate limited as the login one and register 
