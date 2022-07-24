@@ -1,4 +1,4 @@
-import  React,{Suspense,lazy, useState } from "react";
+import  React,{Suspense,lazy, useState,useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,10 +13,19 @@ const Login =lazy(()=> import('./Login/login.js')); // goes to the login page
 const Dashboard = lazy(()=> import("./Dashboard/dashboard.js")) // goes to dashboard
 
 function App() {
-  const [currentTheme,setcurrentTheme] = useState("dark")
+  const [currentTheme,setcurrentTheme] = useState("light")
   const setcurrentThemeFunc = ()=>{
-    if (currentTheme === "dark"){setcurrentTheme("light")}else{setcurrentTheme("dark")}
+    if (currentTheme === null ){ // if its device choice - go to light mode
+      setcurrentTheme("light")
+    }else if(currentTheme === "light"){ // if its light mode go to dark mode
+      setcurrentTheme("dark")
+    }else{ // if its darkmode - go to device choice 
+      setcurrentTheme(null)
+    }
   }
+  useEffect(()=>{
+    document.body.setAttribute("color-scheme",currentTheme)
+  },[currentTheme])
   return (
     <div className="App">
       <Router>  

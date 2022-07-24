@@ -19,7 +19,7 @@ import { ThemeContext } from '../ThemeContext';
 
 
 
-document.title = 'Dashboard'
+
 function Dashboard (){
     //const {urdata,setUser} = useContext(UdContext) // use this to set user data and pull userdata
     const dashdata = JSON.parse(localStorage.getItem('UD')) // login persistence data
@@ -69,11 +69,9 @@ function Dashboard (){
         }
     }
 
-    useEffect(()=>{
-        document.body.setAttribute("color-scheme",currentTheme)
-    },[currentTheme])
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
+        document.title = 'Dashboard'
         const newsocket = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
         setsocket(newsocket) // variable asignment 
         get_chats() //calls the get_chats function 
