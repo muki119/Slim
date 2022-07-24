@@ -6,7 +6,7 @@ export default function ChatBar({setcc, displaycc, convomp}) {
     <div className='chatbar'>
         <div><span className='chatname'>{dashdata.user.firstname} {dashdata.user.surname}</span></div>
         <div className="chatbtnouter"><span className='create_chat_btn'><button onClick={() => {setcc(!displaycc);}}>Create chat</button></span></div>
-        {convomp}
+        {convomp}{/*Mapped conversation*/ }
     </div>
     );
 }

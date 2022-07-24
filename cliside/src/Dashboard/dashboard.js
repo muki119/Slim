@@ -1,10 +1,10 @@
-import React, {useEffect, useState ,useReducer} from 'react';
+import React, {useEffect, useState ,useReducer, useContext} from 'react';
+import { Snackbar,Alert} from '@mui/material';
 import {
     Redirect
 } from "react-router-dom";
 import moment from 'moment'
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+
 import './dashboard.css';
 import '../general_css/gcss.css';
 
@@ -12,8 +12,11 @@ import { io } from "socket.io-client" ;
 import Chatroom from './conversation_component/Chatroom';
 import ChatBar from './chatbarComponent/chatbar.js';
 import CreateChat from './create-chat-component/createchat'
+import NavigationBar from './navigationBar/navigationBar';
 import {AvailableConversationTiles} from'./chatbarComponent/AvailableConversationIcon.js'
 import axios from 'axios';
+import { ThemeContext } from '../ThemeContext';
+
 
 
 document.title = 'Dashboard'
@@ -29,12 +32,13 @@ function Dashboard (){
     const [success_cc,sets_cc]=useState(false) // on successfull creation this is turnt to true - this causes a pop-up  that the app has been created
     const [failed_cc,setf_cc]=useState(false) // on a failed creation of chat this will be toggled to true - causing the failed creation alleart to be displayed 
     const [,forceUpdate] = useReducer(x => x + 1, 0); // forces update
-
+    const [openMenu,setOpenMenu] = useState(false)
+    const {currentTheme,setcurrentThemeFunc} = useContext(ThemeContext)
     axios.defaults.withCredentials=true // makes it so that cookies are sent with every request. 
     
     async function logoutproc(){ // log out process
         localStorage.clear() // clears users basic data 
-        await axios.delete(`${process.env.REACT_APP_API_URL}/api/misc/removecookie`) // deletes cookies
+        await axios.delete(`${process.env.REACT_APP_API_URL}/misc/removecookie`) // deletes cookies
         if(socket!== null){socket.disconnect()}
         setlog(true) // do every thing above before this because this redirects to login
     }
@@ -54,7 +58,7 @@ function Dashboard (){
     }
     async function get_chats(){ // get the user's chats 
         try {
-            var chat= await axios.post(`${process.env.REACT_APP_API_URL}/api/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server .  // http post request 
+            var chat= await axios.post(`${process.env.REACT_APP_API_URL}/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server .  // http post request 
             if (chat.data.validjwt === false){ // if invalid jwt then logout
                 logoutproc()
             }else{
@@ -64,6 +68,10 @@ function Dashboard (){
             
         }
     }
+
+    useEffect(()=>{
+        document.body.setAttribute("color-scheme",currentTheme)
+    },[currentTheme])
 
     useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
         const newsocket = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
@@ -134,12 +142,9 @@ function Dashboard (){
                         <div className = 'dbackground' >
                                 <div className='dinbox'>
 
-                                    {displaycc? <CreateChat {...{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>:<></>} {/* displays the create chats menu when the displaycc value is == true  */}
+                                    {displaycc? <CreateChat {...{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>:null} {/* displays the create chats menu when the displaycc value is == true  */}
                                     
-                                    <nav className ='topbar'>
-                                        <span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> 
-                                        <button tabIndex={0} id='lout'onClick={logoutproc}>Logout</button>
-                                    </nav>
+                                    <NavigationBar {...{setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutproc}}/>
 
                                     <div className = 'chatandbar'>
                                         <ChatBar {...{setcc, displaycc, convomp}} />{/*Displays the chatbar component */}
@@ -157,6 +162,7 @@ function Dashboard (){
                                 <Snackbar open={failed_cc} onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){setf_cc(false)}}} autoHideDuration={5000}>
                                     <Alert severity="error">Unable to create Conversation.Please try again later</Alert>
                                 </Snackbar>
+
                         </div>
                     }
                     {logout === true && <Redirect push to = '/login' /> }
@@ -174,6 +180,8 @@ function Dashboard (){
  
 
 export default Dashboard
+
+
 
 
 

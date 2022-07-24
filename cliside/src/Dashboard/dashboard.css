@@ -15,7 +15,7 @@
     height: 5%;
     width: 100vw;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     align-content: center;
     align-items: center;
     border-bottom: var(--Secondary-color) 2px solid;
@@ -119,27 +119,49 @@
     margin: 10px;
     user-select: none;
 }
-#logout{
-    height: 75%;
+.logout{
+   /* height: 75%;
     width: 10%;
-    min-width: fit-content;
-    border: 4px solid var(--Secondary-color);
+    min-width: fit-content;*/
+    border: 1px 0  solid var(--Secondary-color);
     background-color: var(--Secondary-color);
     color: var(--Button-text-color);
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     font-size: 1rem;
     font-weight: 600;
     transition: 0.4s ease;
-    min-height: 1.5rem;
-    max-height: 2.5rem;
+    /*min-height: 1.5rem;
+    max-height: 2.5rem;*/
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
-#logout:hover{
-    border: 1px solid var(--Secondary-color);
+.logout:hover{
+    /*border: 1px solid var(--Secondary-color);*/
     background-color: var(--Primary-color);
     color: var(--Button-text-color-hover);
-    transform: scale(1.05);
+   /* transform: scale(1.05);*/
     transition: 0.4s ease;
+}
+
+
+.css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper{
+    border-radius: 5px;
+    font-family: inherit !important;
+    font-weight: 600;
+    color: var(--Text-color)!important;
+    background-color: var(--Icon-color-focus);
+
+}   
+#logout-icon{
+    color: var(--Text-color);
+}
+.avatar{
+    background-color: var(--Icon-color-focus);
+    color: var(--Text-color);
+    outline: 2px solid var(--Text-color);
 }
 
 .dbackground{
@@ -150,4 +172,8 @@
 .openchat{
     width: 100%;
     height: 100%;
+}
+
+.lightanddarkicons{
+    color: var(--Theme-icon-color);
 }
