@@ -30,10 +30,10 @@ app.use((req,res,next)=>{
 })
 
 //these tell the server to use these routes.
-app.use(registerRoutes);//register routes
-app.use(loginRoute); // login routes 
-app.use(messageRoute); // message routes
-app.use(miscops) // misc routes
+//app.use(registerRoutes);//register routes
+app.use("/api",[loginRoute,registerRoutes,miscops]); // login routes 
+app.use("/api/m",messageRoute); // message routes
+
 
 
 

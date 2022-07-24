@@ -22,7 +22,13 @@ io.on("connection", (socket) => {
     //console.log(socket.id)
 
     socket.on('join_rooms',(rooms)=>{ // function for joining rooms(rooms should be an array of roooms of the user (rooms should be chat_id ))
-        socket.join(rooms)
+        try{
+            socket.join(rooms)
+            // callback saying successfull join
+        }catch(err){
+            //send back error when joining room 
+        }
+        
     })
 
     socket.on('sendMessage',(room,message,callback)=>{ // room should be chat_id
@@ -31,7 +37,9 @@ io.on("connection", (socket) => {
             if (err){
                 console.log(err)
                 callback({
-                    sent:false
+                    sent:false,
+                    reason:"The server Was unable to send the message",
+                    error_code:500
                 })
             }else if (!err){
                 socket.to(room).emit('incomming_message', room,message)//message should be {sender,message,timesent}
@@ -46,7 +54,7 @@ io.on("connection", (socket) => {
 
 });
 
-Messagerouter.post('/api/m/createconversation',userauth,(req,res)=>{ // creating a new conversation 
+Messagerouter.post('/createconversation',userauth,(req,res)=>{ // creating a new conversation 
     var conv = new ccvmodel({
         chat_name:req.body.chatName,
         users_involved:req.body.users_involved
@@ -69,7 +77,7 @@ var getmsglimiter = RateLimit({
   max: 25
 });
 
-Messagerouter.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
+Messagerouter.post('/getmsgs',[getmsglimiter, userauth],(req,res)=>{
     var userToBeFound = req.body.username // user to be found (userToBeFound)
     Usermodel.exists({username:userToBeFound},(error,out)=>{  /// checks if user exists 
         if (!error && out === true ){
@@ -91,6 +99,79 @@ Messagerouter.post('/api/m/getmsgs',[getmsglimiter, userauth],(req,res)=>{
             res.send("Error!")
         }   
     })
+    
+})
+Messagerouter.post('/leave_conversation',userauth,(req,res)=>{
+    const username = req.body.username
+    const chatId = req.body.chatId
+    const findObj = {"$and":[
+        {chat_id:chatId}, // finds chat 
+        {users_involved:{"$in":username}} //sees if youre in the chat
+        ]
+    }
+    const updateObj={"$pull":{users_involved:username}}
+
+    ccvmodel.findOneAndUpdate(findObj,updateObj,(err,data)=>{
+        if(!err){
+            res.send(data)
+        }else if (err){
+            res.send(err)
+        }
+    })
+    //chat id 
+    // if theyre in the chat 
+    //if so remove them in the array 
+    //send success callback
+})
+
+Messagerouter.post('/addtoconversation',userauth,async (req,res)=>{
+    const username = req.body.username
+    const userToAdd = req.body.userToAdd
+    const chatId = req.body.chatId
+    const findObj = {"$and":[
+        {chat_id:chatId}, // finds chat 
+        {users_involved:{"$nin":userToAdd}},
+        {users_involved:{"$in":username}}  // checks if the user adding the person is in that chat and the person to be added is not 
+        ]
+    }
+    const updateObj={"$push":{users_involved:userToAdd}}
+    const notTheSame = username !== userToAdd
+    if (notTheSame){
+        try{
+            ccvmodel.findOneAndUpdate(findObj,updateObj,(err,data)=>{
+                if (!err){
+                    if (!data){
+                        res.send({
+                            success:false,
+                            errorCode:426,
+                            message:"This chat may not exist ,The user is not in the conversation or the person that is being added is already in the conversation "
+                        })
+                    }else{
+                        res.send({
+                            success:true
+                        })
+                    }
+                }else{
+                    res.status(500).send("Server-Side Error please try again later")
+                }
+                
+            })
+            
+        }catch(err){
+            res.status(500).send("Server-Side Error please try again later") //testing 
+        }
+        
+    }else{
+        try {
+            res.send("same")
+        } catch (error) {
+            console.log("same")
+        }
+    }
+    
+    //check if theyre in the chat
+    //add person to the chat.
+    //send success
     
 })
 
