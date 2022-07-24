@@ -7,7 +7,6 @@ import axios from "axios";
 
 export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged}){
     const [chatID,setId] = useState(null)
-    
     const [openMenu,setOpenMenu] = useState(false)
 
     useEffect(()=>{
@@ -64,7 +63,7 @@ export function TileMenu({chatID,conversation,openMenu,setOpenMenu}){
 
     return( // may use material ui for this one     
         <>
-            <Menu id='Menu' anchorEl={openMenu} open={Boolean(openMenu)} onClose={(e) => { setOpenMenu(false); } } onClick={(e) => { setOpenMenu(false); } }>
+            <Menu id='Menu' anchorEl={openMenu} open={Boolean(openMenu)} onClose={(e) => { setOpenMenu(false); } } onClick={(e) => { setOpenMenu(false); } } anchorOrigin={{vertical: 'center',horizontal: 'center'}} >
                 <MenuItem>
                     <ListItemIcon>
                         <PersonAddIcon className='lightanddarkicons' />
