@@ -1,11 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
+:root,html[color-scheme="light"]{
+  --Primary-color:#f5f5f5;
+  --Secondary-color:#39386f;
+  --Message-color:#385E70;
+  --Icon-color:#eeeeee;
+  --Icon-color-focus:#e6e6e6;
+  --Text-area-color:#eeeeee;
+  --Text-color:#39386f;
+  --Text-area-placeholder-color:none;
+  --Text-area-text-color:var(--Secondary-color);
+  --Sent-by-color:Black;
+
+  --Button-text-color:#f5f5f5;
+  --Button-text-color-hover:var(--Secondary-color);
+}
+html[color-scheme="dark"]{
+  --Primary-color:#222220;
+  --Secondary-color:#39386f;
+  --Text-color:#8683F6;
+  --Text-area-color:var(--Icon-color);
+  --Text-area-placeholder-color:#939393;
+  --Message-color:#385E70;
+  --Icon-color:#282828;
+  --Icon-color-focus:#2e2e2e;
+  --Sent-by-color:var(--Text-color);
+  --Text-area-text-color:#f5f5f5;
+
+  --Button-text-color:#f5f5f5;
+  --Button-text-color-hover:var(--Text-color);
+}
 body {
   margin: 0;
   padding: 0;
   font-family:'Poppins','Montserrat', sans-serif ,'Helvetica Neue';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--Text-color);
 }
 
 code {

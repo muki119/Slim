@@ -1,3 +1,4 @@
+
 .dimopacitybackground{
     width: 100vw;
     height: 100vh;
@@ -26,7 +27,7 @@
     z-index: 2;
     overflow: hidden;
     max-width: 20vw;
-    border: #39386e 2px solid;
+    border: var(--Secondary-color) 2px solid;
 }
 .createchatformcontainer>span{
     width: 100%;
@@ -42,7 +43,7 @@
     position: absolute;
     width: 100vw;
     height: 100vh;
-    background-color: #363636;
+    background-color: var(--Secondary-color);
     opacity: 0.3;
 }
 
@@ -53,12 +54,12 @@
     border-radius: 5px;
     border-style: solid;
     font-size: 1.25rem;
-    border: #39386e solid 1px;
+    border: var(--Secondary-color) solid 1px;
     background: none;
-    color: #39386e;
+    color: var(--Secondary-color);
 }
 .add-userinput>input:focus{
-    outline-color: #39386e;
+    outline-color: var(--Secondary-color);
 }
 .basebutton{
     height: 3rem;
@@ -68,13 +69,13 @@
     outline: none;
     font-size: medium;
     border: #363636 solid 1px;
-    background-color: #39386e;
+    background-color: var(--Secondary-color);
     cursor: pointer;
     transition: all 0.4s ease;
 }
 .basebutton:hover{
     background-color: #e6e6e6;
-    color: #39386f;
+    color: var(--Secondary-color);
     transition: all 0.4s ease;
 
 }
@@ -96,8 +97,8 @@
     justify-content: center;
     align-items: center;
     background-color: #eeeeee;
-    color: #39386f;
-    border: #39386e 2px solid;
+    color: var(--Secondary-color);
+    border: var(--Secondary-color) 2px solid;
     margin: 10px;
     border-radius: 5px; 
 }
@@ -122,13 +123,13 @@
     border-radius: 5px;
     padding: 5px;
     margin: 5px;
-    background-color: #39386e;
-    border: #39386e 2px solid;
+    background-color: var(--Secondary-color);
+    border: var(--Secondary-color) 2px solid;
     transition: all 0.4s ease;
 }
 .selected_recipients:hover{
     background-color: #e6e6e6;
-    color: #39386f;
+    color: var(--Secondary-color);
     transform: scale(1.05);
     transition: all 0.4s ease;
     cursor: pointer;
