@@ -1,13 +1,15 @@
 import {ChatName,ListOfUsers} from "./chatname.js"
-import { Avatar ,Tooltip, IconButton, Menu,MenuItem,ListItemIcon, Divider} from '@mui/material';
+import { Avatar ,Tooltip, IconButton, Menu,MenuItem,ListItemIcon, Divider, Modal, Paper, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button} from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-
-export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged}){
+import './AvailableConversationIcon.css'
+export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,chats}){
     const [chatID,setId] = useState(null)
     const [openMenu,setOpenMenu] = useState(false)
+    const [openFindpersonMenu ,setoFPM]= useState(false)
+    const [openConfirmatiion,setopenConfirmation]=useState(false)
 
     useEffect(()=>{
         setId(conversation.chat_id)
@@ -24,54 +26,29 @@ export function AvailableConversationTiles ({index, conversation, chatchanger, c
                 {chatName ? <ChatName {...{ chatName }} /> : <ListOfUsers {...{ usersinvolved }} />}{/*displays chatname if there is one - otherwide it  shows array of recipients */}
                 <span className='last_messaged'>Last Messaged:{lastMessaged}</span>
             </div>
-            <TileMenu {...{chatID,conversation,openMenu,setOpenMenu}}/>
+
+            <TileMenu {...{chatID,conversation,openMenu,setOpenMenu,openFindpersonMenu,setoFPM,setopenConfirmation}}/>{/* The menu with the option to delete or add person to conversation*/}
+            <FindPerson {...{openFindpersonMenu,setoFPM,setopenConfirmation}}/>
+            <LeaveConfirmation {...{openConfirmatiion,setopenConfirmation,chats}}/>
+
         </>
     )
 }
 
 
-export function TileMenu({chatID,conversation,openMenu,setOpenMenu}){
-    useEffect(()=>{ // set position === mouse x&y 
-
-    },[])
-    function leaveconversation(){
-        ///asks are you sure 
-        // then acts accordingly  -- this will be done with material ui 
-    }
-    async function addToConversation(){
-        // calls and adds to conversation - may also use 
- 
-        try {
-            const dataSchem = {
-                username:username,
-                userToAdd:usersToAdd, // restricting it to onl
-                chatId:chatID  
-            }
-            const sendData = await axios.post(`${process.env.REACT_APP_API_URL}/m/addtoconversation`,null) 
-            var success = sendData.data.
-            if ()
-        } catch (error) {
-            
-        }
-        
-    }
-    // axios send request 
-    // add person to chat 
-    // leave chat 
-    //change name might make that a function only 
-    // on open set its position === to mouse x and y 
+export function TileMenu({chatID,conversation,openMenu,setOpenMenu,setoFPM,setopenConfirmation}){
 
     return( // may use material ui for this one     
         <>
             <Menu id='Menu' anchorEl={openMenu} open={Boolean(openMenu)} onClose={(e) => { setOpenMenu(false); } } onClick={(e) => { setOpenMenu(false); } } anchorOrigin={{vertical: 'center',horizontal: 'center'}} >
-                <MenuItem>
+                <MenuItem onClick={()=>{setoFPM(true)}}>
                     <ListItemIcon>
                         <PersonAddIcon className='lightanddarkicons' />
                     </ListItemIcon>
                     Add Person To Conversation
                 </MenuItem>
                 <Divider/>
-                <MenuItem>
+                <MenuItem onClick={()=>{setopenConfirmation(true)}}>
                     <ListItemIcon>
                         <PersonRemoveIcon className='lightanddarkicons' />
                     </ListItemIcon>
@@ -83,7 +60,7 @@ export function TileMenu({chatID,conversation,openMenu,setOpenMenu}){
 }
 
 
-export function FindPerson(){
+export function FindPerson({openFindpersonMenu,setoFPM}){
     //menu that finds people 
     //check if person is in conversation 
     // if so display to side that theyre already in conversation and prevent them from being added 
@@ -91,6 +68,36 @@ export function FindPerson(){
     // copy looks and overall html from create-chat-component
     return(
         <>
+            <Dialog className ="Tootalo" open={openFindpersonMenu} onClose={()=>{setoFPM(false)}} fullWidth={true} maxWidth={"sm"} >
+                <DialogTitle>Select A Person To Add</DialogTitle>
+                <DialogContent>
+                    <TextField label="Input a Username" variant="standard" margin="dense" />
+                </DialogContent>
+                <DialogContent>
+                    yerr
+                </DialogContent>
+            </Dialog>
+        </>
+    )
+}
+
+function LeaveConfirmation({openConfirmatiion,setopenConfirmation,chatID}){
+    async function HandleAcceptance (){
+        console.log("acceptance")
+        setopenConfirmation(false)
+    }
+    
+    return(
+        <>
+            <Dialog open={openConfirmatiion} onClose={()=>{setopenConfirmation(false)}}fullWidth={true} maxWidth={"sm"} >
+                <DialogTitle>
+                    Are You Sure?
+                </DialogTitle>
+                <DialogActions>
+                    <Button className="Okbutton" onClick={HandleAcceptance}>Ok</Button>
+                    <Button className="CancelButton"variant="outlined" color="error" onClick={()=>{setopenConfirmation(false)}}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }

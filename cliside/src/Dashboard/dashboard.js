@@ -13,6 +13,7 @@ import Chatroom from './conversation_component/Chatroom';
 import ChatBar from './chatbarComponent/chatbar.js';
 import CreateChat from './create-chat-component/createchat'
 import NavigationBar from './navigationBar/navigationBar';
+import anime from 'animejs'
 import {AvailableConversationTiles} from'./chatbarComponent/AvailableConversationIcon.js'
 import axios from 'axios';
 import { ThemeContext } from '../ThemeContext';
@@ -34,6 +35,7 @@ function Dashboard (){
     const [,forceUpdate] = useReducer(x => x + 1, 0); // forces update
     const [openMenu,setOpenMenu] = useState(false)
     const {currentTheme,setcurrentThemeFunc} = useContext(ThemeContext)
+    const [openChatbar,setopenChatbar]=useState(true)// open chat bar on the right if true then it would be open 
     axios.defaults.withCredentials=true // makes it so that cookies are sent with every request. 
     
     async function logoutproc(){ // log out process
@@ -41,6 +43,9 @@ function Dashboard (){
         await axios.delete(`${process.env.REACT_APP_API_URL}/misc/removecookie`) // deletes cookies
         if(socket!== null){socket.disconnect()}
         setlog(true) // do every thing above before this because this redirects to login
+    }
+    function opencb(){
+        setopenChatbar(!openChatbar)   
     }
 
     function chatchanger(e){ // changes the chat 
@@ -122,7 +127,7 @@ function Dashboard (){
             var lastMessaged = moment(conversation.last_messaged).fromNow() // finds the time since last messaged - turns it into 
             var usersinvolved = [(conversation.users_involved.slice(0,conversation.users_involved.indexOf(dashdata.user.username))).toString(),(conversation.users_involved.slice(conversation.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
             var chatName = conversation.chat_name
-            return <AvailableConversationTiles {...{index, conversation, chatchanger, chatName, usersinvolved, lastMessaged}}/> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+            return <AvailableConversationTiles {...{index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,chats}}/> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
         })
     }
 
@@ -142,10 +147,10 @@ function Dashboard (){
 
                                     {displaycc? <CreateChat {...{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>:null} {/* displays the create chats menu when the displaycc value is == true  */}
                                     
-                                    <NavigationBar {...{setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutproc}}/>
+                                    <NavigationBar {...{setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutproc ,opencb,openChatbar}}/>
 
                                     <div className = 'chatandbar'>
-                                        <ChatBar {...{setcc, displaycc, convomp}} />{/*Displays the chatbar component */}
+                                        {openChatbar?<ChatBar {...{setcc, displaycc, convomp}} />:<></>}{/*Displays the chatbar component */}
                                         <div className = 'openchat'>
                                             <Chatroom {...{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}/>{/*displays chatroom */}
                                         </div>

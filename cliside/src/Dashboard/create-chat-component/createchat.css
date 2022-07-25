@@ -18,7 +18,7 @@
     max-height: 80vh;
     overflow-y: scroll;
     overflow-x: hidden;
-    background-color: #eeeeee;
+    background-color: var(--Primary-color);
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -56,7 +56,7 @@
     font-size: 1.25rem;
     border: var(--Secondary-color) solid 1px;
     background: none;
-    color: var(--Secondary-color);
+    color: var(--Text-color);
 }
 .add-userinput>input:focus{
     outline-color: var(--Secondary-color);
@@ -96,14 +96,14 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    background-color: #eeeeee;
-    color: var(--Secondary-color);
+    background-color: var(--Icon-color);
+    color: var(--Text-color);
     border: var(--Secondary-color) 2px solid;
     margin: 10px;
     border-radius: 5px; 
 }
 .similarusrscard:hover{
-    background-color: #e6e6e6;
+    background-color: var(--Icon-color-focus);
     cursor: pointer;
 }
 

@@ -8,6 +8,7 @@
     max-height: fit-content;
     max-width: fit-content;
     backdrop-filter: blur(2px);
+    
 }
 .topbar{
     position: static;
@@ -15,7 +16,7 @@
     height: 5%;
     width: 100vw;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-content: center;
     align-items: center;
     border-bottom: var(--Secondary-color) 2px solid;
@@ -103,7 +104,7 @@
     align-content: center;
     align-items: center;
     margin: 10px;
-    font-weight: 600;
+    font-weight: 500;
     font-size: large;
     color: var(--Text-color);
     word-break: break-word;
@@ -176,4 +177,8 @@
 
 .lightanddarkicons{
     color: var(--Theme-icon-color);
+}
+
+.menuicon{
+    color: var(--Text-color);
 }

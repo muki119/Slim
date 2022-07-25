@@ -1,0 +1,15 @@
+[role="dialog"]{
+    background-color: var(--Icon-color);
+    color: var(--Text-color);
+}
+
+.Okbutton{
+    color: var(--Text-color);
+
+}
+
+.CancelButton{
+    background-color: var(--Icon-color);
+    color: var(--Text-color);
+
+}
