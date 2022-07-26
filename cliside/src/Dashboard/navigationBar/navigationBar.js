@@ -8,7 +8,7 @@ export default function NavigationBar({setOpenMenu, dashdata, openMenu, setcurre
     return <nav className='topbar'>
         {/*<span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> */}
         {/*<button tabIndex={0} id='logout'onClick={logoutproc}><LogoutIcon/>Logout</button>*/}
-        <Tooltip title={openChatbar?'Open Menu':'Close Menu'}>
+        <Tooltip title={openChatbar?'Close Menu':'Open Menu'}>
             <IconButton disableRipple={true} onClick={opencb}>
                 <MenuIcon className='menuicon'/>
             </IconButton>
