@@ -13,7 +13,6 @@ import Chatroom from './conversation_component/Chatroom';
 import ChatBar from './chatbarComponent/chatbar.js';
 import CreateChat from './create-chat-component/createchat'
 import NavigationBar from './navigationBar/navigationBar';
-import anime from 'animejs'
 import {AvailableConversationTiles} from'./chatbarComponent/AvailableConversationIcon.js'
 import axios from 'axios';
 import { ThemeContext } from '../ThemeContext';
