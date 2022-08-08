@@ -36,9 +36,23 @@
     display: flex;
     min-height: 5%;
     align-content: center;
-    align-items: center;
+    /*align-items: center;*/
     justify-content: center;
     border-top: var(--Secondary-color) solid 2px;
+}
+.messageInputBoxContainer{
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+    /* border: var(--Secondary-color) 1px solid; */
+    border-radius: 10px;
+    background-color: var(--Text-area-color);
+    /*height: 90%;*/
+    margin: 10px;
 }
 .users_message,.incoming_message,.incoming_message_top,.incoming_message_middle,.incoming_message_bottom{
     text-align: left;
@@ -113,30 +127,41 @@
     font-weight: 500;
     font-family: Montserrat;
     max-height: 50vh;
-    width: 80%;
+    width: 100%;
     padding: 10px;
-    background-color: var(--Text-area-color);
+    background: none;
+    border: none;
     margin: 5px;
-    border-radius: 10px 0px 0px 10px;
-    border: var(--Secondary-color) 1px solid;
-    margin: 5px 0px 5px 5px;
     transition: 0.3s height ease;
     color: var(--Text-area-text-color);
+    
 }
 
 #text_area:focus{
     outline: none;
 }
 
+.sendButtonContainer{
+    height: 100%;
+    /* width: 100%; */
+    min-width: 5%;
+    /* max-width: 15%; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
 
+    margin: 5px;
+}
 #sendbtn{
-    height: 90%;
-    max-width: 15%;
-    min-width:5%;
-    border-radius: 0px 10px 10px 0px;
-    border: var(--Secondary-color) 1px solid;
-    background-color: var(--Message-color);
-    color:var(--Text-area-text-color);
+    min-height:20%;
+    min-width:100%;
+    color:var(--Text-color);
+    background: none;
     font-size: 1rem;
     font-weight: 500;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: none;
 }

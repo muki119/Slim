@@ -49,6 +49,7 @@ function Dashboard (){
 
     function chatchanger(e){ // changes the chat 
         changechat(e.currentTarget.dataset.chatid)
+        opencb()
     }
 
     function joinrooms(){

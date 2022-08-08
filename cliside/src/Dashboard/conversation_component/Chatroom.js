@@ -88,8 +88,14 @@ function Chatroom({chats,setchats,currentchatid,socket,setsocket,forceUpdate}){ 
                         </ScrollableFeed>
                     </div>
                     <div className = 'message_input_box' >
-                        <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={2}style={{fontsize:'2rem'}}></TextareaAutosize>  
-                        <button id='sendbtn'onClick={sendmsg}>Send</button>
+                        <div className='messageInputBoxContainer'>
+                            <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={1}style={{fontsize:'2rem'}}></TextareaAutosize>  
+                            <div className='sendButtonContainer' >
+                                <button id='sendbtn'onClick={sendmsg}>Send</button>
+                            </div>
+                             
+                        </div>
+                        
                     </div>
                 </div>
             )

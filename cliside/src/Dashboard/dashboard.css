@@ -8,12 +8,14 @@
     max-height: fit-content;
     max-width: fit-content;
     backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: column;
     
 }
 .topbar{
     position: static;
     top:0;
-    height: 5%;
+    /*height: 5%;*/
     width: 100vw;
     display: flex;
     justify-content: space-between;
@@ -31,7 +33,8 @@
 }
 .chatandbar{
     width: 100%;
-    height: 95%;
+    min-height: 92%;
+    height: 100%;
     display: flex;
 }
 .chatbar::-webkit-scrollbar{

@@ -24,7 +24,7 @@ export function AvailableConversationTiles ({index, conversation, chatchanger, c
         <>
             <div key={index} data-chatid={conversation.chat_id} onClick={chatchanger} onContextMenu ={changeTileMenuState} tabIndex={0}>
                 {chatName ? <ChatName {...{ chatName }} /> : <ListOfUsers {...{ usersinvolved }} />}{/*displays chatname if there is one - otherwide it  shows array of recipients */}
-                <span className='last_messaged'>Last Messaged:{lastMessaged}</span>
+                <span className='last_messaged'>{lastMessaged}</span>
             </div>
 
             <TileMenu {...{chatID,conversation,openMenu,setOpenMenu,openFindpersonMenu,setoFPM,setopenConfirmation}}/>{/* The menu with the option to delete or add person to conversation*/}
