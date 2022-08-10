@@ -134,7 +134,11 @@
     margin: 5px;
     transition: 0.3s height ease;
     color: var(--Text-area-text-color);
-    
+    word-break: break-word;
+}
+
+#text_area::placeholder{
+    color: var(--Text-area-text-color);
 }
 
 #text_area:focus{
