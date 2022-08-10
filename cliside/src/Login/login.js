@@ -3,7 +3,7 @@ import Axios from 'axios'
 import './login.css'
 import '../general_css/gcss.css'
 import {
-    Redirect
+    Navigate as Redirect
 } from "react-router-dom";
 Axios.defaults.withCredentials = true
 document.title = 'Login'

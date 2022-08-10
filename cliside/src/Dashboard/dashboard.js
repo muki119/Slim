@@ -1,7 +1,7 @@
 import React, {useEffect, useState ,useReducer, useContext} from 'react';
 import { Snackbar,Alert} from '@mui/material';
 import {
-    Redirect
+    Navigate as Redirect
 } from "react-router-dom";
 import moment from 'moment'
 
@@ -43,7 +43,7 @@ function Dashboard (){
         if(socket!== null){socket.disconnect()}
         setlog(true) // do every thing above before this because this redirects to login
     }
-    function opencb(){
+    function opencb(){ // opens and closes the chatbar 
         setopenChatbar(!openChatbar)   
     }
 
@@ -52,10 +52,11 @@ function Dashboard (){
         opencb()
     }
 
-    function joinrooms(){
+    function joinrooms(){ // function that joins the roos 
         socket.emit('join_rooms',roomidarr) // emits join_rooms event to server and attaches room id array. This attempts to join all rooms in array. 
     }
-    function loadchats(){
+
+    function loadchats(){ // gets chat ids and adds them to an array to be sent to the server so the user can join the chats and recieve messages 
         setRoomIdArray(roomidarr=>[dashdata.user.username]) // connect to private rooms  // adds users name to array  -- their username will be used to send created chats  ,involving them, ,by other users to them
         chats.data.forEach((e)=>{
             setRoomIdArray(roomidarr=>[...roomidarr,e.chat_id]) 
