@@ -1,6 +1,7 @@
 import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import DevicesIcon from '@mui/icons-material/Devices';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Avatar ,Tooltip, IconButton, Menu,MenuItem,ListItemIcon, Divider} from '@mui/material';
@@ -31,7 +32,7 @@ export default function NavigationBar({setOpenMenu, dashdata, openMenu, setcurre
 
             <MenuItem onClick={setcurrentThemeFunc}>
                 <ListItemIcon>
-                    {(currentTheme === "light") ? <DarkModeIcon className='lightanddarkicons' /> :<> {(currentTheme === null)?<LightModeIcon className='lightanddarkicons' />:<DevicesIcon  className='lightanddarkicons' />}</>}
+                    {(currentTheme === "light") ? <DarkModeOutlinedIcon className='lightanddarkicons' /> :<> {(currentTheme === null)?<LightModeIcon className='lightanddarkicons' />:<DevicesIcon  className='lightanddarkicons' />}</>}
                 </ListItemIcon>
                 {(currentTheme === "light") ? <>Toggle Dark Theme</> : <>{(currentTheme === null)?<>Toggle Light Theme</>:<>Use Device Theme</> }</>  }
             </MenuItem>
