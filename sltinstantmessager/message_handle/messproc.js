@@ -101,7 +101,7 @@ Messagerouter.post('/getmsgs',[getmsglimiter, userauth],(req,res)=>{
     })
     
 })
-Messagerouter.post('/leave_conversation',userauth,(req,res)=>{
+Messagerouter.post('/leave-conversation',userauth,(req,res)=>{
     const username = req.body.username
     const chatId = req.body.chatId
     const findObj = {"$and":[
