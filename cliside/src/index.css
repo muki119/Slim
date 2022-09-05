@@ -72,7 +72,7 @@ code {
 
 @media (prefers-reduced-motion) {
   *{
-    transition: none;
+    transition: none !important;
   }
 }
 
