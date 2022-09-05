@@ -2,9 +2,7 @@ import  React,{Suspense,lazy, useState,useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  useSearchParams,
-  Routes,
-  Navigate
+  Routes
 } from "react-router-dom";
 import Landing from "./Landing/Landing.js"
 import { CircularProgress } from "@mui/material";
@@ -15,18 +13,22 @@ const Dashboard = lazy(()=> import("./Dashboard/dashboard.js")) // goes to dashb
 const Profile = lazy(()=>import("./ProfileViewer/profile.js"))
 
 function App() {
-  const [currentTheme,setcurrentTheme] = useState("light")
+  const [currentTheme,setCurrentTheme] = useState("light")
   const setcurrentThemeFunc = ()=>{
     if (currentTheme === null ){ // if its device choice - go to light mode
-      setcurrentTheme("light")
+      setCurrentTheme("light")
     }else if(currentTheme === "light"){ // if its light mode go to dark mode
-      setcurrentTheme("dark")
+      setCurrentTheme("dark")
     }else{ // if its darkmode - go to device choice 
-      setcurrentTheme(null)
+      setCurrentTheme(null)
     }
   }
   useEffect(()=>{
+    {localStorage.getItem("colorScheme")?setCurrentTheme(localStorage.getItem("colorScheme")):setCurrentTheme("light")}
+  },[])
+  useEffect(()=>{
     document.body.setAttribute("color-scheme",currentTheme)
+    localStorage.setItem('colorScheme',currentTheme)
   },[currentTheme])
   return (
     <>
@@ -39,7 +41,7 @@ function App() {
             <Route exact path="/register" element={<Register/>}/>
             <Route exact path ='/dashboard' element = {<Dashboard/>}/>  {/** url/dashboard */}
             <Route exact path ='/profile' element={<Profile/>}/>
-            <Route path="*" element={<Fof/>}/>
+            <Route path="*" element={<Fof/>}/> {/*404 error for any unknown ones */}
           </Routes>
         </Suspense>
       </ThemeContext.Provider>
