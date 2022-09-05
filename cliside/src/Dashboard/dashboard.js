@@ -128,7 +128,7 @@ function Dashboard (){
             var lastMessaged = moment(conversation.last_messaged).fromNow() // finds the time since last messaged - turns it into 
             var usersinvolved = [(conversation.users_involved.slice(0,conversation.users_involved.indexOf(dashdata.user.username))).toString(),(conversation.users_involved.slice(conversation.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
             var chatName = conversation.chat_name
-            return <AvailableConversationTiles {...{index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,chats}}/> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+            return <AvailableConversationTiles {...{index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,chats,forceUpdate}}/> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
         })
     }
 

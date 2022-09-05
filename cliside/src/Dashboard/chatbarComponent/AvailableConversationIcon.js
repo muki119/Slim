@@ -1,19 +1,15 @@
 import {ChatName,ListOfUsers} from "./chatname.js"
-import { Avatar ,Tooltip, IconButton, Menu,MenuItem,ListItemIcon, Divider, Modal, Paper, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button} from '@mui/material';
+import { Menu,MenuItem,ListItemIcon, Divider ,TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button} from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import './AvailableConversationIcon.css'
-export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,chats}){
-    const [chatID,setId] = useState(null)
+export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,chats,forceUpdate}){
+    const [chatID,] = useState(conversation.chat_id)
     const [openMenu,setOpenMenu] = useState(false)
     const [openFindpersonMenu ,setoFPM]= useState(false)
     const [openConfirmatiion,setopenConfirmation]=useState(false)
-
-    useEffect(()=>{
-        setId(conversation.chat_id)
-    },[])
 
     const changeTileMenuState =(e)=>{
         e.preventDefault()
@@ -29,14 +25,14 @@ export function AvailableConversationTiles ({index, conversation, chatchanger, c
 
             <TileMenu {...{chatID,conversation,openMenu,setOpenMenu,openFindpersonMenu,setoFPM,setopenConfirmation}}/>{/* The menu with the option to delete or add person to conversation*/}
             <FindPerson {...{openFindpersonMenu,setoFPM,setopenConfirmation}}/>
-            <LeaveConfirmation {...{openConfirmatiion,setopenConfirmation,chats}}/>
+            <LeaveConfirmation {...{openConfirmatiion,setopenConfirmation,chatID,chats,forceUpdate}}/>
 
         </>
     )
 }
 
 
-export function TileMenu({chatID,conversation,openMenu,setOpenMenu,setoFPM,setopenConfirmation}){
+export function TileMenu({openMenu,setOpenMenu,setoFPM,setopenConfirmation}){
 
     return( // may use material ui for this one     
         <>
@@ -81,10 +77,18 @@ export function FindPerson({openFindpersonMenu,setoFPM}){
     )
 }
 
-function LeaveConfirmation({openConfirmatiion,setopenConfirmation,chatID}){
+function LeaveConfirmation({openConfirmatiion,setopenConfirmation,chatID,chats,forceUpdate}){
+    const dashdata = JSON.parse(localStorage.getItem('UD'))
     async function HandleAcceptance (){
-        console.log("acceptance")
-        setopenConfirmation(false)
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/m/leave-conversation`,{username:dashdata.user.username,chatId:chatID}) // sends request to delete the chat 
+            chats.data = chats.data.filter(e=>e.chat_id!==chatID)
+            setopenConfirmation(false) 
+            forceUpdate()            
+        } catch (error) {
+            setopenConfirmation(false) 
+        }
+        
     }
     
     return(
