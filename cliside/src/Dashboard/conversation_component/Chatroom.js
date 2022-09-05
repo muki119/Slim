@@ -20,7 +20,7 @@ function Chatroom({chats,setchats,currentchatid,socket,setsocket,forceUpdate}){ 
                     timesent:new Date(Date.now()).toISOString() // gets the time the message was sent 
                 }
                 socket.emit('sendMessage',currentchatid,messageObject,(response)=>{
-                    //console.log(response.sent)
+
                 }) // change to get username
                 const indx = chats.data.findIndex((e)=>{return e.chat_id === currentchatid}) // current chat index in array
                 const cht = chats
@@ -124,16 +124,22 @@ function mapAllMessages(currentcmsgs,dashdata){ // this function displays the me
                     return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message_top' key={index} >{chatMessage.message}</span></span>
                 }else if (chatMessage.sender === nextarr.sender && chatMessage.sender === prevarr.sender){ // if middle of sandwhich 
                     return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_middle' key={index} >{chatMessage.message}</span></span>
-                }else if (chatMessage.sender !== nextarr.sender && chatMessage.sender === prevarr.sender){ // if bottom of sandwhich 
+                }else if ((chatMessage.sender !== nextarr.sender)&&chatMessage.sender === prevarr.sender){ // if bottom of sandwhich 
                     return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_bottom' key={index} >{chatMessage.message}</span><span className ='sentby'>{chatMessage.sender}</span></span> 
                 }else{
                     return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message' key={index} >{chatMessage.message}</span><span className ='sentby'>{chatMessage.sender}</span></span> 
                 }
             }else{
+                if (nextarr === undefined &&chatMessage.sender === prevarr.sender){
+                    return <span className = 'incoming_message_sandwich_container' key={index}><span className = 'incoming_message_bottom' key={index} >{chatMessage.message}</span><span className ='sentby'>{chatMessage.sender}</span></span>
+                }
                 return <span className = 'incoming_message_container' key={index}><span className = 'incoming_message' key={index} >{chatMessage.message}</span><span className ='sentby'>{chatMessage.sender}</span></span> 
             }  
+
         }else if (chatMessage.sender === dashdata.user.username){
             return <span className = 'users_message_container' key={index} ><span className = 'users_message'>{chatMessage.message}</span></span>
+        }else{
+            return null
         }
     })
     
