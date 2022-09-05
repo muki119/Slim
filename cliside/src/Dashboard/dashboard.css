@@ -103,7 +103,6 @@
 }
 .chatname{
     display: flex;
-    max-height: 20vh;
     align-content: center;
     align-items: center;
     margin: 10px;
