@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import anime from "animejs";
+import React from "react";
 export default function ChatBar({setcc, displaycc, convomp}) {
     const dashdata = JSON.parse(localStorage.getItem('UD')) // login persistence data
     return (
