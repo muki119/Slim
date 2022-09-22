@@ -8,6 +8,7 @@ import {
 Axios.defaults.withCredentials = true
 document.title = 'Login'
 
+
 function Login (){
     
     const [logindetails,setdetails] = useState({username:'',password:'',remember_me:true}) //function component equivalent of this.state  // used to get login details
@@ -15,26 +16,22 @@ function Login (){
     const [errorMessage,seterm] = useState(null) // error message if incorrect login
     
     
-    function handleChange (event){
+    function handleChange (event:any){
         setdetails({...logindetails ,[event.target.name]: event.target.value}) // changes 
-        //console.log(logindetails)
-        //console.log('somewhat works')
     }
 
     async function loginproce(){
         try {
             const userdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,logindetails) // send details to server and asign response as variable 
-            //console.log(userdata)
             if (userdata.data.redirect === true){ // if successfull and should go to dashboard 
-                var ud = JSON.stringify({user:userdata.data.user,redirect:userdata.data.redirect}) 
-                localStorage.setItem('UD',ud)// user data // save user info  in local storage 
+                var userDetails = JSON.stringify({user:userdata.data.user,redirect:userdata.data.redirect}) 
+                localStorage.setItem('UD',userDetails)// user data // save user info  in local storage 
                 setredirect(userdata.data.redirect); // redirectr to dashboard 
  
             } else if (userdata.data.successful === false){
                 seterm(userdata.data.login_error) // display error message 
             }
         } catch (error) {
-            //throw 'Error in Attempt to send';
             
         }
         
@@ -56,14 +53,14 @@ function Login (){
         onloadlogin() // on first render- call the function 
     },[]) // empty brackets means that its to only happen once 
 
-    function enterlp (e){ // listens for enter button 
+    function enterlp (e:any){ // listens for enter button 
         if (e.key === 'Enter'){
             loginproce()
         }
     }
 
     if (redirect === true) {
-        return(<Redirect push to = '/dashboard' />)
+        return(<Redirect to = '/dashboard' />)
     }else{
         return(
             <div className = 'logbackground'>

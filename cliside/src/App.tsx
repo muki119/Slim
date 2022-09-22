@@ -6,15 +6,15 @@ import {
 } from "react-router-dom";
 import Landing from "./Landing/Landing.js"
 import { CircularProgress } from "@mui/material";
-import {ThemeContext} from "./ThemeContext.js";
+import {ThemeContext} from "./ThemeContext";
 const Register = lazy(()=> import("./register/register.js") )
-const Login =lazy(()=> import('./Login/login.js')); // goes to the login page 
-const Dashboard = lazy(()=> import("./Dashboard/dashboard.js")) // goes to dashboard
-const Profile = lazy(()=>import("./ProfileViewer/profile.js"))
+const Login =lazy(()=> import('./Login/login')); // goes to the login page 
+const Dashboard = lazy(()=>import("./Dashboard/dashboard")); // goes to dashboard
+const Profile = lazy(()=>import("./ProfileViewer/profile"));
 
 function App() {
-  const [currentTheme,setCurrentTheme] = useState("light")
-  const setcurrentThemeFunc = ()=>{
+  const [currentTheme,setCurrentTheme] = useState<any>("light")
+  const setcurrentThemeFunc:any= ()=>{
     if (currentTheme === null ){ // if its device choice - go to light mode
       setCurrentTheme("light")
     }else if(currentTheme === "light"){ // if its light mode go to dark mode
@@ -36,11 +36,11 @@ function App() {
       <ThemeContext.Provider value={{currentTheme,setcurrentThemeFunc}}>
         <Suspense fallback={<Circ/>}>
           <Routes>  
-            <Route exact path="/" element={<Landing/>}/> {/** url routes  */}
-            <Route exact path="/login" element={<Login/>}/>
-            <Route exact path="/register" element={<Register/>}/>
-            <Route exact path ='/dashboard' element = {<Dashboard/>}/>  {/** url/dashboard */}
-            <Route exact path ='/profile' element={<Profile/>}/>
+            <Route  path="/" element={<Landing/>}/> {/** url routes  */}
+            <Route  path="/login" element={<Login/>}/>
+            <Route  path="/register" element={<Register/>}/>
+            <Route  path ='/dashboard' element = {<Dashboard/>}/>  {/** url/dashboard */}
+            <Route  path ='/profile' element={<Profile/>}/>
             <Route path="*" element={<Fof/>}/> {/*404 error for any unknown ones */}
           </Routes>
         </Suspense>

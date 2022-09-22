@@ -1,7 +1,8 @@
 import {Navigate,useSearchParams} from 'react-router-dom'
+import React from 'react'
 export default function Profile() {
     const [param,setparam] = useSearchParams({})
-    const username = param.get("username")
+    const username:string|null = param.get("username")
     return(
     <>
         {username ? 
