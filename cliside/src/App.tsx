@@ -15,12 +15,12 @@ const Profile = lazy(()=>import("./ProfileViewer/profile"));
 function App() {
   const [currentTheme,setCurrentTheme] = useState<any>("light")
   const setcurrentThemeFunc:any= ()=>{
-    if (currentTheme === null ){ // if its device choice - go to light mode
+    if (currentTheme === "null" ){ // if its device choice - go to light mode
       setCurrentTheme("light")
     }else if(currentTheme === "light"){ // if its light mode go to dark mode
       setCurrentTheme("dark")
     }else{ // if its darkmode - go to device choice 
-      setCurrentTheme(null)
+      setCurrentTheme("null")
     }
   }
   useEffect(()=>{
