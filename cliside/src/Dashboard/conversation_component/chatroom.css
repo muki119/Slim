@@ -25,6 +25,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    margin-top: 10px;
 }
 .message_section>div{
     height: 100% !important;
@@ -74,11 +75,11 @@
 
 .users_message{
     background-color: var(--Secondary-color);
-    border-radius: 12px 12px 0px 12px;
+    border-radius: 12px 12px 3px 12px;
     margin: 10px;
 }
 
-.incoming_message_container{
+.incoming_message_container,.incoming_message_sandwich_container{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -86,7 +87,7 @@
 }
 .incoming_message{
     background-color: var(--Message-color);
-    border-radius: 12px 12px 12px 0px;
+    border-radius: 12px 12px 12px 3px;
     margin: 10px 10px 5px 10px !important;
 }
 .incoming_message_top,.incoming_message_middle,.incoming_message_bottom{
@@ -94,20 +95,13 @@
     background-color: var(--Message-color);
 }
 .incoming_message_top{ 
-    border-radius: 12px 12px 0px 0px;
+    border-radius: 12px 12px 3px 3px;
 }
 .incoming_message_middle{
-    border-radius: 0px 12px 12px 0px;
+    border-radius: 3px 12px 12px 3px;
 }
 .incoming_message_bottom{
-    border-radius: 0px 0px 12px 0px;
-}
-
-.incoming_message_sandwich_container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+    border-radius: 3px 3px 12px 3px;
 }
 
 .sentby{
