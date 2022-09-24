@@ -4,10 +4,8 @@ import {
     Navigate as Redirect
 } from "react-router-dom";
 import moment from 'moment'
-
 import './dashboard.css';
 import '../general_css/gcss.css';
-
 import { io, Socket } from "socket.io-client" ; 
 import Chatroom from './conversation_component/Chatroom';
 import ChatBar from './chatbarComponent/chatbar.js';
@@ -19,14 +17,13 @@ import { ThemeContext } from '../ThemeContext';
 
 
 interface Conversation{
-    users_involved: any;
+    users_involved: string[];
     chat_id:string;
     chat_name:string;
     last_messaged:string
 }
 interface Message{
     last_messaged:any;
-    
 }
 interface ServerToClientEvents {
     noArg: () => void;
@@ -38,21 +35,20 @@ interface ClientToServerEvents {
     hello: () => void;
 }
 
-interface roomidarray{
-    [key:string]:any;
-}
+
 interface chats{
     data:any[];
 }
 
 export default function Dashboard(){
     //const {urdata,setUser} = useContext(UdContext) // use this to set user data and pull userdata
-    const dashdata= JSON.parse(localStorage.getItem('UD')||"{}") // login persistence data
+    // @ts-ignore
+    const dashdata= JSON.parse(localStorage.getItem('UD')) // login persistence data
     const [logout,setlog] = useState(false) // if set to true the user wil be logged out
-    const [chats,setchats] = useState<chats>({data:[]}) // all the conversations 
+    const [availableConversations,setchats] = useState<chats>({data:[]}) // all the conversations 
     const [currentchatid,changechat] = useState('') // the id of the 
     const [socket,setsocket]:any=useState(null) // variable for the socket 
-    const [roomidarr,setRoomIdArray]  = useState<roomidarray[]>([]) // array of chatids to be used as room id's
+    const [roomidarr,setRoomIdArray]  = useState<string[]>([]) // array of chatids to be used as room id's
     const [displaycc,setcc]= useState(false)  //display create conversation   
     const [success_cc,sets_cc]=useState(false) // on successfull creation this is turnt to true - this causes a pop-up  that the app has been created
     const [failed_cc,setf_cc]=useState(false) // on a failed creation of chat this will be toggled to true - causing the failed creation alleart to be displayed 
@@ -64,7 +60,7 @@ export default function Dashboard(){
     axios.defaults.withCredentials=true // makes it so that cookies are sent with every request. 
     
     async function logoutproc(){ // log out process
-        localStorage.clear() // clears users basic data 
+        localStorage.removeItem("UD") // clears users basic data 
         await axios.delete(`${process.env.REACT_APP_API_URL}/misc/removecookie`) // deletes cookies
         if(socket!== null){socket.disconnect()}
         setlog(true) // do every thing above before this because this redirects to login
@@ -82,13 +78,13 @@ export default function Dashboard(){
         socket.emit('join_rooms',roomidarr) // emits join_rooms event to server and attaches room id array. This attempts to join all rooms in array.  // needs callback 
     }
 
-    function loadchats(){ // gets chat ids and adds them to an array to be sent to the server so the user can join the chats and recieve messages 
-        setRoomIdArray(roomidarr=>[dashdata.user.username]) // connect to private rooms  // adds users name to array  -- their username will be used to send created chats  ,involving them, ,by other users to them
-        chats.data.forEach((e:any)=>{
+    function loadchats(){ // gets chat ids and adds them to an array to be sent to the server so the user can join the availableConversations and recieve messages 
+        setRoomIdArray(roomidarr=>[dashdata.user.username]) // connect to private rooms  // adds users name to array  -- their username will be used to send created availableConversations  ,involving them, ,by other users to them
+        availableConversations.data.forEach((e:any)=>{
             setRoomIdArray(roomidarr=>[...roomidarr,e.chat_id]) 
         })
     }
-    async function get_chats(){ // get the user's chats 
+    async function get_chats(){ // get the user's availableConversations 
         try {
             var chat= await axios.post(`${process.env.REACT_APP_API_URL}/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server .  // http post request 
             if (chat.data.validjwt === false){ // if invalid jwt then logout
@@ -100,23 +96,21 @@ export default function Dashboard(){
             
         }
     }
-
-
-    useEffect(()=>{ // establishes ws socket connection and gets all availabele chats of user 
+    useEffect(()=>{ // establishes ws socket connection and gets all availabele availableConversations of user 
         document.title = 'Dashboard'
         const newsocket:Socket<ServerToClientEvents, ClientToServerEvents> = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
         setsocket(newsocket) // variable asignment 
         get_chats() //calls the get_chats function 
-        Notification.requestPermission() // allows the sending of notifications
+        if (Notification.permission !== "denied"){Notification.requestPermission()} // allows the sending of notifications
         return ()=>{newsocket.close()} // once the dashboard closes the socket will be disconnected  - cleanup function
     },[])
 
-    useEffect(()=>{ // if theres chats found that the user is a part of - the chat ids will be gathered and used as seperate socket rooms 
-        if (chats.data.length>0){
+    useEffect(()=>{ // if theres availableConversations found that the user is a part of - the chat ids will be gathered and used as seperate socket rooms 
+        if (availableConversations.data.length>0){
             loadchats()
         }  
         return ()=>{setRoomIdArray([])} 
-    },[chats])
+    },[availableConversations])
 
     useEffect(()=>{ // joins rooms once everything is established - if the user also has no rooms then the function will not run 
         if (roomidarr.length>1 && socket !== null){
@@ -132,9 +126,9 @@ export default function Dashboard(){
     useEffect(()=>{ // listens for a new conversation
         if (socket !== null){
             socket.on("new_chat",(conv:Conversation)=>{
-                chats.data.push(conv) // appending to array
+                availableConversations.data.push(conv) // appending to array
                 socket.emit('join_rooms',conv.chat_id) // needs callback //notification 
-                new Notification(`You have Been added to a new chat!`,{"body":`${conv}`})
+                new Notification(`You have Been added to ${conv.chat_name}!`)
                 forceUpdate()
             })
             return(()=>{
@@ -142,41 +136,43 @@ export default function Dashboard(){
             })
         }
         
-    },[socket,chats,forceUpdate])
+    },[socket,availableConversations,forceUpdate])
 
     function sort_display(){ // sort messages and  display them
         const sortAlgorithm = (a:Message,b:Message)=>{
             return Date.parse(b.last_messaged)-Date.parse(a.last_messaged)
         }
-        
-        var sk  = chats.data
-        sk.sort(sortAlgorithm) // sorts the chats by last messaged 
-
-        return chats.data.map((conversation:Conversation,index)=>{ // maps the lists into tiles clickable tiles 
-            var lastMessaged = moment(conversation.last_messaged).fromNow() // finds the time since last messaged - turns it into 
-            var usersinvolved = [(conversation.users_involved.slice(0,conversation.users_involved.indexOf(dashdata.user.username))).toString(),(conversation.users_involved.slice(conversation.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
-            var chatName = conversation.chat_name
-            return <AvailableConversationTiles {...{index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,chats,forceUpdate}}/> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
-        })
+        var sk  = availableConversations.data
+        sk.sort(sortAlgorithm) // sorts the availableConversations by last messaged 
+        try{
+            return availableConversations.data.map((conversation:Conversation,index)=>{ // maps the lists into tiles clickable tiles 
+                var lastMessaged = moment(conversation.last_messaged).fromNow() // finds the time since last messaged - turns it into 
+                var usersinvolved = [(conversation.users_involved.slice(0,conversation.users_involved.indexOf(dashdata.user.username))).toString(),(conversation.users_involved.slice(conversation.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
+                var chatName = conversation.chat_name
+                return <AvailableConversationTiles {...{index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,availableConversations,forceUpdate}}/> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
+            })
+        }catch{
+            logoutproc()
+            return <Redirect  to = '/login' />
+        } 
     }
 
         if (dashdata){ // if there is a redirect allowance 
             var convomp = sort_display()
             return(
-                dashdata ?
                     <>
                         {logout === false && 
                             <div className = 'dbackground' >
                                     <div className='dinbox'>
 
-                                        {displaycc? <CreateChat {...{chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>:null} {/* displays the create chats menu when the displaycc value is == true  */}
+                                        {displaycc? <CreateChat {...{availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>:null} {/* displays the create availableConversations menu when the displaycc value is == true  */}
                                         
                                         <NavigationBar {...{setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutproc ,opencb,openChatbar}}/>
 
                                         <div className = 'chatandbar'>
-                                            {openChatbar?<ChatBar {...{setcc, displaycc, convomp}} />:<></>}{/*Displays the chatbar component */}
+                                            {openChatbar && <ChatBar {...{setcc, displaycc, convomp}} />}{/*Displays the chatbar component */}
                                             <div className = 'openchat'>
-                                                <Chatroom {...{chats,setchats,currentchatid,socket,setsocket,forceUpdate}}/>{/*displays chatroom */}
+                                                <Chatroom {...{availableConversations,setchats,currentchatid,socket,setsocket,forceUpdate}}/>{/*displays chatroom */}
                                             </div>
                                         </div>
 
@@ -193,8 +189,6 @@ export default function Dashboard(){
                             </div>
                         }
                     </>
-                    : <Redirect  to = '/login' />
-                
             )
         }else{
             return <Redirect  to = '/login' />

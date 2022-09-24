@@ -4,7 +4,7 @@ import './createchat.css'
 import axios from 'axios';
 
 
-export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}){
+export default function CreateChat({availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}){
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     const [selectedusers,setselected] = useState([dashdata.user.username])// array of the users selected 
     const [foundusers , setfoundusers] =useState([])
@@ -40,7 +40,7 @@ export default function CreateChat({chats,setchats,displaycc,setcc,forceUpdate,s
                     logoutproc() //logout 
                 }else{
                     if (success === true ){ // if the creation was successful 
-                        chats.data.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
+                        availableConversations.data.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
                         socket.emit('join_rooms',createconv.data.chat.chat_id)
                         forceUpdate()
                         sets_cc(true) // successful conversation creation - this opens the snackbar 

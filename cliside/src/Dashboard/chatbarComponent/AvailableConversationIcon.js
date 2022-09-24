@@ -5,7 +5,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { useState } from "react";
 import axios from "axios";
 import './AvailableConversationIcon.css'
-export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,chats,forceUpdate}){
+export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,availableConversations,forceUpdate}){
     const [chatID,] = useState(conversation.chat_id)
     const [openMenu,setOpenMenu] = useState(false)
     const [openFindpersonMenu ,setoFPM]= useState(false)
@@ -25,7 +25,7 @@ export function AvailableConversationTiles ({index, conversation, chatchanger, c
 
             <TileMenu {...{chatID,conversation,openMenu,setOpenMenu,openFindpersonMenu,setoFPM,setopenConfirmation}}/>{/* The menu with the option to delete or add person to conversation*/}
             <FindPerson {...{openFindpersonMenu,setoFPM,setopenConfirmation}}/>
-            <LeaveConfirmation {...{openConfirmatiion,setopenConfirmation,chatID,chats,forceUpdate}}/>
+            <LeaveConfirmation {...{openConfirmatiion,setopenConfirmation,chatID,availableConversations,forceUpdate}}/>
 
         </>
     )
@@ -77,12 +77,12 @@ export function FindPerson({openFindpersonMenu,setoFPM}){
     )
 }
 
-function LeaveConfirmation({openConfirmatiion,setopenConfirmation,chatID,chats,forceUpdate}){
+function LeaveConfirmation({openConfirmatiion,setopenConfirmation,chatID,availableConversations,forceUpdate}){
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     async function HandleAcceptance (){
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/m/leave-conversation`,{username:dashdata.user.username,chatId:chatID}) // sends request to delete the chat 
-            chats.data = chats.data.filter(e=>e.chat_id!==chatID)
+            availableConversations.data = availableConversations.data.filter(e=>e.chat_id!==chatID)
             setopenConfirmation(false) 
             forceUpdate()            
         } catch (error) {
