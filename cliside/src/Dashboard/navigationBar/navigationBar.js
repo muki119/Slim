@@ -5,10 +5,10 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import DevicesIcon from '@mui/icons-material/Devices';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Avatar ,Tooltip, IconButton, Menu,MenuItem,ListItemIcon, Divider} from '@mui/material';
-export default function NavigationBar({setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutproc,opencb,openChatbar}) {
+export default function NavigationBar({setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutProcess,opencb,openChatbar}) {
     return <nav className='topbar'>
         {/*<span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> */}
-        {/*<button tabIndex={0} id='logout'onClick={logoutproc}><LogoutIcon/>Logout</button>*/}
+        {/*<button tabIndex={0} id='logout'onClick={logoutProcess}><LogoutIcon/>Logout</button>*/}
         <Tooltip title={openChatbar?'Close Menu':'Open Menu'}>
             <IconButton disableRipple={true} onClick={opencb}>
                 <MenuIcon className='menuicon'/>
@@ -47,7 +47,7 @@ export default function NavigationBar({setOpenMenu, dashdata, openMenu, setcurre
 
             <Divider />
 
-            <MenuItem onClick={logoutproc}>
+            <MenuItem onClick={logoutProcess}>
                 <ListItemIcon>
                     <LogoutIcon id="logout-icon" fontSize="medium" />
                 </ListItemIcon>

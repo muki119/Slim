@@ -15,15 +15,21 @@ import {AvailableConversationTiles} from'./chatbarComponent/AvailableConversatio
 import axios from 'axios';
 import { ThemeContext } from '../ThemeContext';
 
-
+interface Chats{
+    data:Conversation[]|any[];
+}
 interface Conversation{
-    users_involved: string[];
+    users_involved:string[];
     chat_id:string;
     chat_name:string;
-    last_messaged:string
+    date_created:string;
+    last_messaged:string;
+    messages:Message[];
 }
 interface Message{
-    last_messaged:any;
+    sender:string;
+    message:string;
+    timesent:string;
 }
 interface ServerToClientEvents {
     noArg: () => void;
@@ -36,16 +42,13 @@ interface ClientToServerEvents {
 }
 
 
-interface chats{
-    data:any[];
-}
 
 export default function Dashboard(){
     //const {urdata,setUser} = useContext(UdContext) // use this to set user data and pull userdata
     // @ts-ignore
-    const dashdata= JSON.parse(localStorage.getItem('UD')) // login persistence data
+    const dashdata:any= JSON.parse(localStorage.getItem('UD')) // login persistence data
     const [logout,setlog] = useState(false) // if set to true the user wil be logged out
-    const [availableConversations,setchats] = useState<chats>({data:[]}) // all the conversations 
+    const [availableConversations,setchats] = useState<Chats>({data:[]}) // all the conversations 
     const [currentchatid,changechat] = useState('') // the id of the 
     const [socket,setsocket]:any=useState(null) // variable for the socket 
     const [roomidarr,setRoomIdArray]  = useState<string[]>([]) // array of chatids to be used as room id's
@@ -59,17 +62,17 @@ export default function Dashboard(){
 
     axios.defaults.withCredentials=true // makes it so that cookies are sent with every request. 
     
-    async function logoutproc(){ // log out process
+    async function logoutProcess():Promise<void>{ // log out process
         localStorage.removeItem("UD") // clears users basic data 
         await axios.delete(`${process.env.REACT_APP_API_URL}/misc/removecookie`) // deletes cookies
         if(socket!== null){socket.disconnect()}
         setlog(true) // do every thing above before this because this redirects to login
     }
-    function opencb(){ // opens and closes the chatbar 
+    function opencb():void{ // opens and closes the chatbar 
         setopenChatbar(!openChatbar)   
     }
 
-    function chatchanger(e:any){ // changes the chat 
+    function chatchanger(e:any):void{ // changes the chat 
         changechat(e.currentTarget.dataset.chatid)
         opencb()
     }
@@ -88,7 +91,7 @@ export default function Dashboard(){
         try {
             var chat= await axios.post(`${process.env.REACT_APP_API_URL}/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server .  // http post request 
             if (chat.data.validjwt === false){ // if invalid jwt then logout
-                logoutproc()
+                logoutProcess()
             }else{
                setchats(chat) 
             }
@@ -139,7 +142,7 @@ export default function Dashboard(){
     },[socket,availableConversations,forceUpdate])
 
     function sort_display(){ // sort messages and  display them
-        const sortAlgorithm = (a:Message,b:Message)=>{
+        const sortAlgorithm = (a:Conversation,b:Conversation)=>{
             return Date.parse(b.last_messaged)-Date.parse(a.last_messaged)
         }
         var sk  = availableConversations.data
@@ -152,48 +155,40 @@ export default function Dashboard(){
                 return <AvailableConversationTiles {...{index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,availableConversations,forceUpdate}}/> // id for the chat_id used -chatchanger is a function that changes the conversation by making the new one a 
             })
         }catch{
-            logoutproc()
+            logoutProcess()
             return <Redirect  to = '/login' />
         } 
-    }
+    }   
+        if(!dashdata||logout===true){return <Redirect  to = '/login' /> } // logsout  if not data is in the localstorage or logout was set to true 
+        var convomp = sort_display()
+        return(
+            <>
+                <div className = 'dbackground' >
+                        <div className='dinbox'>
 
-        if (dashdata){ // if there is a redirect allowance 
-            var convomp = sort_display()
-            return(
-                    <>
-                        {logout === false && 
-                            <div className = 'dbackground' >
-                                    <div className='dinbox'>
+                            {displaycc? <CreateChat {...{availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutProcess,setf_cc}}/>:null} {/* displays the create availableConversations menu when the displaycc value is == true  */}
+                            
+                            <NavigationBar {...{setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutProcess ,opencb,openChatbar}}/>
 
-                                        {displaycc? <CreateChat {...{availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}}/>:null} {/* displays the create availableConversations menu when the displaycc value is == true  */}
-                                        
-                                        <NavigationBar {...{setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutproc ,opencb,openChatbar}}/>
-
-                                        <div className = 'chatandbar'>
-                                            {openChatbar && <ChatBar {...{setcc, displaycc, convomp}} />}{/*Displays the chatbar component */}
-                                            <div className = 'openchat'>
-                                                <Chatroom {...{availableConversations,setchats,currentchatid,socket,setsocket,forceUpdate}}/>{/*displays chatroom */}
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}> 
-                                        <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
-                                    </Snackbar>    
-
-                                    <Snackbar open={failed_cc} onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){setf_cc(false)}}} autoHideDuration={5000}>
-                                        <Alert severity="error">Unable to create Conversation.Please try again later</Alert>
-                                    </Snackbar>
-
+                            <div className = 'chatandbar'>
+                                {openChatbar && <ChatBar {...{setcc, displaycc, convomp}} />}{/*Displays the chatbar component */}
+                                <div className = 'openchat'>
+                                    <Chatroom {...{availableConversations,setchats,currentchatid,socket,setsocket,forceUpdate}}/>{/*displays chatroom */}
+                                </div>
                             </div>
-                        }
-                    </>
-            )
-        }else{
-            return <Redirect  to = '/login' />
-        }
-    
+
+                        </div>
+
+                        <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}> 
+                            <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
+                        </Snackbar>    
+
+                        <Snackbar open={failed_cc} onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){setf_cc(false)}}} autoHideDuration={5000}>
+                            <Alert severity="error">Unable to create Conversation.Please try again later</Alert>
+                        </Snackbar>
+                </div>
+            </>
+        )
 
 }
  

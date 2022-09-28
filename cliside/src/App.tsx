@@ -14,7 +14,7 @@ const Profile = lazy(()=>import("./ProfileViewer/profile"));
 
 function App() {
   const [currentTheme,setCurrentTheme] = useState<any>("light")
-  const setcurrentThemeFunc:any= ()=>{
+  const setcurrentThemeFunc= ()=>{
     if (currentTheme === "null" ){ // if its device choice - go to light mode
       setCurrentTheme("light")
     }else if(currentTheme === "light"){ // if its light mode go to dark mode
@@ -24,7 +24,7 @@ function App() {
     }
   }
   useEffect(()=>{
-    {localStorage.getItem("colorScheme")?setCurrentTheme(localStorage.getItem("colorScheme")):setCurrentTheme("light")}
+    localStorage.getItem("colorScheme")?setCurrentTheme(localStorage.getItem("colorScheme")):setCurrentTheme("light")
   },[])
   useEffect(()=>{
     document.body.setAttribute("color-scheme",currentTheme)

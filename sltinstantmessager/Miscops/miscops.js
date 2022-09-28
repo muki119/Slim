@@ -4,9 +4,9 @@ const Usermodel = require('../userschema/userschema')// register schema
 require('dotenv').config();
 
 
-regi.post("/misc/getsimilar",(req,res)=>{ // this function finds the 
-    //console.log(req.body.username)
-    Usermodel.find({username:{$regex: req.body.username, $options: 'i'}},"firstname username",{limit:5},(error,data)=>{ // find all usernames that are similar to the 
+regi.get("/misc/getsimilar",(req,res)=>{ // this function finds the 
+    var userstring = req.query.q
+    Usermodel.find({username:{$regex: userstring, $options: 'i'}},"firstname username",{limit:5},(error,data)=>{ // find all usernames that are similar to the 
         if (!error){
             //console.log(data)
             res.send(data)  

@@ -4,7 +4,7 @@ import './createchat.css'
 import axios from 'axios';
 
 
-export default function CreateChat({availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutproc,setf_cc}){
+export default function CreateChat({availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutProcess,setf_cc}){
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     const [selectedusers,setselected] = useState([dashdata.user.username])// array of the users selected 
     const [foundusers , setfoundusers] =useState([])
@@ -18,7 +18,7 @@ export default function CreateChat({availableConversations,setchats,displaycc,se
     async function displaysimilarusers(e){
         //setaui(e.target.value)
         if ((e.target.value).length >= 2 ){
-            const similar =await axios.post(`${process.env.REACT_APP_API_URL}/misc/getsimilar`,{username:e.target.value}) // gets all the simmilar users to the input 
+            const similar =await axios.get(`${process.env.REACT_APP_API_URL}/misc/getsimilar?q=${e.target.value}`) // gets all the simmilar users to the input //should be a get request
             setfoundusers(similar.data)
         }   
     }
@@ -37,7 +37,7 @@ export default function CreateChat({availableConversations,setchats,displaycc,se
                 var success = createconv.data.success  
                 if (createconv.data.validjwt === false){ // if token send alongside is invalid 
                     setcc(false) //stop rendering window
-                    logoutproc() //logout 
+                    logoutProcess() //logout 
                 }else{
                     if (success === true ){ // if the creation was successful 
                         availableConversations.data.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
