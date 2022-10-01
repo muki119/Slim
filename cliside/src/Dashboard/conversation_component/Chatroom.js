@@ -92,7 +92,7 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
                     </div>
                     <div className = 'message_input_box' >
                         <div className='messageInputBoxContainer'>
-                            <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={1}style={{fontSize:'2rem'}}></TextareaAutosize>  
+                            <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={1}></TextareaAutosize>  
                             <div className='sendButtonContainer' >
                                 <button id='sendbtn'onClick={sendmsg}>Send</button>
                             </div>
