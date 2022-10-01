@@ -20,7 +20,7 @@ export function AvailableConversationTiles ({index, conversation, chatchanger, c
 
     return (
         <>
-            <div key={index} data-chatid={conversation.chat_id} onClick={chatchanger} onContextMenu ={changeTileMenuState} tabIndex={0}>
+            <div key={index} className={"flexcollumncenter"}data-chatid={conversation.chat_id} onClick={chatchanger} onContextMenu ={changeTileMenuState} tabIndex={0}>
                 {chatName ? <ChatName {...{ chatName }} /> : <ListOfUsers {...{ usersinvolved }} />}{/*displays chatname if there is one - otherwide it  shows array of recipients */}
                 <span className='last_messaged'>{lastMessaged}</span>
             </div>

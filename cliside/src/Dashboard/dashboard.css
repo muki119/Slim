@@ -40,6 +40,11 @@
 .chatbar::-webkit-scrollbar{
     display: none;
 }
+.usersnameCreatechatbutton{
+    display: flex;
+    flex-direction: row;
+}
+
 .chatbar{
     width: fit-content;
     max-width: 30vw;
@@ -57,11 +62,14 @@
     width: 100%;
     margin-bottom: 5px;
     background-color: var(--Icon-color);
+    word-break: break-word;
+    cursor: pointer;
+}
+.flexcollumncenter{
     display: flex;
     flex-direction:column;
     justify-content: center;
-    word-break: break-word;
-    cursor: pointer;
+  
 }
 .chatbar>div:hover ,.chatbar>div:focus{
     background-color: var(--Icon-color-focus);
@@ -113,6 +121,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     user-select: none;
+    flex: 1 ;
     
 }
 .last_messaged{
