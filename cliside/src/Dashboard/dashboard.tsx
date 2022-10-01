@@ -15,9 +15,7 @@ import {AvailableConversationTiles} from'./chatbarComponent/AvailableConversatio
 import axios from 'axios';
 import { ThemeContext } from '../ThemeContext';
 
-interface Chats{
-    data:Conversation[]|any[];
-}
+
 interface Conversation{
     users_involved:string[];
     chat_id:string;
@@ -48,7 +46,7 @@ export default function Dashboard(){
     // @ts-ignore
     const dashdata:any= JSON.parse(localStorage.getItem('UD')) // login persistence data
     const [logout,setlog] = useState(false) // if set to true the user wil be logged out
-    const [availableConversations,setchats] = useState<Chats>({data:[]}) // all the conversations 
+    const [availableConversations,setchats] = useState<Conversation[]|any[]>([]) // all the conversations 
     const [currentchatid,changechat] = useState('') // the id of the 
     const [socket,setsocket]:any=useState(null) // variable for the socket 
     const [roomidarr,setRoomIdArray]  = useState<string[]>([]) // array of chatids to be used as room id's
@@ -83,7 +81,7 @@ export default function Dashboard(){
 
     function loadchats(){ // gets chat ids and adds them to an array to be sent to the server so the user can join the availableConversations and recieve messages 
         setRoomIdArray(roomidarr=>[dashdata.user.username]) // connect to private rooms  // adds users name to array  -- their username will be used to send created availableConversations  ,involving them, ,by other users to them
-        availableConversations.data.forEach((e:any)=>{
+        availableConversations.forEach((e:any)=>{
             setRoomIdArray(roomidarr=>[...roomidarr,e.chat_id]) 
         })
     }
@@ -93,7 +91,7 @@ export default function Dashboard(){
             if (chat.data.validjwt === false){ // if invalid jwt then logout
                 logoutProcess()
             }else{
-               setchats(chat) 
+               setchats(chat.data) 
             }
         }catch{
             
@@ -109,7 +107,7 @@ export default function Dashboard(){
     },[])
 
     useEffect(()=>{ // if theres availableConversations found that the user is a part of - the chat ids will be gathered and used as seperate socket rooms 
-        if (availableConversations.data.length>0){
+        if (availableConversations.length>0){
             loadchats()
         }  
         return ()=>{setRoomIdArray([])} 
@@ -129,7 +127,7 @@ export default function Dashboard(){
     useEffect(()=>{ // listens for a new conversation
         if (socket !== null){
             socket.on("new_chat",(conv:Conversation)=>{
-                availableConversations.data.push(conv) // appending to array
+                availableConversations.push(conv) // appending to array
                 socket.emit('join_rooms',conv.chat_id) // needs callback //notification 
                 new Notification(`You have Been added to ${conv.chat_name}!`)
                 forceUpdate()
@@ -145,10 +143,10 @@ export default function Dashboard(){
         const sortAlgorithm = (a:Conversation,b:Conversation)=>{
             return Date.parse(b.last_messaged)-Date.parse(a.last_messaged)
         }
-        var sk  = availableConversations.data
+        var sk  = availableConversations
         sk.sort(sortAlgorithm) // sorts the availableConversations by last messaged 
         try{
-            return availableConversations.data.map((conversation:Conversation,index)=>{ // maps the lists into tiles clickable tiles 
+            return availableConversations.map((conversation:Conversation,index)=>{ // maps the lists into tiles clickable tiles 
                 var lastMessaged = moment(conversation.last_messaged).fromNow() // finds the time since last messaged - turns it into 
                 var usersinvolved = [(conversation.users_involved.slice(0,conversation.users_involved.indexOf(dashdata.user.username))).toString(),(conversation.users_involved.slice(conversation.users_involved.indexOf(dashdata.user.username)+1)).toString()] // removes the users name from the available recipients list 
                 var chatName = conversation.chat_name

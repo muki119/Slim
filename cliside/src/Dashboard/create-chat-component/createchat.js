@@ -40,7 +40,7 @@ export default function CreateChat({availableConversations,setchats,displaycc,se
                     logoutProcess() //logout 
                 }else{
                     if (success === true ){ // if the creation was successful 
-                        availableConversations.data.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
+                        availableConversations.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
                         socket.emit('join_rooms',createconv.data.chat.chat_id)
                         forceUpdate()
                         sets_cc(true) // successful conversation creation - this opens the snackbar 

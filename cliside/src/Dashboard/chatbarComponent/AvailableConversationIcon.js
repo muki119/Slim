@@ -5,7 +5,9 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { useState } from "react";
 import axios from "axios";
 import './AvailableConversationIcon.css'
-export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,availableConversations,forceUpdate}){
+
+
+export function AvailableConversationTiles ({index, conversation, chatchanger, chatName, usersinvolved, lastMessaged,availableConversations,forceUpdate}){ // Compiling component for the conversation tiles 
     const [chatID,] = useState(conversation.chat_id)
     const [openMenu,setOpenMenu] = useState(false)
     const [openFindpersonMenu ,setoFPM]= useState(false)

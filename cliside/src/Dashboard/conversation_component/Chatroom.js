@@ -7,6 +7,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import $ from "jquery";
 import {IncomingMessage} from './Messages';
 
+
 function Chatroom({availableConversations,setchats,currentchatid,socket,setsocket,forceUpdate}){ // this is wwhere the messages are displayed from 
 //availableConversations are all the available availableConversations from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
     const [message,setmessage]=useState('')
@@ -23,10 +24,10 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
                 socket.emit('sendMessage',currentchatid,messageObject,(response)=>{
 
                 }) // change to get username
-                const indx = availableConversations.data.findIndex((e)=>{return e.chat_id === currentchatid}) // current chat index in array
+                const indx = availableConversations.findIndex((e)=>{return e.chat_id === currentchatid}) // current chat index in array
                 const cht = availableConversations
-                cht.data[indx].messages.push(messageObject) // appending to array 
-                cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
+                cht[indx].messages.push(messageObject) // appending to array 
+                cht[indx].last_messaged = new Date(Date.now()).toISOString()
                 //console.log(cht.data[indx].last_messaged )
                 setmessage('')
                 forceUpdate()
@@ -60,7 +61,7 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
 
             function addchat(incmessage,room){
                 try {
-                    const indx = availableConversations.data.findIndex((e)=>{return e.chat_id === room})  //finds index of chat where chat id == room 
+                    const indx = availableConversations.findIndex((e)=>{return e.chat_id === room})  //finds index of chat where chat id == room 
                     const cht = availableConversations
                     cht.data[indx].messages.push(incmessage) // adds message to array to be displayed 
                     cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
@@ -74,10 +75,10 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
         
     },[socket, availableConversations, forceUpdate])
 
-    if (availableConversations.data.length !== 0 && socket!== null ){ // if the user has available availableConversations 
+    if (availableConversations.length !== 0 && socket!== null ){ // if the user has available availableConversations 
 
-        const p = availableConversations.data.findIndex((e)=>{return e.chat_id === currentchatid}) // finds
-        const currentchat = availableConversations.data[p] // change the contents using setchats
+        const p = availableConversations.findIndex((e)=>{return e.chat_id === currentchatid}) // finds
+        const currentchat = availableConversations[p] // change the contents using setchats
 
         if (currentchat !== undefined){
             const mappedmsgs = mapAllMessages(currentchat.messages,dashdata)
@@ -91,7 +92,7 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
                     </div>
                     <div className = 'message_input_box' >
                         <div className='messageInputBoxContainer'>
-                            <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={1}style={{fontsize:'2rem'}}></TextareaAutosize>  
+                            <TextareaAutosize id = 'text_area' value={message} placeholder='Type something here :)' onChange={(e)=>{setmessage(e.target.value)}} minRows={1}style={{fontSize:'2rem'}}></TextareaAutosize>  
                             <div className='sendButtonContainer' >
                                 <button id='sendbtn'onClick={sendmsg}>Send</button>
                             </div>
