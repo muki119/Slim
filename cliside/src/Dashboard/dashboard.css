@@ -12,17 +12,23 @@
     flex-direction: column;
     
 }
-.topbar{
+.topbarcontainer{
     position: static;
     top:0;
     /*height: 5%;*/
     width: 100vw;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-content: center;
     align-items: center;
     border-bottom: var(--Secondary-color) 2px solid;
 
+}
+.topbar{
+    width: 80%;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
 }
 
 #barwelcome{
@@ -75,7 +81,7 @@
     background-color: var(--Icon-color-focus);
 }
 .chatbtnouter{
-    height: 5% !important;
+    height: 100% !important;
     min-height: 4rem !important;
     
 }
