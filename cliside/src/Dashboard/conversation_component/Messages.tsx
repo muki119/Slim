@@ -10,9 +10,11 @@ const IncomingMessage=({keynum,message,sender,position}:incomingMessage)=>{
                 <span className ={`incoming_message${position?"_"+position:""}`}>
                     {message}
                 </span>
-                {sender&&<span className ='sentby'>{sender}</span>}
+                {sender&&
+                    <span className ='sentby'>
+                        {sender}
+                    </span>
+                }
             </span>}
-
-
 
 export {IncomingMessage}
