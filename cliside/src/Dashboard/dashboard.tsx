@@ -72,7 +72,7 @@ export default function Dashboard(){
 
     function chatchanger(e:any):void{ // changes the chat 
         changechat(e.currentTarget.dataset.chatid)
-        opencb()
+        //opencb()
     }
 
     function joinrooms(){ // function that joins the roos 
@@ -85,7 +85,7 @@ export default function Dashboard(){
             setRoomIdArray(roomidarr=>[...roomidarr,e.chat_id]) 
         })
     }
-    async function get_chats(){ // get the user's availableConversations 
+    async function getChats(){ // get the user's availableConversations 
         try {
             var chat= await axios.post(`${process.env.REACT_APP_API_URL}/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server .  // http post request 
             if (chat.data.validjwt === false){ // if invalid jwt then logout
@@ -101,7 +101,7 @@ export default function Dashboard(){
         document.title = 'Dashboard'
         const newsocket:Socket<ServerToClientEvents, ClientToServerEvents> = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
         setsocket(newsocket) // variable asignment 
-        get_chats() //calls the get_chats function 
+        getChats() //calls the getChats function 
         if (Notification.permission !== "denied"){Notification.requestPermission()} // allows the sending of notifications
         return ()=>{newsocket.close()} // once the dashboard closes the socket will be disconnected  - cleanup function
     },[])
