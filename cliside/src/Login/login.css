@@ -14,7 +14,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-right: 12.5%;
 }
 
 .Login_form>span>input{

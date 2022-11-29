@@ -65,7 +65,7 @@ function Login (){
         return(
             <div className = 'logbackground'>
                 <div className = 'maincontainer'>
-                    <div className ='Form_schem'>
+                    <form className ='Form_schem'>
                         <span>
                             {errorMessage !== null && <h2>{errorMessage}</h2>}
                         </span>
@@ -78,13 +78,13 @@ function Login (){
                             <input value = {logindetails.password} name = 'password' id = 'Password'placeholder = 'Password' type = 'password' onChange={handleChange} onKeyPress={enterlp} />
                         </span>
                         <span>
-                            <button id = 'login_button'onClick = {loginproce}>Login</button>
+                            <button id = 'login_button'onClick = {(e)=> {e.preventDefault();loginproce()}}>Login</button>
                         </span>
                         <span className = 'fn'>
                             <span><a href='/login'>Forgotten Your Password?</a></span>
                             <span className = 'regilink'>Need An account? <a href ='/register'>Register</a></span>
                         </span>
-                    </div>
+                    </form>
                 </div> 
                 
             </div>
