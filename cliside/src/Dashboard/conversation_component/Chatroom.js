@@ -22,7 +22,7 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
                     timesent:new Date(Date.now()).toISOString() // gets the time the message was sent 
                 }
                 socket.emit('sendMessage',currentchatid,messageObject,(response)=>{
-
+                    // on successfull eddit the object to also have a successfull tick // else it would have a (x) or a (!) telling to retry 
                 }) // change to get username
                 const indx = availableConversations.findIndex((e)=>{return e.chat_id === currentchatid}) // current chat index in array
                 const cht = availableConversations
@@ -50,7 +50,6 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
                     await addchat(incmessage,room)
                     forceUpdate() // forces update so its displayed 
                 } catch (error) {
-                    
                 }
                 
             })
@@ -63,8 +62,8 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
                 try {
                     const indx = availableConversations.findIndex((e)=>{return e.chat_id === room})  //finds index of chat where chat id == room 
                     const cht = availableConversations
-                    cht.data[indx].messages.push(incmessage) // adds message to array to be displayed 
-                    cht.data[indx].last_messaged = new Date(Date.now()).toISOString()
+                    cht[indx].messages.push(incmessage) // adds message to array to be displayed 
+                    cht[indx].last_messaged = new Date(Date.now()).toISOString()
                     currentchatid !== room && new Notification(`New message in ${cht.data[indx].chat_name}`,{"body":`From ${incmessage.sender}`})
                 } catch (error) {
                     return error
