@@ -157,36 +157,36 @@ export default function Dashboard(){
             return <Redirect  to = '/login' />
         } 
     }   
-        if(!dashdata||logout===true){return <Redirect  to = '/login' /> } // logsout  if not data is in the localstorage or logout was set to true 
-        var convomp = sort_display()
-        return(
-            <>
-                <div className = 'dbackground' >
-                        <div className='dinbox'>
+    if(!dashdata||logout===true){return <Redirect  to = '/login' /> } // logsout  if not data is in the localstorage or logout was set to true 
+    var convomp = sort_display()
+    return(
+        <>
+            <div className = 'dbackground' >
+                    <div className='dinbox'>
 
-                            {displaycc? <CreateChat {...{availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutProcess,setf_cc}}/>:null} {/* displays the create availableConversations menu when the displaycc value is == true  */}
-                            
-                            <NavigationBar {...{setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutProcess ,opencb,openChatbar}}/>
+                        {displaycc? <CreateChat {...{availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutProcess,setf_cc}}/>:null} {/* displays the create availableConversations menu when the displaycc value is == true  */}
+                        
+                        <NavigationBar {...{setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutProcess ,opencb,openChatbar}}/>
 
-                            <div className = 'chatandbar'>
-                                {openChatbar && <ChatBar {...{setcc, displaycc, convomp}} />}{/*Displays the chatbar component */}
-                                <div className = 'openchat'>
-                                    <Chatroom {...{availableConversations,setchats,currentchatid,socket,setsocket,forceUpdate}}/>{/*displays chatroom */}
-                                </div>
+                        <div className = 'chatandbar'>
+                            {openChatbar && <ChatBar {...{setcc, displaycc, convomp}} />}{/*Displays the chatbar component */}
+                            <div className = 'openchat'>
+                                <Chatroom {...{availableConversations,setchats,currentchatid,socket,setsocket,forceUpdate}}/>{/*displays chatroom */}
                             </div>
-
                         </div>
 
-                        <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}> 
-                            <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
-                        </Snackbar>    
+                    </div>
 
-                        <Snackbar open={failed_cc} onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){setf_cc(false)}}} autoHideDuration={5000}>
-                            <Alert severity="error">Unable to create Conversation.Please try again later</Alert>
-                        </Snackbar>
-                </div>
-            </>
-        )
+                    <Snackbar open={success_cc}  onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){sets_cc(false)}}} autoHideDuration={5000}> 
+                        <Alert severity="success" sx={{backgroundColor:'#39386f',color:'#eeeeee',fontWeight:500}}>Conversation has successfully been created.</Alert>
+                    </Snackbar>    
+
+                    <Snackbar open={failed_cc} onClose={(e,reason)=>{if (reason === "timeout" || reason=== 'clickaway'){setf_cc(false)}}} autoHideDuration={5000}>
+                        <Alert severity="error">Unable to create Conversation.Please try again later</Alert>
+                    </Snackbar>
+            </div>
+        </>
+    )
 
 }
  

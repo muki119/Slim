@@ -62,12 +62,8 @@ function Fof () {
   )
  }
 
-function Circ (){
-  return(
-    <div id = "circ">
-      <CircularProgress size= {"3rem"} sx={{color:"#39386e"}}/>
-    </div>
-  )
-}
+
+const Circ = ()=> <div id = "circ"><CircularProgress size= {"3rem"} sx={{color:"#39386e"}}/></div>
+
 
 export default App;

@@ -19,20 +19,24 @@ instrument(io, {
 });
 
 io.on("connection", (socket) => {
-    //console.log(socket.id)
 
-    socket.on('join_rooms',(rooms)=>{ // function for joining rooms(rooms should be an array of roooms of the user (rooms should be chat_id ))
+    socket.on('join_rooms',(rooms,callback)=>{ // function for joining rooms(rooms should be an array of roooms of the user (rooms should be chat_id ))
         try{
             socket.join(rooms)
             // callback saying successfull join
+            callback({
+                success:true
+            })
         }catch(err){
             //send back error when joining room 
+            return
         }
         
     })
 
     socket.on('sendMessage',(room,message,callback)=>{ // room should be chat_id
         // update database find by chat id 
+        console.log(`${socket.id};socket id ,${room} :room \n ${JSON.stringify(message)} :message`)
         ccvmodel.findOneAndUpdate({chat_id:room},{$push:{messages:message},$currentDate:{last_messaged:true}},(err)=>{ // adds message to database 
             if (err){
                 console.log(err)
@@ -41,12 +45,11 @@ io.on("connection", (socket) => {
                     reason:"The server Was unable to send the message",
                     error_code:500
                 })
-            }else if (!err){
+            }else{
                 socket.to(room).emit('incomming_message', room,message)//message should be {sender,message,timesent}
                 callback({
                     sent:true
                 });
-        
             }
         })
 
@@ -136,39 +139,38 @@ Messagerouter.post('/addtoconversation',userauth,async (req,res)=>{
     }
     const updateObj={"$push":{users_involved:userToAdd}}
     const notTheSame = username !== userToAdd
-    if (notTheSame){
-        try{
-            ccvmodel.findOneAndUpdate(findObj,updateObj,(err,data)=>{
-                if (!err){
-                    if (!data){
-                        res.send({
-                            success:false,
-                            errorCode:426,
-                            message:"This chat may not exist ,The user is not in the conversation or the person that is being added is already in the conversation "
-                        })
-                    }else{
-                        res.send({
-                            success:true
-                        })
-                    }
-                }else{
-                    res.status(500).send("Server-Side Error please try again later")
-                }
-                
-            })
-            
-        }catch(err){
-            res.status(500).send("Server-Side Error please try again later") //testing 
-        }
-        
-    }else{
+    if (!notTheSame){
         try {
             res.send("same")
         } catch (error) {
             console.log("same")
         }
+        return
     }
-    
+    try{
+        ccvmodel.findOneAndUpdate(findObj,updateObj,(err,data)=>{
+            if (err){
+                res.status(500).send("Server-Side Error please try again later")
+                return
+            } 
+            if (!data){
+                res.send({
+                    success:false,
+                    errorCode:426,
+                    message:"This chat may not exist ,The user is not in the conversation or the person that is being added is already in the conversation "
+                })
+                return
+            }else{
+                console.log(data)
+                res.send({
+                    success:true
+                })
+            }
+        })
+        
+    }catch(err){
+        res.status(500).send("Server-Side Error please try again later") //testing 
+    }
     //check if theyre in the chat
     //add person to the chat.
     //send success

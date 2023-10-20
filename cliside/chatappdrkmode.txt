@@ -5,3 +5,8 @@ chat name tiles text colour = #d2cbff
 
 chat sender name = white i think 
 this is the darkmode 
+
+
+
+potential ideas :
+    add a hourly feed. that you can post statuses to 
