@@ -16,7 +16,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",
     "animejs": "^3.2.1",
-    "axios": "^0.21.1",
+    "axios": "^1.6.4",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
