@@ -6,11 +6,11 @@ import {
 } from "react-router-dom";
 import Landing from "./Landing/Landing.js"
 import { CircularProgress } from "@mui/material";
-import {ThemeContext} from "./ThemeContext.js";
+import {ThemeContext} from "./ThemeContext";
 const Register = lazy(()=> import("./register/register.js") )
-const Login =lazy(()=> import('./Login/login.js')); // goes to the login page 
-const Dashboard = lazy(()=>import("./Dashboard/dashboard.js")); // goes to dashboard
-const Profile = lazy(()=>import("./ProfileViewer/profile.js"));
+const Login =lazy(()=> import('./Login/login')); // goes to the login page 
+const Dashboard = lazy(()=>import("./Dashboard/dashboard")); // goes to dashboard
+const Profile = lazy(()=>import("./ProfileViewer/profile"));
 
 function App() {
   const [currentTheme,setCurrentTheme] = useState<any>("light")
