@@ -46,7 +46,7 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
                             password: pass // sets password to the login form password to avoid hashing problems in bcrypt because us cant compare between two hashed passwords
                         }) 
                         //if (jwtout){res.cookie('userauth',jwtout,{httpOnly:true,maxAge:604800000}) }// sends the jwt to the client as a cookie // fixes problem of cookie switching from jwt to undefined where undefined is caused by no remember me in jwt so the jwtout is nothing and as a result the output is nothing - adding a if stamemnt makes sure that if there is somethin in the jwt out then it will send it as a cookie - not just sending it out even with no remember_me == true 
-                        res.cookie('SID',jwtout,{maxAge:1209600000,httpOnly:true,sameSite:process.env.SAMESITE,secure:true})// then send the user authentication token (userauth in jwt)
+                        res.cookie('SID',jwtout,{maxAge:1209600000,httpOnly:true,sameSite:process.env.SAMESITE,secure:process.env.SECURE})// then send the user authentication token (userauth in jwt)
                         res.send({ // sends the data 
                             successful:true,
                             user:{

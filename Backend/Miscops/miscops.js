@@ -18,6 +18,6 @@ regi.get("/misc/getsimilar",(req,res)=>{ // this function finds the
 })
 
 regi.delete("/misc/removecookie",(req,res)=>{ // route for deleteing the cookie (authentication token )
-    res.clearCookie("SID",{sameSite:process.env.SAMESITE}).send() // deletes the cookie
+    res.clearCookie("SID",{sameSite:process.env.SAMESITE,secure:process.env.SECURE}).send() // deletes the cookie
 })
 module.exports = regi
