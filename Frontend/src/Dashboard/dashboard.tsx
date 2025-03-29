@@ -1,4 +1,4 @@
-import React, {useEffect, useState , useContext, useCallback} from 'react';
+import {useEffect, useState , useContext, useCallback} from 'react';
 import { Snackbar,Alert} from '@mui/material';
 import {
     Navigate as Redirect
@@ -143,7 +143,6 @@ export default function Dashboard(){
         
     },[socket,availableConversations])
 
-    useEffect(()=>{console.log(availableConversations)},[availableConversations])
    
 
     const SortDisplay = useCallback(() => {

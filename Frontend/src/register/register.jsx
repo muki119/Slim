@@ -2,7 +2,7 @@ import { useState,useCallback} from 'react';
 import '../general_css/gcss.css'
 import './register.css'
 import Axios from 'axios'
-import debounce  from 'lodash.debounce';
+import {debounce} from "lodash"
 import RegisterForm from './RegisterForm';
 
 
