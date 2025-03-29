@@ -62,7 +62,7 @@ loginRoute.post('/login',[loginlimiter,jwtauth],async (req,res)=>{ //login middl
                             redirect:true
                         });
                     }else if (result === false ){ // if the passwords are different 
-                        if (req.cookies.SID){res.clearCookie("SID")}
+                        if (req.cookies.SID){res.clearCookie("SID",{sameSite:process.env.SAMESITE})}
                         res.send({successful:false,login_error:'Incorrect username/password'}) //send uncuccesfull and a incorrect messge in json 
                     }
                         
@@ -98,7 +98,7 @@ async function jwtauth(req,res,next){  // jwt checker  - uses jwt to login
                     res.status(200).send({auth_error:'Invalid auth',validjwt:false});
                 }
             }catch(err){
-                res.clearCookie('SID')
+                res.clearCookie('SID',{sameSite:"none"})
                 res.status(200).send({auth_error:'Invalid auth',validjwt:false});
            
             }
