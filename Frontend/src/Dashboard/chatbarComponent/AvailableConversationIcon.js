@@ -1,7 +1,7 @@
 import {ChatName,ListOfUsers} from "./chatname.js"
 import { Menu,MenuItem,ListItemIcon, Divider ,TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button} from '@mui/material';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import PersonAddIcon from '@mui/icons-material/PersonAdd.js';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove.js';
 import React, { useEffect, useState,useCallback } from "react";
 import axios from "axios";
 import './AvailableConversationIcon.css'
