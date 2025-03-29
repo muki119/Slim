@@ -5,14 +5,14 @@ import './chatroom.css'
 import ScrollableFeed from 'react-scrollable-feed'
 import TextareaAutosize from 'react-textarea-autosize';
 import $ from "jquery";
-import {IncomingMessage} from './Messages';
+import IncomingMessage from './Messages';
 
 
-function Chatroom({availableConversations,setchats,currentchatid,socket,setsocket,forceUpdate}){ // this is wwhere the messages are displayed from 
+function Chatroom({availableConversations,setchats,currentchatid,socket,setsocket}){ // this is wwhere the messages are displayed from 
 //availableConversations are all the available availableConversations from the users account -setchats is for updating when a message comes in or when you send a message - cchat_id to find the chat the user selected - socket are for realtime connection    
     const [message,setmessage]=useState('')
-    const dashdata = JSON.parse(localStorage.getItem('UD'))
     
+    const dashdata = JSON.parse(localStorage.getItem('UD'))
     function sendmsg(){
         if (message.length > 0 || message.trim().length !== 0){
             try {
@@ -25,12 +25,10 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
                     // on successfull eddit the object to also have a successfull tick // else it would have a (x) or a (!) telling to retry 
                 }) // change to get username
                 const indx = availableConversations.findIndex((e)=>{return e.chat_id === currentchatid}) // current chat index in array
-                const cht = availableConversations
-                cht[indx].messages.push(messageObject) // appending to array 
-                cht[indx].last_messaged = new Date(Date.now()).toISOString()
-                //console.log(cht.data[indx].last_messaged )
+                const cht = [...availableConversations]
+                cht[indx] = {...cht[indx],messages:[...cht[indx].messages,messageObject],last_messaged:new Date(Date.now()).toISOString()}
+                setchats(cht)
                 setmessage('')
-                forceUpdate()
                 $(".styles_scrollable-div__prSCv div ")[0].scrollIntoView({block:'end'});
                 $("#text_area").focus();
             } catch (error) {
@@ -48,7 +46,7 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
                 try {
                     //console.log(`incoming message from room ${room}:${JSON.stringify(incmessage)}`)
                     await addchat(incmessage,room)
-                    forceUpdate() // forces update so its displayed 
+                    //forceUpdate() // forces update so its displayed 
                 } catch (error) {
                 }
                 
@@ -61,9 +59,9 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
             function addchat(incmessage,room){
                 try {
                     const indx = availableConversations.findIndex((e)=>{return e.chat_id === room})  //finds index of chat where chat id == room 
-                    const cht = availableConversations
-                    cht[indx].messages.push(incmessage) // adds message to array to be displayed 
-                    cht[indx].last_messaged = new Date(Date.now()).toISOString()
+                    const cht = [...availableConversations] // copy availableConversations 
+                    cht[indx] = {...cht[indx],messages:[...cht[indx].messages,incmessage],last_messaged:new Date(Date.now()).toISOString()} // change chat data
+                    setchats(cht) //assign copy to availableConversations
                     currentchatid !== room && new Notification(`New message in ${cht.data[indx].chat_name}`,{"body":`From ${incmessage.sender}`})
                 } catch (error) {
                     return error
@@ -72,7 +70,7 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
             }
         }
         
-    },[socket, availableConversations, forceUpdate])
+    },[socket, availableConversations, setchats, currentchatid])
 
     if (availableConversations.length !== 0 && socket!== null ){ // if the user has available availableConversations 
 
@@ -80,7 +78,7 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
         const currentchat = availableConversations[p] // change the contents using setchats
 
         if (currentchat !== undefined){
-            const mappedmsgs = mapAllMessages(currentchat.messages,dashdata)
+            const mappedmsgs = MappedMessages(currentchat.messages,dashdata)
             //const mappedresp =  [currentchat.users_involved.slice(0,currentchat.users_involved.indexOf(dashdata.user.username)).toString(),currentchat.users_involved.slice(currentchat.users_involved.indexOf(dashdata.user.username)+1).toString()] // recipients  
             return (
                 <div className = 'chatroom_container'>
@@ -115,29 +113,28 @@ function Chatroom({availableConversations,setchats,currentchatid,socket,setsocke
         )
     }
 }
-
-function mapAllMessages(currentcmsgs,dashdata){ // this function displays the messages
+const MappedMessages = (currentcmsgs,dashdata)=>{ // this function displays the messages
     return currentcmsgs.map((chatMessage,index,arr)=>{ // this maps the incoming messages and users messages
         var previousMessage = arr[index-1]
         var nextMessage = arr[index+1]
         if (chatMessage.sender !== dashdata.user.username){ // if the sender 
             if (index>0 && index!==(arr.length-1)){
                 if (chatMessage.sender === nextMessage.sender && chatMessage.sender !== previousMessage?.sender){ /// if its the top of the sandwhich
-                    return <IncomingMessage keynum={index} message={chatMessage.message} position={"top"}/>
+                    return <IncomingMessage key={index} message={chatMessage.message} position={"top"}/>
                 }else if (chatMessage.sender === nextMessage.sender && chatMessage.sender === previousMessage.sender){ // if middle of sandwhich 
-                    return <IncomingMessage keynum={index} message={chatMessage.message} position={"middle"}/>
+                    return <IncomingMessage key={index} message={chatMessage.message} position={"middle"}/>
                 }else if ((chatMessage.sender !== nextMessage.sender)&&chatMessage.sender === previousMessage.sender){ // if bottom of sandwhich
-                    return <IncomingMessage keynum={index} message={chatMessage.message} position={"bottom"} sender={chatMessage.sender}/>
+                    return <IncomingMessage key={index} message={chatMessage.message} position={"bottom"} sender={chatMessage.sender}/>
                 }else{ // standalone
-                    return <IncomingMessage keynum={index} message={chatMessage.message} sender={chatMessage.sender}/>
+                    return <IncomingMessage key={index} message={chatMessage.message} sender={chatMessage.sender}/>
                 }
             }else{ // for the beginning and end elements of the arrays 
                 if (nextMessage === undefined &&chatMessage.sender === previousMessage?.sender){ //if at the bottom of the text
-                    return <IncomingMessage keynum={index} message={chatMessage.message} position={"bottom"} sender={chatMessage.sender}/>
+                    return <IncomingMessage key={index} message={chatMessage.message} position={"bottom"} sender={chatMessage.sender}/>
                 }else if (nextMessage?.sender === chatMessage.sender && !previousMessage) { // if at the top and its 
-                    return <IncomingMessage keynum={index} message={chatMessage.message} position={"top"}/>
+                    return <IncomingMessage key={index} message={chatMessage.message} position={"top"}/>
                 }else{ //standalone 
-                    return <IncomingMessage keynum={index} message={chatMessage.message} sender={chatMessage.sender}/>
+                    return <IncomingMessage key={index} message={chatMessage.message} sender={chatMessage.sender}/>
                 }
             }
         }else if (chatMessage.sender === dashdata.user.username){
@@ -148,5 +145,7 @@ function mapAllMessages(currentcmsgs,dashdata){ // this function displays the me
     })
     
 }
+
+
 
 export default Chatroom

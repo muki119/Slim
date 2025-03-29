@@ -5,8 +5,8 @@ interface incomingMessage{
     sender?:string;
     position?:string
 }
-const IncomingMessage=({keynum,message,sender,position}:incomingMessage)=>{
-    return <span className = {`incoming_message_${position!=="top"?"sandwich_":""}container`} key={keynum}>
+const IncomingMessage=({message,sender,position}:incomingMessage)=>{
+    return <span className = {`incoming_message_${position!=="top"?"sandwich_":""}container`}>
                 <span className ={`incoming_message${position?"_"+position:""}`}>
                     {message}
                 </span>
@@ -17,4 +17,4 @@ const IncomingMessage=({keynum,message,sender,position}:incomingMessage)=>{
                 }
             </span>}
 
-export {IncomingMessage}
+export default React.memo(IncomingMessage)

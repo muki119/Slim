@@ -1,5 +1,5 @@
-const ListOfUsers = ({usersinvolved})=>{
-    return <p className='chatname'>{usersinvolved.map((users) => { return users + ' '; })}</p> // displays all other users in chat
+const ListOfUsers = ({usersInvolved})=>{
+    return <>{usersInvolved && <p className='chatname'>{usersInvolved.map((users) => { return users + ' '; })}</p>}</> // displays all other users in chat
 }
 
 const ChatName = ({chatName})=>{

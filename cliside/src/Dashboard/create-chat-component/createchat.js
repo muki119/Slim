@@ -4,7 +4,7 @@ import './createchat.css'
 import axios from 'axios';
 
 
-export default function CreateChat({availableConversations,setchats,displaycc,setcc,forceUpdate,socket,sets_cc,logoutProcess,setf_cc}){
+export default function CreateChat({availableConversations,setchats,displaycc,setcc,socket,sets_cc,logoutProcess,setf_cc}){
     const dashdata = JSON.parse(localStorage.getItem('UD'))
     const [selectedusers,setselected] = useState([dashdata.user.username])// array of the users selected 
     const [foundusers , setfoundusers] =useState([])
@@ -40,9 +40,10 @@ export default function CreateChat({availableConversations,setchats,displaycc,se
                     logoutProcess() //logout 
                 }else{
                     if (success === true ){ // if the creation was successful 
-                        availableConversations.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
+                        setchats([...availableConversations,createconv.data.chat])
+                        //availableConversations.push(createconv.data.chat) // add data to chat array so it can be viewsd in the tiles 
                         socket.emit('join_rooms',createconv.data.chat.chat_id)
-                        forceUpdate()
+                        //forceUpdate()
                         sets_cc(true) // successful conversation creation - this opens the snackbar 
                         setcc(false) // this closes the menu
                     }else if (createconv.success === false){ // if the creation was a failiure 
@@ -61,11 +62,12 @@ export default function CreateChat({availableConversations,setchats,displaycc,se
 
     function removeselected (e){
         var indexofuser = selectedusers.indexOf(e.currentTarget.dataset.selected_username)
-        selectedusers.splice(indexofuser,1)
-        forceUpdate()
+        setselected([...selectedusers.slice(0,indexofuser),...selectedusers.slice(indexofuser+1)])
+        //selectedusers.splice(indexofuser,1)
+        //forceUpdate()
     }
 
-    const mappedfoundusers = foundusers.map((value,index)=>{ // mapps all the users found from api call
+    const mappedFoundUsers = foundusers.map((value,index)=>{ // mapps all the users found from api call
         return<span className ='similarusrscard'key={index} data-foundusername = {value.username}  tabIndex={0} onClick={(e)=>{addtoselected(e)}}><span className='foundusrsfn'>{value.firstname}</span ><span className="foundusrsun">{value.username}</span></span>
     })
     
@@ -81,7 +83,7 @@ export default function CreateChat({availableConversations,setchats,displaycc,se
             <span id = 'dob' onClick={(e)=>{closewindow(e)}}></span>
             <div className = "createchatformcontainer">
                 <span className='add-userinput'><input placeholder='Input Group Chatname' onChange={e=>{setchatName(e.target.value)}}></input></span>
-                <span className = 'add-userinput'><input placeholder='Input A Username' onChange={e=>{debcall(e)}}></input>{mappedfoundusers}</span> 
+                <span className = 'add-userinput'><input placeholder='Input A Username' onChange={e=>{debcall(e)}}></input>{mappedFoundUsers}</span> 
                 <span className = 'recipients_list '>
                     <p>Selected Recipients:</p>
                     {mappedSelectedUsers}

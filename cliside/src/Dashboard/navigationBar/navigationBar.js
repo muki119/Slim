@@ -5,7 +5,12 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import DevicesIcon from '@mui/icons-material/Devices';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Avatar ,Tooltip, IconButton, Menu,MenuItem,ListItemIcon, Divider} from '@mui/material';
-export default function NavigationBar({setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutProcess,opencb,openChatbar}) {
+import React, { useCallback } from 'react';
+const NavigationBar = ({setOpenMenu, dashdata, openMenu, setcurrentThemeFunc, currentTheme, logoutProcess,opencb,openChatbar})=> {
+    const memoizedOpenMenuFunc = useCallback(()=>{
+        return Boolean(openMenu)
+    },[openMenu])
+    
     return (
     <nav className='topbarcontainer'>
         {/*<span id='barwelcome'>{dashdata.user.firstname.charAt(0).toUpperCase()+dashdata.user.firstname.slice(1)} {dashdata.user.surname} ( {dashdata.user.username} )</span> */}
@@ -23,7 +28,7 @@ export default function NavigationBar({setOpenMenu, dashdata, openMenu, setcurre
                 </IconButton>
             </Tooltip>
 
-            <Menu id='Menu' anchorEl={openMenu} open={Boolean(openMenu)} onClose={(e) => { setOpenMenu(false); } } >
+            <Menu id='Menu' anchorEl={openMenu} open={memoizedOpenMenuFunc()} onClose={(e) => { setOpenMenu(false); } } >
                 <Tooltip title="Copy Username">
                     <MenuItem onClick={() => { navigator.clipboard.writeText(dashdata.user.username); } }>
                         {dashdata.user.username}
@@ -64,3 +69,5 @@ export default function NavigationBar({setOpenMenu, dashdata, openMenu, setcurre
 
     </nav>)
 }
+
+export default React.memo(NavigationBar)
