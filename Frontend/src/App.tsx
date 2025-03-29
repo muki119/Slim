@@ -1,13 +1,13 @@
-import  React,{Suspense,lazy, useState,useEffect } from "react";
+import  {Suspense,lazy, useState,useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes
 } from "react-router-dom";
-import Landing from "./Landing/Landing.js"
+import Landing from "./Landing/Landing"
 import { CircularProgress } from "@mui/material";
 import {ThemeContext} from "./ThemeContext";
-const Register = lazy(()=> import("./register/register.js") )
+const Register = lazy(()=> import("./register/register") )
 const Login =lazy(()=> import('./Login/login')); // goes to the login page 
 const Dashboard = lazy(()=>import("./Dashboard/dashboard")); // goes to dashboard
 const Profile = lazy(()=>import("./ProfileViewer/profile"));

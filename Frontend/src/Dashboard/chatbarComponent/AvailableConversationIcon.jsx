@@ -1,7 +1,7 @@
-import {ChatName,ListOfUsers} from "./chatname.js"
+import {ChatName,ListOfUsers} from "./chatname"
 import { Menu,MenuItem,ListItemIcon, Divider ,TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button} from '@mui/material';
-import PersonAddIcon from '@mui/icons-material/PersonAdd.js';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove.js';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import React, { useEffect, useState,useCallback } from "react";
 import axios from "axios";
 import './AvailableConversationIcon.css'
@@ -72,7 +72,7 @@ const AvailableConversationTiles = React.memo(({dashdata,conversation, chatchang
         const dashdata = JSON.parse(localStorage.getItem('UD'))
         async function HandleAcceptance (){
             try {
-                const response = await axios.post(`${process.env.REACT_APP_API_URL}/m/leave-conversation`,{username:dashdata.user.username,chatId:chatID}) // sends request to delete the chat 
+                const response = await axios.post(`${import.meta.env.VITE_APP_API_URL}/m/leave-conversation`,{username:dashdata.user.username,chatId:chatID}) // sends request to delete the chat 
                 setchats([...availableConversations.filter(e=>e.chat_id!==chatID)])
                 //availableConversations.data = availableConversations.data.filter(e=>e.chat_id!==chatID)
                 setopenConfirmation(false)           

@@ -18,7 +18,7 @@ export default function CreateChat({availableConversations,setchats,displaycc,se
     async function displaysimilarusers(e){
         //setaui(e.target.value)
         if ((e.target.value).length >= 2 ){
-            const similar =await axios.get(`${process.env.REACT_APP_API_URL}/misc/getsimilar?q=${e.target.value}`) // gets all the simmilar users to the input //should be a get request
+            const similar =await axios.get(`${import.meta.env.VITE_APP_API_URL}/misc/getsimilar?q=${e.target.value}`) // gets all the simmilar users to the input //should be a get request
             setfoundusers(similar.data)
         }   
     }
@@ -33,7 +33,7 @@ export default function CreateChat({availableConversations,setchats,displaycc,se
         if (selectedusers.length >1 ){
             try{
                 var uat = localStorage.getItem("Uat")
-                const createconv =await axios.post(`${process.env.REACT_APP_API_URL}/m/createconversation`,{chatName:chatName,users_involved :selectedusers,Uat:uat,username:dashdata.user.username}) // send to server and set response as variable 
+                const createconv =await axios.post(`${import.meta.env.VITE_APP_API_URL}/m/createconversation`,{chatName:chatName,users_involved :selectedusers,Uat:uat,username:dashdata.user.username}) // send to server and set response as variable 
                 var success = createconv.data.success  
                 if (createconv.data.validjwt === false){ // if token send alongside is invalid 
                     setcc(false) //stop rendering window

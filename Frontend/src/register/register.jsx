@@ -36,7 +36,7 @@ function Register (){
         if (path === 'email'){
             if (data === ''){return{out:false}}
             try{
-                const axd = await Axios.post(`${process.env.REACT_APP_API_URL}/takencredentials` , {email:data})
+                const axd = await Axios.post(`${import.meta.env.VITE_APP_API_URL}/takencredentials` , {email:data})
                 if (axd.data.taken === false ){ // if theres no match in the database i.e username is not taken 
                     return {out:false}
                 }else if (axd.data.taken === true ){ 
@@ -60,7 +60,7 @@ function Register (){
                 var dataToBeSent = atstring.concat(data)
 
                 try {
-                    const axdata = await Axios.post(`${process.env.REACT_APP_API_URL}/takencredentials` , {username:dataToBeSent}) // asks if username has been taken 
+                    const axdata = await Axios.post(`${import.meta.env.VITE_APP_API_URL}/takencredentials` , {username:dataToBeSent}) // asks if username has been taken 
                     //console.log(axdata)
                     if (axdata.data.taken === false ){ // if username aint taken 
                         //this.usernamevall = true // is username valid -true === yes
@@ -140,7 +140,7 @@ function Register (){
         if (messval.emailval === true && messval.usernamevall === true && registerDetails.password.length >1){
             var atc = "@"
             var new_con = atc.concat(registerDetails.username.trim())
-            const streg = await Axios.post(`${process.env.REACT_APP_API_URL}/register` ,{fnm:registerDetails.firstname,surn:registerDetails.surname,email:registerDetails.email ,usrnm:new_con,password:registerDetails.password,pnum:registerDetails.phonenumber})
+            const streg = await Axios.post(`${import.meta.env.VITE_APP_API_URL}/register` ,{fnm:registerDetails.firstname,surn:registerDetails.surname,email:registerDetails.email ,usrnm:new_con,password:registerDetails.password,pnum:registerDetails.phonenumber})
             var success = streg.data.success
             if(success && success === true){
                 setsent(true)

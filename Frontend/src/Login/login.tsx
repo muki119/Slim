@@ -22,7 +22,7 @@ function Login (){
 
     async function loginproce(){
         try {
-            const userdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,logindetails) // send details to server and asign response as variable 
+            const userdata = await Axios.post(`${import.meta.env.VITE_APP_API_URL}/login`,logindetails) // send details to server and asign response as variable 
             if (userdata.data.redirect === true){ // if successfull and should go to dashboard 
                 var userDetails = JSON.stringify({user:userdata.data.user,redirect:userdata.data.redirect}) 
                 localStorage.setItem('UD',userDetails)// user data // save user info  in local storage 
@@ -32,13 +32,13 @@ function Login (){
                 seterm(userdata.data.login_error) // display error message 
             }
         } catch (error) {
-            
+            console.log(error) 
         }
         
     }
     async function onloadlogin (){ // This is done automatically once you go onto the login page 
             try {
-                const usdata = await Axios.post(`${process.env.REACT_APP_API_URL}/login`,null) // sends cookie to server and asigns response as variable 
+                const usdata = await Axios.post(`${import.meta.env.VITE_APP_API_URL}/login`,null) // sends cookie to server and asigns response as variable 
                 if (usdata.data.redirect === true){ // if can go to dashboard 
                     localStorage.setItem('UD',JSON.stringify({user:usdata.data.user,redirect:usdata.data.redirect})) // save user data in localstorage
                     setredirect(usdata.data.redirect); //redirect to dashboard 

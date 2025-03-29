@@ -8,10 +8,10 @@ import './dashboard.css';
 import '../general_css/gcss.css';
 import { io, Socket } from "socket.io-client" ; 
 import Chatroom from './conversation_component/Chatroom';
-import ChatBar from './chatbarComponent/chatbar.js';
+import ChatBar from './chatbarComponent/chatbar';
 import CreateChat from './create-chat-component/createchat'
 import NavigationBar from './navigationBar/navigationBar';
-import AvailableConversationTiles from'./chatbarComponent/AvailableConversationIcon.js'
+import AvailableConversationTiles from'./chatbarComponent/AvailableConversationIcon'
 import axios from 'axios';
 import { ThemeContext } from '../ThemeContext';
 
@@ -62,7 +62,7 @@ export default function Dashboard(){
     
     async function logoutProcessFunction():Promise<void>{ // log out process
         localStorage.removeItem("UD") // clears users basic data 
-        await axios.delete(`${process.env.REACT_APP_API_URL}/misc/removecookie`) // deletes cookies
+        await axios.delete(`${import.meta.env.VITE_APP_API_URL}/misc/removecookie`) // deletes cookies
         if(socket!== null){socket.disconnect()}
         setlog(true) // do every thing above before this because this redirects to login
     }
@@ -90,7 +90,7 @@ export default function Dashboard(){
     
     async function getChats(){ // get the user's availableConversations 
         try {
-            var chat= await axios.post(`${process.env.REACT_APP_API_URL}/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server .  // http post request 
+            var chat= await axios.post(`${import.meta.env.VITE_APP_API_URL}/m/getmsgs`,{username:dashdata.user.username})  //gets messages from the server .  // http post request 
             if (chat.data.validjwt === false){ // if invalid jwt then logout
                 logoutProcess()
             }else{
@@ -102,7 +102,7 @@ export default function Dashboard(){
     }
     useEffect(()=>{ // establishes ws socket connection and gets all availabele availableConversations of user 
         document.title = 'Dashboard'
-        const newsocket:Socket<ServerToClientEvents, ClientToServerEvents> = io(`${process.env.REACT_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
+        const newsocket:Socket<ServerToClientEvents, ClientToServerEvents> = io(`${import.meta.env.VITE_APP_SOCKET_URL}`); // URL WILL BE FROM .ENV
         setsocket(newsocket) // variable asignment 
         getChats() //calls the getChats function 
         if (Notification.permission !== "denied"){Notification.requestPermission()} // allows the sending of notifications
